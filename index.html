@@ -1,0 +1,728 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#F1F3EE" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121815" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Batch cooking">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23356349'/%3E%3Cpath d='M14 30h36a18 18 0 0 1-36 0z' fill='%23F1F3EE'/%3E%3Cpath d='M24 14c-3 4 3 6 0 10M32 12c-3 4 3 6 0 10M40 14c-3 4 3 6 0 10' stroke='%23E8995A' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<title>Carnet de batch cooking</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: one narrow column (max 760px) read on a phone in the shop; sticky tab bar; shopping rows are big tap targets grouped by rayon, quantities in grams set in mono on the right. */
+:root{
+  --bg:#F1F3EE; --surface:#FFFFFF; --sunk:#E6EAE3; --ink:#1B241F; --muted:#5B685F; --line:#D5DCD2;
+  --accent:#B9561A; --accent-soft:#F5E1CF; --leaf:#356349; --leaf-soft:#DCE9E0; --warn:#A63F2A;
+  --f-display:"Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --f-body:"Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121815; --surface:#1A221D; --sunk:#0E1311; --ink:#E5EBE5; --muted:#98A69C; --line:#2B362F;
+    --accent:#E8995A; --accent-soft:#3A281A; --leaf:#8BC3A1; --leaf-soft:#1F3127; --warn:#E58A73;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121815; --surface:#1A221D; --sunk:#0E1311; --ink:#E5EBE5; --muted:#98A69C; --line:#2B362F;
+  --accent:#E8995A; --accent-soft:#3A281A; --leaf:#8BC3A1; --leaf-soft:#1F3127; --warn:#E58A73;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5;padding-inline:16px;padding-block:0 64px}
+.wrap{max-width:760px;margin-inline:auto}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+.brand{padding-block:22px 10px;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px}
+.brand h1{font-family:var(--f-display);font-weight:800;font-size:clamp(1.55rem,5vw,2.1rem);line-height:1.05;letter-spacing:-0.02em;margin:0;text-wrap:balance}
+.brand h1 span{color:var(--accent)}
+.brand p{margin:0;color:var(--muted);font-size:.85rem}
+
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:18px}
+.tabs button{flex:1;background:none;border:0;padding:12px 6px 10px;font-family:var(--f-display);font-weight:600;font-size:1rem;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-1px}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+
+.ro{background:var(--sunk);color:var(--muted);border-radius:var(--r);padding:10px 12px;font-size:.88rem;margin-bottom:14px}
+.state{color:var(--muted);padding:28px 4px}
+.empty{padding:32px 4px;display:grid;gap:6px}
+.empty h2{font-family:var(--f-display);font-weight:600;font-size:1.2rem;margin:0}
+.empty p{margin:0;color:var(--muted);max-width:52ch}
+
+.eyebrow{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--muted)}
+
+/* Courses */
+.cour-head{display:grid;gap:12px;margin-bottom:18px}
+.week-pick{display:grid;gap:4px}
+select{appearance:none;background:var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.6' fill='none'/%3E%3C/svg%3E") no-repeat right 14px center;border:1px solid var(--line);border-radius:var(--r);padding:11px 38px 11px 12px;font-family:var(--f-display);font-weight:600;font-size:1.05rem;width:100%}
+.progress{display:grid;gap:6px}
+.progress .num{font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-size:.92rem;color:var(--muted)}
+.progress .num strong{color:var(--ink);font-size:1.2rem}
+.bar{height:8px;border-radius:99px;background:var(--sunk);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--leaf);border-radius:inherit;transition:width .25s ease}
+.actions{display:flex;flex-wrap:wrap;gap:8px}
+.btn{background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:7px 14px;font-size:.88rem}
+.btn[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.btn.danger{color:var(--warn)}
+.confirm{display:flex;flex-wrap:wrap;align-items:center;gap:8px;background:var(--accent-soft);border-radius:var(--r);padding:10px 12px;font-size:.92rem}
+.confirm span{flex:1 1 180px}
+
+.rayon{margin-bottom:22px}
+.rayon h2{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin:0 0 6px;padding-inline:4px}
+.rayon h2 .eyebrow{color:var(--accent)}
+.rayon h2 .cnt{font-family:var(--f-mono);font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.rayon .hint{margin:-2px 4px 8px;font-size:.84rem;color:var(--muted)}
+.items{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.item{display:flex;align-items:stretch;border-top:1px solid var(--line)}
+.item:first-child{border-top:0}
+.tick{flex:1;min-width:0;display:grid;grid-template-columns:26px minmax(0,1fr) auto;align-items:center;gap:12px;background:none;border:0;text-align:left;padding:12px 14px;min-height:54px}
+.box{width:22px;height:22px;border:2px solid var(--muted);border-radius:6px;display:grid;place-items:center;transition:background .15s,border-color .15s}
+.done .box{background:var(--leaf);border-color:var(--leaf)}
+.done .box::after{content:"";width:10px;height:6px;border-left:2.5px solid var(--surface);border-bottom:2.5px solid var(--surface);transform:translateY(-1px) rotate(-45deg)}
+.nm{min-width:0;overflow-wrap:anywhere}
+.nm small{display:block;color:var(--muted);font-size:.8rem;line-height:1.35}
+.qt{font-family:var(--f-mono);font-size:.88rem;font-variant-numeric:tabular-nums;text-align:right;max-width:13ch;color:var(--ink)}
+.done .nm,.done .qt{color:var(--muted);text-decoration:line-through;text-decoration-thickness:1px}
+.rm{background:none;border:0;border-left:1px solid var(--line);padding:0 12px;font-size:.8rem;color:var(--muted)}
+.allok{background:var(--surface);border:1px dashed var(--line);border-radius:var(--r);padding:12px 14px;color:var(--muted);font-size:.9rem}
+
+.extra{display:grid;gap:6px;margin-top:6px}
+.extra label{padding-inline:4px}
+.extra-row{display:flex;flex-wrap:wrap;gap:8px}
+.extra input{flex:2 1 160px;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 12px}
+.extra input#extra-qte{flex:1 1 100px}
+.extra button{flex:0 0 auto;border-radius:var(--r);padding:10px 16px}
+
+/* Plats */
+.filters{display:grid;gap:12px;margin-bottom:16px}
+input[type="search"]{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:11px 12px}
+.group{display:flex;align-items:center;gap:10px;min-width:0}
+.group .eyebrow{flex:0 0 88px}
+.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;min-width:0;padding-block:2px}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:5px 12px;font-size:.86rem;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--leaf);border-color:var(--leaf);color:var(--surface)}
+.count{display:flex;justify-content:space-between;align-items:center;gap:8px;color:var(--muted);font-size:.88rem;margin-bottom:10px;padding-inline:4px}
+.linkbtn{background:none;border:0;padding:0;color:var(--accent);font-size:.88rem;text-decoration:underline;text-underline-offset:3px}
+
+.plats{display:grid;gap:12px}
+.plat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:grid;gap:10px}
+.plat.idee{border-style:dashed}
+.plat-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.plat h3{font-family:var(--f-display);font-weight:600;font-size:1.1rem;line-height:1.25;margin:0;text-wrap:balance;min-width:0}
+.tag{flex:0 0 auto;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;padding:3px 8px;border-radius:6px;background:var(--leaf-soft);color:var(--leaf)}
+.tag.viande{background:var(--accent-soft);color:var(--accent)}
+.tag.idee{background:var(--sunk);color:var(--muted)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:6px 14px;margin:0}
+.facts div{min-width:0}
+.facts dt{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.facts dd{margin:0;font-size:.9rem}
+.ingr{margin:0;font-size:.9rem;color:var(--muted)}
+.ingr b{color:var(--ink);font-weight:700}
+.remarque{margin:0;font-size:.88rem;background:var(--accent-soft);border-radius:8px;padding:8px 10px}
+.remarque b{color:var(--accent)}
+.plat-foot{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;border-top:1px solid var(--line);padding-top:10px}
+.fait{font-size:.84rem;color:var(--muted);font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.avis{display:flex;gap:4px;flex-wrap:wrap}
+.avis button{background:none;border:1px solid var(--line);border-radius:99px;padding:4px 10px;font-size:.8rem;color:var(--muted)}
+.avis button[aria-pressed="true"][data-v="a-refaire"]{background:var(--leaf);border-color:var(--leaf);color:var(--surface)}
+.avis button[aria-pressed="true"][data-v="bof"]{background:var(--muted);border-color:var(--muted);color:var(--surface)}
+.avis button[aria-pressed="true"][data-v="plus-jamais"]{background:var(--warn);border-color:var(--warn);color:var(--surface)}
+.avis button:disabled{cursor:default}
+
+/* Semaines */
+.weeks{display:grid;gap:12px}
+.week{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+.week summary{list-style:none;cursor:pointer;padding:14px 16px;display:grid;gap:4px}
+.week summary::-webkit-details-marker{display:none}
+.week summary h3{font-family:var(--f-display);font-weight:600;font-size:1.15rem;margin:0;display:flex;justify-content:space-between;gap:10px}
+.week summary h3::after{content:"+";font-family:var(--f-mono);color:var(--muted)}
+.week[open] summary h3::after{content:"–"}
+.week summary p{margin:0;font-size:.84rem;color:var(--muted)}
+.steps{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.steps span{font-size:.74rem;padding:2px 8px;border-radius:6px;background:var(--sunk);color:var(--muted)}
+.steps span.ok{background:var(--leaf-soft);color:var(--leaf)}
+.week-body{padding:0 16px 16px;display:grid;gap:18px}
+.menu{margin:0;display:grid;gap:0;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.menu div{display:grid;grid-template-columns:52px minmax(0,1fr);gap:10px;padding:9px 12px;border-top:1px solid var(--line)}
+.menu div:first-child{border-top:0}
+.menu dt{font-family:var(--f-mono);font-size:.78rem;text-transform:uppercase;color:var(--accent);padding-top:2px}
+.menu dd{margin:0;font-size:.93rem}
+.week-body h4{margin:0 0 6px}
+.week-body p.txt{margin:0;font-size:.9rem;color:var(--muted);max-width:65ch}
+.retours{margin:0;padding-left:18px;font-size:.9rem;display:grid;gap:4px}
+.mini{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.mini ul{list-style:none;margin:0;padding:0;font-size:.86rem}
+.mini li{display:flex;justify-content:space-between;gap:10px;padding:3px 0;border-bottom:1px dotted var(--line)}
+.mini li span:last-child{font-family:var(--f-mono);font-variant-numeric:tabular-nums;text-align:right;color:var(--muted)}
+
+/* Repas */
+.plan-head{display:grid;gap:10px;margin-bottom:16px}
+.hint-txt{margin:0;color:var(--muted);font-size:.86rem;max-width:60ch}
+.grid-repas{display:grid;grid-template-columns:52px repeat(5,minmax(0,1fr));gap:6px;align-items:stretch}
+.grid-repas .jh{text-align:center;font-family:var(--f-display);font-weight:600;font-size:.95rem;line-height:1.1;padding-bottom:2px}
+.grid-repas .jh small{display:block;font-family:var(--f-mono);font-weight:500;font-size:.72rem;color:var(--muted)}
+.grid-repas .rh{align-self:center;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.meal{min-height:52px;border-radius:8px;border:1.5px dashed var(--line);background:transparent;color:var(--muted);font-size:.78rem;padding:4px 2px;display:grid;place-items:center;line-height:1.15}
+.meal[aria-pressed="true"]{background:var(--leaf-soft);border:1.5px solid var(--leaf);color:var(--leaf);font-weight:700}
+.meal:disabled{cursor:default}
+.bilan{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;display:grid;gap:4px;margin-block:16px}
+.bilan .big{font-family:var(--f-display);font-weight:800;font-size:1.6rem;line-height:1.1}
+.bilan .big span{color:var(--accent);font-variant-numeric:tabular-nums}
+.bilan p{margin:0;color:var(--muted);font-size:.92rem}
+.bilan p b{color:var(--ink);font-family:var(--f-mono);font-weight:500}
+.note-box{display:grid;gap:6px;margin-bottom:22px}
+.note-box textarea{width:100%;resize:vertical;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 12px;font:inherit;color:var(--ink)}
+.note-state{font-size:.8rem;color:var(--muted);min-height:1.2em}
+.reglages{border-top:1px solid var(--line);padding-top:16px;display:grid;gap:12px}
+.reglages h2{font-family:var(--f-display);font-weight:600;font-size:1.05rem;margin:0}
+.reglages p.txt{margin:0;color:var(--muted);font-size:.86rem;max-width:60ch}
+.stepper{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:8px 8px 8px 14px}
+.stepper .lbl{min-width:0}
+.stepper .lbl small{display:block;color:var(--muted);font-size:.8rem}
+.stepper .ctl{display:flex;align-items:center;gap:6px;flex:0 0 auto}
+.stepper button{width:40px;height:40px;border-radius:8px;border:1px solid var(--line);background:var(--bg);font-size:1.2rem;line-height:1}
+.stepper output{min-width:2ch;text-align:center;font-family:var(--f-mono);font-size:1.1rem;font-variant-numeric:tabular-nums}
+
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));max-width:calc(100% - 32px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:var(--r);font-size:.9rem;z-index:10;box-shadow:0 6px 24px rgb(0 0 0 / .2)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+@media (max-width:440px){.group{flex-direction:column;align-items:stretch;gap:4px}.group .eyebrow{flex:none}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="brand">
+    <h1>Carnet de <span>batch cooking</span></h1>
+    <p>Dimanche en cuisine · 2 personnes · 5 plats</p>
+  </header>
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button type="button" role="tab" id="t-repas" data-tab="repas" aria-controls="v-repas" aria-selected="false">Repas</button>
+    <button type="button" role="tab" id="t-courses" data-tab="courses" aria-controls="v-courses" aria-selected="true">Courses</button>
+    <button type="button" role="tab" id="t-plats" data-tab="plats" aria-controls="v-plats" aria-selected="false">Plats</button>
+    <button type="button" role="tab" id="t-semaines" data-tab="semaines" aria-controls="v-semaines" aria-selected="false">Semaines</button>
+  </nav>
+  <div id="ro" class="ro" hidden>Lecture seule : vous pouvez consulter le carnet, pas le modifier.</div>
+  <main>
+    <section id="v-repas" role="tabpanel" aria-labelledby="t-repas" hidden>
+      <div id="repas-main"><p class="state">Chargement du planning…</p></div>
+      <div id="repas-note" class="note-box" hidden>
+        <label for="plan-note" class="eyebrow">Remarques pour les menus de cette semaine</label>
+        <textarea id="plan-note" rows="2" placeholder="Ex. envie de soupe, un plat facile à emporter jeudi midi"></textarea>
+        <span class="note-state" id="note-state" aria-live="polite"></span>
+      </div>
+      <div id="reglages"></div>
+    </section>
+    <section id="v-courses" role="tabpanel" aria-labelledby="t-courses">
+      <div id="courses-head"></div>
+      <div id="courses-list"><p class="state">Chargement de la liste de courses…</p></div>
+      <form id="extra-form" class="extra" hidden>
+        <label for="extra-nom" class="eyebrow">Ajouter un article à la liste</label>
+        <div class="extra-row">
+          <input id="extra-nom" placeholder="Ex. citrons" autocomplete="off" required>
+          <input id="extra-qte" placeholder="Quantité" autocomplete="off">
+          <button type="submit" class="btn primary">Ajouter</button>
+        </div>
+      </form>
+    </section>
+    <section id="v-plats" role="tabpanel" aria-labelledby="t-plats" hidden>
+      <div class="filters">
+        <label for="plat-search" class="sr">Chercher un plat ou un ingrédient</label>
+        <input id="plat-search" type="search" placeholder="Chercher un plat ou un ingrédient" autocomplete="off">
+        <div id="chip-groups"></div>
+      </div>
+      <div id="plats-list"><p class="state">Chargement des plats…</p></div>
+    </section>
+    <section id="v-semaines" role="tabpanel" aria-labelledby="t-semaines" hidden>
+      <div id="semaines-list"><p class="state">Chargement des semaines…</p></div>
+    </section>
+  </main>
+</div>
+<div id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+/* Configuration Firebase (clés publiques par conception ; l'accès est limité par les règles Firestore). */
+window.FIREBASE_CONFIG = {
+  apiKey: "AIzaSyBC58wEcsvAlQ0-OM2HttzKRoe2tRmsq0c",
+  authDomain: "carnet-batch-cooking.firebaseapp.com",
+  projectId: "carnet-batch-cooking",
+  storageBucket: "carnet-batch-cooking.firebasestorage.app",
+  messagingSenderId: "904720822515",
+  appId: "1:904720822515:web:44ac65a5cfd80c269b0786"
+};
+</script>
+<script>
+(function(){
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const norm = s => String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+  const fLong = new Intl.DateTimeFormat('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+  const fShort = new Intl.DateTimeFormat('fr-FR',{day:'numeric',month:'short',year:'numeric'});
+  const fDay = new Intl.DateTimeFormat('fr-FR',{weekday:'long',day:'numeric',month:'long'});
+  const toDate = iso => { const [y,m,d] = String(iso).split('-').map(Number); return new Date(y,(m||1)-1,d||1); };
+  const TABS = ['repas','courses','plats','semaines'];
+  const JOURS = [['lundi','Lun'],['mardi','Mar'],['mercredi','Mer'],['jeudi','Jeu'],['vendredi','Ven']];
+  const MOMENTS = [['midi','Midi'],['soir','Soir']];
+  const isoOf = x => x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0');
+  function nextMondays(n){
+    const d = new Date(); d.setHours(0,0,0,0);
+    d.setDate(d.getDate() + (7 - (d.getDay()+6)%7));
+    return Array.from({length:n}, (_,i) => { const x = new Date(d); x.setDate(d.getDate()+7*i); return isoOf(x); });
+  }
+
+  const S = {
+    status:'loading', dbErr:null, loaded:{plats:false, semaines:false, listes:false, plannings:false, reglages:false, avis:false}, platsBase:[], avis:{}, plats:[], semaines:[], listes:{}, plannings:{}, reglages:{}, planId:nextMondays(1)[0], tab:'courses', weekId:null,
+    hideDone:false, confirmReset:false, canWrite:true, open:new Set(), openInit:false,
+    f:{type:'tous',saison:'toutes',cong:'toutes',avis:'tous',statut:'tout',q:''}
+  };
+  try { const t = localStorage.getItem('bc-tab'); if (TABS.includes(t)) S.tab = t; S.hideDone = localStorage.getItem('bc-hide') === '1'; } catch(e){}
+  const h = location.hash.slice(1); if (TABS.includes(h)) S.tab = h;
+
+  let store = null;
+
+  /* ---------- tabs ---------- */
+  function setTab(t){
+    S.tab = t;
+    TABS.forEach(k => {
+      $('#t-'+k).setAttribute('aria-selected', String(k===t));
+      $('#v-'+k).hidden = k !== t;
+    });
+    try { localStorage.setItem('bc-tab', t); } catch(e){}
+    try { history.replaceState(null,'','#'+t); } catch(e){}
+  }
+
+  /* ---------- toast ---------- */
+  let toastTimer;
+  function toast(msg){
+    const el = $('#toast'); el.textContent = msg; el.hidden = false;
+    clearTimeout(toastTimer); toastTimer = setTimeout(()=>{ el.hidden = true; }, 3600);
+  }
+
+  /* ---------- writes ---------- */
+  const queues = {};
+  function enqueue(key, fn){
+    const p = (queues[key] || Promise.resolve()).then(fn).catch(onWriteErr);
+    queues[key] = p; return p;
+  }
+  function onWriteErr(e){
+    const code = e && e.code;
+    if (code === 'permission-denied') toast('La base a refusé l’enregistrement. Vérifiez les règles Firestore.');
+    else if (code === 'resource-exhausted') toast('Quota gratuit de la base atteint pour aujourd’hui : réessayez demain.');
+    else toast('Changement non enregistré. Vérifiez la connexion puis réessayez.');
+    return false;
+  }
+  function canEdit(){
+    if (!store) { toast('Base partagée injoignable : le changement n’est pas enregistré. Rechargez la page.'); return false; }
+    return true;
+  }
+  /* set + merge : Firestore fusionne les sous-objets (coche, extras, repas), le document est créé s'il manque */
+  const writeDoc = (path, patch) => enqueue(path, () => store.merge(path, patch));
+  const writeList = (wid, patch) => writeDoc('listes/'+wid, patch, {coche:{}, extras:{}});
+  function localList(wid){
+    if (!S.listes[wid]) S.listes[wid] = {coche:{}, extras:{}};
+    const L = S.listes[wid]; L.coche = L.coche || {}; L.extras = L.extras || {};
+    return L;
+  }
+
+  /* ---------- helpers ---------- */
+  const weeksSorted = () => S.semaines.slice().sort((a,b)=> String(b.debut||b.id).localeCompare(String(a.debut||a.id)));
+  const DBKEYS = ['listes','plannings','reglages','avis'];
+  function gate(el, what, keys){
+    if (S.status === 'nodb' && keys.some(k => DBKEYS.includes(k))) {
+      el.innerHTML = S.dbErr === 'config'
+        ? '<div class="empty"><h2>Application pas encore reliée à sa base</h2><p>La configuration Firebase manque dans index.html.</p></div>'
+        : '<div class="empty"><h2>Base partagée injoignable</h2><p>Vérifiez la connexion internet, puis rechargez la page.</p></div>';
+      return true;
+    }
+    if (keys.some(k => !S.loaded[k])) { el.innerHTML = '<p class="state">Chargement '+what+'…</p>'; return true; }
+    return false;
+  }
+  function mergeAvis(){
+    S.plats = S.platsBase.map(p => Object.assign({}, p, {avis: S.avis[p.id] != null ? S.avis[p.id] : (p.avis || '')}));
+  }
+  const empty = (t, p) => '<div class="empty"><h2>'+esc(t)+'</h2><p>'+esc(p)+'</p></div>';
+  const weekLabel = w => 'Semaine du ' + fLong.format(toDate(w.debut || w.id));
+
+  /* ---------- repas de la semaine ---------- */
+  const reg = () => ({personnes: S.reglages.personnes || 2, portionsParPlat: S.reglages.portionsParPlat || 4});
+  function planRepas(pid){
+    const stored = (S.plannings[pid] || {}).repas || {};
+    const r = {};
+    JOURS.forEach(([j]) => { r[j] = {}; MOMENTS.forEach(([m]) => { r[j][m] = !(stored[j] && stored[j][m] === false); }); });
+    return r;
+  }
+  function bilan(repas){
+    const {personnes, portionsParPlat:P} = reg();
+    let n = 0; JOURS.forEach(([j]) => MOMENTS.forEach(([m]) => { if (repas[j][m]) n++; }));
+    const portions = n * personnes, plats = Math.ceil(portions / P);
+    return {n, portions, plats, reste: portions - (plats-1)*P, P, personnes};
+  }
+  function stepper(k, label, sub, v, min, max){
+    const dis = S.canWrite ? '' : ' disabled';
+    const b = (d, txt, lim) => '<button type="button" data-step="'+k+'" data-d="'+d+'" data-min="'+min+'" data-max="'+max+'" aria-label="'+txt+'"'+(lim?' disabled':dis)+'>'+(d<0?'−':'+')+'</button>';
+    return '<div class="stepper"><span class="lbl">'+esc(label)+'<small>'+esc(sub)+'</small></span><span class="ctl">'
+      + b(-1, label+' : un de moins', v<=min) + '<output aria-live="polite">'+v+'</output>' + b(1, label+' : un de plus', v>=max) + '</span></div>';
+  }
+  function renderRepas(){
+    const main = $('#repas-main'), noteBox = $('#repas-note');
+    if (gate(main, 'du planning', ['plannings','reglages'])) { noteBox.hidden = true; $('#reglages').innerHTML = ''; return; }
+    const ids = nextMondays(3);
+    if (!ids.includes(S.planId)) S.planId = ids[0];
+    const repas = planRepas(S.planId), b = bilan(repas), lundi = toDate(S.planId);
+    const dis = S.canWrite ? '' : ' disabled';
+    let grid = '<div class="grid-repas" role="group" aria-label="Repas pris à la maison"><span></span>';
+    JOURS.forEach(([,l], i) => { const x = new Date(lundi); x.setDate(lundi.getDate()+i); grid += '<span class="jh">'+l+'<small>'+x.getDate()+'</small></span>'; });
+    MOMENTS.forEach(([m, ml]) => {
+      grid += '<span class="rh">'+ml+'</span>';
+      JOURS.forEach(([j, jl]) => {
+        const on = repas[j][m];
+        grid += '<button type="button" class="meal" data-meal="'+j+'.'+m+'" aria-pressed="'+on+'" aria-label="'+jl+' '+ml.toLowerCase()+' : '+(on?'à la maison':'dehors')+'"'+dis+'>'+(on?'Maison':'Dehors')+'</button>';
+      });
+    });
+    grid += '</div>';
+    const detail = !b.n
+      ? '<p>Aucun repas à la maison : pas de batch cooking cette semaine.</p>'
+      : '<p>Soit <b>'+b.portions+'</b> portions pour '+b.personnes+' personne'+(b.personnes>1?'s':'')+', donc <b>'+b.plats+'</b> plat'+(b.plats>1?'s':'')+' de '+b.P+' portions'+(b.reste !== b.P ? ' (dont 1 de '+b.reste+')' : '')+'.</p>';
+    const allHome = b.n === JOURS.length * MOMENTS.length;
+    main.innerHTML = '<div class="plan-head"><div class="week-pick"><label for="plan-select" class="eyebrow">Semaine à préparer</label><select id="plan-select">'
+      + ids.map(id => '<option value="'+id+'"'+(id===S.planId?' selected':'')+'>Semaine du '+esc(fLong.format(toDate(id)))+'</option>').join('')
+      + '</select></div><p class="hint-txt">Touchez un repas pris à l’extérieur pour le passer en « Dehors ». Claude lit ce planning avant de proposer les menus.</p></div>'
+      + grid
+      + '<div class="bilan"><div class="big"><span>'+b.n+'</span> repas à la maison</div>'+detail
+      + (!allHome && S.canWrite ? '<div><button type="button" class="linkbtn" id="all-home">Tout remettre à la maison</button></div>' : '')
+      + '</div>';
+    noteBox.hidden = false;
+    const ta = $('#plan-note');
+    if (document.activeElement !== ta) ta.value = (S.plannings[S.planId] || {}).note || '';
+    ta.disabled = !S.canWrite;
+    const r = reg();
+    $('#reglages').innerHTML = '<div class="reglages"><h2>Réglages du foyer</h2>'
+      + '<p class="txt">Valables toutes les semaines. Ils fixent le nombre de plats et les quantités des listes de courses.</p>'
+      + stepper('personnes', 'Personnes à nourrir', 'À chaque repas', r.personnes, 1, 8)
+      + stepper('portionsParPlat', 'Portions par plat', '4 = un midi et un soir pour 2', r.portionsParPlat, 2, 12)
+      + '</div>';
+  }
+  let noteTimer;
+  function saveNote(){
+    if (!store || !S.loaded.plannings) return;
+    const pid = S.planId, v = $('#plan-note').value.trim();
+    const P = S.plannings[pid] = S.plannings[pid] || {};
+    if ((P.note || '') === v) return;
+    P.note = v;
+    writeDoc('plannings/'+pid, {note:v}, {repas:{}, note:''}).then(ok => { if (ok !== false) $('#note-state').textContent = 'Enregistré'; });
+  }
+
+  /* ---------- courses ---------- */
+  function itemRow(id, nom, qte, note, done, removable){
+    return '<li class="item'+(done?' done':'')+'">'
+      + '<button type="button" class="tick" data-tick="'+esc(id)+'" aria-pressed="'+done+'">'
+      + '<span class="box" aria-hidden="true"></span>'
+      + '<span class="nm">'+esc(nom)+(note?'<small>'+esc(note)+'</small>':'')+'</span>'
+      + '<span class="qt">'+esc(qte||'')+'</span></button>'
+      + (removable ? '<button type="button" class="rm" data-rm="'+esc(id)+'" aria-label="Retirer '+esc(nom)+'">Retirer</button>' : '')
+      + '</li>';
+  }
+  function renderCourses(){
+    const head = $('#courses-head'), list = $('#courses-list'), form = $('#extra-form');
+    if (gate(list, 'de la liste de courses', ['semaines','listes'])) { head.innerHTML = ''; form.hidden = true; return; }
+    const weeks = weeksSorted();
+    if (!weeks.length) {
+      head.innerHTML = ''; form.hidden = true;
+      list.innerHTML = empty('Aucune liste de courses pour l’instant', 'Dès qu’une semaine est validée, sa liste arrive ici, rangée par rayon, à cocher au magasin.');
+      return;
+    }
+    if (!S.weekId || !weeks.some(w => w.id === S.weekId)) S.weekId = weeks[0].id;
+    const w = weeks.find(x => x.id === S.weekId);
+    const L = S.listes[w.id] || {};
+    const coche = L.coche || {};
+    const extras = Object.entries(L.extras || {}).filter(([,v]) => v && !v.supprime);
+
+    let total = 0, done = 0, html = '';
+    (w.courses || []).forEach(r => {
+      let n = 0, d = 0, rows = '';
+      (r.items || []).forEach(it => {
+        const c = !!coche[it.id]; n++; if (c) d++;
+        if (!(c && S.hideDone)) rows += itemRow(it.id, it.nom, it.qte, it.note, c, false);
+      });
+      if (!r.placard) { total += n; done += d; }
+      html += '<section class="rayon"><h2><span class="eyebrow">'+esc(r.rayon)+'</span><span class="cnt">'+d+' / '+n+'</span></h2>'
+        + (r.hint ? '<p class="hint">'+esc(r.hint)+'</p>' : '')
+        + (rows ? '<ul class="items">'+rows+'</ul>' : '<div class="allok">Tout est coché dans ce rayon.</div>')
+        + '</section>';
+    });
+    if (extras.length) {
+      let n = 0, d = 0, rows = '';
+      extras.forEach(([id, v]) => {
+        const c = !!coche[id]; n++; if (c) d++;
+        if (!(c && S.hideDone)) rows += itemRow(id, v.nom, v.qte, '', c, true);
+      });
+      total += n; done += d;
+      html += '<section class="rayon"><h2><span class="eyebrow">Ajouts</span><span class="cnt">'+d+' / '+n+'</span></h2>'
+        + (rows ? '<ul class="items">'+rows+'</ul>' : '<div class="allok">Tout est coché.</div>') + '</section>';
+    }
+
+    const pct = total ? Math.round(done/total*100) : 0;
+    const checkedCount = Object.values(coche).filter(Boolean).length;
+    head.innerHTML = '<div class="cour-head">'
+      + '<div class="week-pick"><label for="week-select" class="eyebrow">Liste de la semaine</label>'
+      + '<select id="week-select">' + weeks.map(x => '<option value="'+esc(x.id)+'"'+(x.id===w.id?' selected':'')+'>'+esc(weekLabel(x))+'</option>').join('') + '</select></div>'
+      + '<div class="progress"><div class="num"><strong>'+done+'</strong> / '+total+' articles dans le panier</div>'
+      + '<div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="'+total+'" aria-valuenow="'+done+'" aria-label="Articles cochés"><i style="width:'+pct+'%"></i></div></div>'
+      + '<div class="actions"><button type="button" class="btn" id="toggle-done" aria-pressed="'+S.hideDone+'">Masquer les cochés</button>'
+      + (S.canWrite && checkedCount ? '<button type="button" class="btn danger" id="reset-ask">Tout décocher</button>' : '') + '</div>'
+      + (S.confirmReset ? '<div class="confirm" role="group" aria-label="Confirmation"><span>Décocher les '+checkedCount+' cases de cette liste, pour vous deux ?</span>'
+         + '<button type="button" class="btn primary" id="reset-yes">Oui, tout décocher</button><button type="button" class="btn" id="reset-no">Annuler</button></div>' : '')
+      + '</div>';
+    list.innerHTML = html || empty('Liste vide', 'Cette semaine n’a pas encore de liste de courses.');
+    form.hidden = !S.canWrite;
+  }
+
+  /* ---------- plats ---------- */
+  const GROUPS = [
+    {k:'type', label:'Type', opts:[['tous','Tous'],['vege','Végé'],['viande','Viande']]},
+    {k:'saison', label:'Saison', opts:[['toutes','Toutes'],['automne','Automne'],['hiver','Hiver'],['printemps','Printemps'],['ete','Été']]},
+    {k:'cong', label:'Congélation', opts:[['toutes','Toutes'],['oui','Oui'],['moyen','Moyen'],['non','Non']]},
+    {k:'avis', label:'Avis', opts:[['tous','Tous'],['aucun','Pas encore noté'],['a-refaire','À refaire'],['bof','Bof'],['plus-jamais','Plus jamais']]},
+    {k:'statut', label:'Statut', opts:[['tout','Tout'],['fait','Déjà faits'],['idee','Idées']]}
+  ];
+  const DEFAULT_F = {type:'tous',saison:'toutes',cong:'toutes',avis:'tous',statut:'tout'};
+  function buildChips(){
+    $('#chip-groups').innerHTML = GROUPS.map(g =>
+      '<div class="group" role="group" aria-label="'+esc(g.label)+'"><span class="eyebrow">'+esc(g.label)+'</span><div class="chips">'
+      + g.opts.map(([v,l]) => '<button type="button" class="chip" data-fk="'+g.k+'" data-fv="'+v+'" aria-pressed="false">'+esc(l)+'</button>').join('')
+      + '</div></div>').join('');
+    $('#chip-groups').style.display = 'grid'; $('#chip-groups').style.gap = '8px';
+  }
+  function syncChips(){
+    document.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', String(S.f[c.dataset.fk] === c.dataset.fv)));
+  }
+  const SAISON = {automne:'automne', hiver:'hiver', printemps:'printemps', ete:'été'};
+  const CONG = {oui:'Se congèle', moyen:'Moyennement', non:'Ne se congèle pas'};
+  const CONS = {tot:'À manger tôt dans la semaine', tient:'Tient jusqu’au vendredi'};
+  const AVIS = [['a-refaire','À refaire'],['bof','Bof'],['plus-jamais','Plus jamais']];
+
+  function renderPlats(){
+    const el = $('#plats-list');
+    syncChips();
+    if (gate(el, 'des plats', ['plats'])) return;
+    if (!S.plats.length) { el.innerHTML = empty('Le catalogue est vide', 'Chaque plat validé pour une semaine vient s’ajouter ici, avec sa saison, sa conservation et votre avis.'); return; }
+    const f = S.f, q = norm(f.q);
+    const list = S.plats.filter(p =>
+      (f.type === 'tous' || p.type === f.type) &&
+      (f.saison === 'toutes' || (p.saisons || []).includes(f.saison)) &&
+      (f.cong === 'toutes' || p.congelation === f.cong) &&
+      (f.avis === 'tous' || (f.avis === 'aucun' ? !p.avis && (p.statut || 'fait') === 'fait' : p.avis === f.avis)) &&
+      (f.statut === 'tout' || (p.statut || 'fait') === f.statut) &&
+      (!q || norm(p.nom + ' ' + (p.ingredients || []).join(' ')).includes(q))
+    ).sort((a,b) => {
+      const sa = (a.statut||'fait') === 'idee' ? 1 : 0, sb = (b.statut||'fait') === 'idee' ? 1 : 0;
+      if (sa !== sb) return sa - sb;
+      const la = (a.faitLe||[]).slice().sort().pop() || '', lb = (b.faitLe||[]).slice().sort().pop() || '';
+      return lb.localeCompare(la) || (a.ordre||0) - (b.ordre||0);
+    });
+    const active = Object.keys(DEFAULT_F).some(k => f[k] !== DEFAULT_F[k]) || q;
+    let html = '<div class="count"><span>'+list.length+' plat'+(list.length>1?'s':'')+' sur '+S.plats.length+'</span>'
+      + (active ? '<button type="button" class="linkbtn" id="clear-filters">Effacer les filtres</button>' : '') + '</div>';
+    if (!list.length) { el.innerHTML = html + empty('Aucun plat ne correspond', 'Retirez un filtre ou cherchez un autre ingrédient.'); return; }
+    html += '<div class="plats">' + list.map(p => {
+      const idee = (p.statut||'fait') === 'idee';
+      const tag = idee ? '<span class="tag idee">Idée</span>' : (p.type === 'viande' ? '<span class="tag viande">Viande</span>' : '<span class="tag">Végé</span>');
+      const facts = [
+        ['Cuisson', p.cuisson],
+        ['Conservation', CONS[p.conservation] || p.conservation],
+        ['Congélation', p.congelation ? (CONG[p.congelation] || p.congelation) + (p.congelationNote ? ' ('+p.congelationNote+')' : '') : ''],
+        ['Saison', (p.saisons||[]).map(s => SAISON[s] || s).join(', ')]
+      ].filter(x => x[1]).map(([k,v]) => '<div><dt>'+k+'</dt><dd>'+esc(v)+'</dd></div>').join('');
+      const fait = (p.faitLe||[]).slice().sort().reverse().map(id => 'sem. du '+fShort.format(toDate(id))).join(' · ');
+      const avis = idee ? '' : '<div class="avis" role="group" aria-label="Avis sur ce plat">' + AVIS.map(([v,l]) =>
+        '<button type="button" data-avis="'+esc(p.id)+'" data-v="'+v+'" aria-pressed="'+(p.avis===v)+'"'+(S.canWrite?'':' disabled')+'>'+l+'</button>').join('') + '</div>';
+      return '<article class="plat'+(idee?' idee':'')+'">'
+        + '<div class="plat-top"><h3>'+esc(p.nom)+'</h3>'+tag+'</div>'
+        + (facts ? '<dl class="facts">'+facts+'</dl>' : '')
+        + ((p.ingredients||[]).length ? '<p class="ingr"><b>Ingrédients clés :</b> '+esc(p.ingredients.join(', '))+'</p>' : '')
+        + (p.remarque ? '<p class="remarque"><b>Retour :</b> '+esc(p.remarque)+'</p>' : '')
+        + '<div class="plat-foot"><span class="fait">'+(idee ? 'Pas encore cuisiné' : (fait ? 'Fait : '+esc(fait) : ''))+'</span>'+avis+'</div>'
+        + '</article>';
+    }).join('') + '</div>';
+    el.innerHTML = html;
+  }
+
+  /* ---------- semaines ---------- */
+  function renderSemaines(){
+    const el = $('#semaines-list');
+    if (gate(el, 'des semaines', ['semaines'])) return;
+    const weeks = weeksSorted();
+    if (!weeks.length) { el.innerHTML = empty('Aucune semaine enregistrée', 'Chaque semaine validée s’ajoute ici avec son menu, sa liste de courses et les retours du dimanche.'); return; }
+    if (!S.openInit) { S.open.add(weeks[0].id); S.openInit = true; }
+    el.innerHTML = '<div class="weeks">' + weeks.map(w => {
+      const et = w.etapes || {};
+      const steps = [['menu','Menu validé'],['courses','Liste de courses'],['deroule','Déroulé du dimanche']]
+        .map(([k,l]) => '<span class="'+(et[k]?'ok':'')+'">'+(et[k]?'✓ ':'')+l+'</span>').join('');
+      const menu = (w.menu||[]).map(m => '<div><dt>'+esc(String(m.jour||'').slice(0,3))+'</dt><dd>'+esc(m.plat)+'</dd></div>').join('');
+      const mini = (w.courses||[]).map(r => '<div><h4 class="eyebrow">'+esc(r.rayon)+'</h4><ul>'
+        + (r.items||[]).map(it => '<li><span>'+esc(it.nom)+'</span><span>'+esc(it.qte||'')+'</span></li>').join('') + '</ul></div>').join('');
+      return '<details class="week" data-week="'+esc(w.id)+'"'+(S.open.has(w.id)?' open':'')+'>'
+        + '<summary><h3>'+esc(weekLabel(w))+'</h3>'
+        + ((w.batch || w.nbRepas) ? '<p>'+[w.batch ? 'Batch le '+esc(fDay.format(toDate(w.batch))) : '', w.nbRepas ? esc(w.nbRepas)+' repas à la maison' : ''].filter(Boolean).join(' · ')+'</p>' : '')
+        + '<div class="steps">'+steps+'</div></summary>'
+        + '<div class="week-body">'
+        + (menu ? '<div><h4 class="eyebrow">Menu</h4><dl class="menu">'+menu+'</dl></div>' : '')
+        + (w.choix ? '<div><h4 class="eyebrow">Comment on a choisi</h4><p class="txt">'+esc(w.choix)+'</p></div>' : '')
+        + ((w.retours||[]).length ? '<div><h4 class="eyebrow">Retours du dimanche</h4><ul class="retours">'+w.retours.map(r => '<li>'+esc(r)+'</li>').join('')+'</ul></div>' : '')
+        + (mini ? '<div><h4 class="eyebrow">Liste de courses</h4><div class="mini">'+mini+'</div></div>' : '')
+        + '<div><button type="button" class="btn primary" data-openlist="'+esc(w.id)+'">Ouvrir la liste à cocher</button></div>'
+        + '</div></details>';
+    }).join('') + '</div>';
+  }
+
+  function renderAll(){
+    $('#ro').hidden = S.canWrite || S.status !== 'ready';
+    /* status 'ready' = la base répond ; chaque onglet attend ses propres données (S.loaded) */
+    renderRepas(); renderCourses(); renderPlats(); renderSemaines();
+  }
+
+  /* ---------- events ---------- */
+  document.addEventListener('click', e => {
+    const t = e.target.closest('button'); if (!t) return;
+    if (t.dataset.tab) { setTab(t.dataset.tab); return; }
+    if (t.dataset.tick) {
+      if (!canEdit()) return;
+      const wid = S.weekId, L = localList(wid), id = t.dataset.tick, v = !L.coche[id];
+      L.coche[id] = v; renderCourses(); writeList(wid, {coche:{[id]:v}}); return;
+    }
+    if (t.dataset.rm) {
+      if (!canEdit()) return;
+      const wid = S.weekId, L = localList(wid), id = t.dataset.rm;
+      L.extras[id] = Object.assign({}, L.extras[id], {supprime:true});
+      renderCourses(); writeList(wid, {extras:{[id]:{supprime:true}}}); return;
+    }
+    if (t.dataset.meal) {
+      if (!canEdit()) return;
+      const [j, m] = t.dataset.meal.split('.'), pid = S.planId, nv = !planRepas(pid)[j][m];
+      const P = S.plannings[pid] = S.plannings[pid] || {}; P.repas = P.repas || {};
+      P.repas[j] = Object.assign({}, P.repas[j], {[m]: nv});
+      renderRepas(); writeDoc('plannings/'+pid, {repas:{[j]:{[m]:nv}}}, {repas:{}, note:''}); return;
+    }
+    if (t.id === 'all-home') {
+      if (!canEdit()) return;
+      const pid = S.planId, full = {};
+      JOURS.forEach(([j]) => { full[j] = {midi:true, soir:true}; });
+      const P = S.plannings[pid] = S.plannings[pid] || {}; P.repas = JSON.parse(JSON.stringify(full));
+      renderRepas(); writeDoc('plannings/'+pid, {repas:full}, {repas:{}, note:''}); return;
+    }
+    if (t.dataset.step) {
+      if (!canEdit()) return;
+      const k = t.dataset.step, r = reg();
+      const v = Math.min(+t.dataset.max, Math.max(+t.dataset.min, r[k] + Number(t.dataset.d)));
+      if (v === r[k]) return;
+      S.reglages = Object.assign({}, S.reglages, {[k]: v});
+      renderRepas(); writeDoc('reglages/foyer', {[k]: v}, {personnes:2, portionsParPlat:4}); return;
+    }
+    if (t.id === 'toggle-done') { S.hideDone = !S.hideDone; try { localStorage.setItem('bc-hide', S.hideDone?'1':'0'); } catch(e){} renderCourses(); return; }
+    if (t.id === 'reset-ask') { S.confirmReset = true; renderCourses(); return; }
+    if (t.id === 'reset-no') { S.confirmReset = false; renderCourses(); return; }
+    if (t.id === 'reset-yes') {
+      S.confirmReset = false;
+      if (!canEdit()) { renderCourses(); return; }
+      const wid = S.weekId, L = localList(wid), patch = {};
+      Object.keys(L.coche).forEach(k => { if (L.coche[k]) { patch[k] = false; L.coche[k] = false; } });
+      renderCourses(); if (Object.keys(patch).length) writeList(wid, {coche:patch}); toast('Liste décochée.'); return;
+    }
+    if (t.dataset.fk) { S.f[t.dataset.fk] = t.dataset.fv; renderPlats(); return; }
+    if (t.id === 'clear-filters') { Object.assign(S.f, DEFAULT_F, {q:''}); $('#plat-search').value = ''; renderPlats(); return; }
+    if (t.dataset.avis) {
+      if (!canEdit()) return;
+      const p = S.plats.find(x => x.id === t.dataset.avis); if (!p) return;
+      const nv = p.avis === t.dataset.v ? '' : t.dataset.v; S.avis[p.id] = nv; mergeAvis(); renderPlats();
+      writeDoc('avis/'+p.id, {avis:nv}); return;
+    }
+    if (t.dataset.openlist) { S.weekId = t.dataset.openlist; S.confirmReset = false; renderCourses(); setTab('courses'); window.scrollTo(0,0); return; }
+  });
+  document.addEventListener('change', e => {
+    if (e.target.id === 'week-select') { S.weekId = e.target.value; S.confirmReset = false; renderCourses(); }
+    if (e.target.id === 'plan-select') { saveNote(); S.planId = e.target.value; $('#note-state').textContent = ''; $('#plan-note').value = (S.plannings[S.planId] || {}).note || ''; renderRepas(); }
+  });
+  $('#plan-note').addEventListener('input', () => { clearTimeout(noteTimer); $('#note-state').textContent = ''; noteTimer = setTimeout(saveNote, 900); });
+  $('#plan-note').addEventListener('blur', () => { clearTimeout(noteTimer); saveNote(); });
+  document.addEventListener('toggle', e => {
+    const d = e.target; if (!d.matches || !d.matches('details[data-week]')) return;
+    if (d.open) S.open.add(d.dataset.week); else S.open.delete(d.dataset.week);
+  }, true);
+  $('#plat-search').addEventListener('input', e => { S.f.q = e.target.value; renderPlats(); });
+  $('#extra-form').addEventListener('submit', e => {
+    e.preventDefault();
+    if (!canEdit() || !S.weekId) return;
+    const nom = $('#extra-nom').value.trim(), qte = $('#extra-qte').value.trim();
+    if (!nom) return;
+    const id = 'x' + Date.now().toString(36) + Math.random().toString(36).slice(2,5);
+    const L = localList(S.weekId); L.extras[id] = {nom, qte};
+    $('#extra-nom').value = ''; $('#extra-qte').value = '';
+    renderCourses(); writeList(S.weekId, {extras:{[id]:{nom, qte}}});
+  });
+
+  /* ---------- boot ---------- */
+  const ready = k => { S.loaded[k] = true; };
+  async function getJSON(name){
+    try { const r = await fetch('data/'+name+'.json', {cache:'no-cache'}); if (r.ok) return await r.json(); } catch(e){}
+    const r = await fetch('data/'+name+'.json'); if (!r.ok) throw new Error(name); return r.json();
+  }
+  async function loadStatic(){
+    try {
+      const [plats, semaines] = await Promise.all([getJSON('plats'), getJSON('semaines')]);
+      S.platsBase = plats; S.semaines = semaines; mergeAvis();
+    } catch(e){ toast('Impossible de charger les menus et les plats. Rechargez la page.'); }
+    ready('plats'); ready('semaines'); renderAll();
+  }
+  async function connect(){
+    const cfg = window.FIREBASE_CONFIG;
+    if (!cfg || !cfg.apiKey) { const e = new Error('config'); e.kind = 'config'; throw e; }
+    const base = 'https://www.gstatic.com/firebasejs/10.12.2/';
+    const [appMod, authMod, fs] = await Promise.all([import(base+'firebase-app.js'), import(base+'firebase-auth.js'), import(base+'firebase-firestore.js')]);
+    const app = appMod.initializeApp(cfg);
+    const auth = authMod.getAuth(app);
+    await auth.authStateReady();
+    if (!auth.currentUser) await authMod.signInAnonymously(auth);
+    let fdb;
+    try { fdb = fs.initializeFirestore(app, {localCache: fs.persistentLocalCache({tabManager: fs.persistentMultipleTabManager()})}); }
+    catch(e){ fdb = fs.getFirestore(app); }
+    return {
+      watchCol: (name, next, err) => fs.onSnapshot(fs.collection(fdb, name), s => next(s.docs.map(d => ({id:d.id, data:d.data()}))), err),
+      watchDoc: (path, next, err) => fs.onSnapshot(fs.doc(fdb, path), s => next(s.exists() ? s.data() : null), err),
+      merge: (path, patch) => fs.setDoc(fs.doc(fdb, path), patch, {merge:true})
+    };
+  }
+
+  buildChips(); setTab(S.tab); renderAll();
+  loadStatic();
+  (async () => {
+    try { store = await connect(); }
+    catch(e){ S.status = 'nodb'; S.dbErr = e.kind === 'config' ? 'config' : 'net'; DBKEYS.forEach(ready); renderAll(); return; }
+    S.status = 'ready';
+    const onErrFor = k => e => { ready(k); renderAll(); toast(e && e.code === 'permission-denied' ? 'La base refuse la lecture : vérifiez les règles Firestore.' : 'Une partie du carnet ne se met plus à jour. Rechargez la page.'); };
+    setTimeout(() => {
+      const late = Object.keys(S.loaded).filter(k => !S.loaded[k]);
+      if (late.length) { late.forEach(ready); renderAll(); toast('Le carnet met du temps à répondre. Rechargez la page si rien n’apparaît.'); }
+    }, 12000);
+    const asMap = docs => { const o = {}; docs.forEach(d => { o[d.id] = JSON.parse(JSON.stringify(d.data)); }); return o; };
+    store.watchCol('plannings', docs => { S.plannings = asMap(docs); ready('plannings'); renderAll(); }, onErrFor('plannings'));
+    store.watchCol('listes', docs => { S.listes = asMap(docs); ready('listes'); renderAll(); }, onErrFor('listes'));
+    store.watchDoc('reglages/foyer', d => { S.reglages = d ? Object.assign({}, d) : {}; ready('reglages'); renderAll(); }, onErrFor('reglages'));
+    store.watchCol('avis', docs => { S.avis = {}; docs.forEach(d => { S.avis[d.id] = d.data.avis || ''; }); mergeAvis(); ready('avis'); renderAll(); }, onErrFor('avis'));
+  })();
+})();
+</script>
+</body>
+</html>
