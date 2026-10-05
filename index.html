@@ -52,7 +52,7 @@ button{cursor:pointer}
 .brand p{margin:0;color:var(--muted);font-size:.85rem}
 
 .tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:18px}
-.tabs button{flex:1;background:none;border:0;padding:12px 6px 10px;font-family:var(--f-display);font-weight:600;font-size:1rem;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-1px}
+.tabs button{flex:1;min-width:0;background:none;border:0;padding:12px 2px 10px;font-family:var(--f-display);font-weight:600;font-size:clamp(.86rem,3.6vw,1rem);color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-1px}
 .tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
 
 .ro{background:var(--sunk);color:var(--muted);border-radius:var(--r);padding:10px 12px;font-size:.88rem;margin-bottom:14px}
@@ -105,6 +105,29 @@ select{appearance:none;background:var(--surface) url("data:image/svg+xml,%3Csvg 
 .extra input{flex:2 1 160px;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 12px}
 .extra input#extra-qte{flex:1 1 100px}
 .extra button{flex:0 0 auto;border-radius:var(--r);padding:10px 16px}
+
+/* Stock */
+.stock-sum{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:18px}
+.stock-sum>div{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 14px;display:flex;align-items:baseline;gap:8px}
+.stock-sum b{font-family:var(--f-display);font-weight:800;font-size:1.5rem;color:var(--accent);font-variant-numeric:tabular-nums}
+.stock-sum span{color:var(--muted);font-size:.9rem}
+.stock-sum .hint-txt{grid-column:1/-1}
+.srow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;padding:10px 6px 10px 14px;border-top:1px solid var(--line)}
+.srow:first-child{border-top:0}
+.srow.todo .snm::after{content:"à vérifier";margin-left:8px;font-size:.72rem;color:var(--accent);font-weight:700}
+.srow.vide .snm{color:var(--warn)}
+.snm{flex:1 1 9rem;min-width:0;overflow-wrap:anywhere}
+.etats{display:flex;gap:4px;flex-wrap:wrap}
+.etats button{background:none;border:1px solid var(--line);border-radius:99px;padding:5px 10px;font-size:.8rem;color:var(--muted)}
+.etats button[aria-pressed="true"][data-etat="ok"]{background:var(--leaf);border-color:var(--leaf);color:var(--surface)}
+.etats button[aria-pressed="true"][data-etat="bas"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.etats button[aria-pressed="true"][data-etat="vide"]{background:var(--warn);border-color:var(--warn);color:var(--surface)}
+.sq,.sd{min-width:0;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:7px 9px;font-family:var(--f-mono);font-size:.86rem;color:var(--ink)}
+.sq{flex:0 1 8.5rem}
+.sd{flex:0 1 9.5rem}
+.srm{background:none;border:0;width:36px;height:36px;border-radius:8px;font-size:1.2rem;color:var(--muted);flex:0 0 auto}
+.srm:hover{background:var(--sunk)}
+.extra-row select{width:auto;flex:1 1 7.5rem;font-family:var(--f-body);font-weight:400;font-size:1rem;padding-block:10px}
 
 /* Plats */
 .filters{display:grid;gap:12px;margin-bottom:16px}
@@ -212,6 +235,7 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
   <nav class="tabs" role="tablist" aria-label="Sections">
     <button type="button" role="tab" id="t-repas" data-tab="repas" aria-controls="v-repas" aria-selected="false">Repas</button>
     <button type="button" role="tab" id="t-courses" data-tab="courses" aria-controls="v-courses" aria-selected="true">Courses</button>
+    <button type="button" role="tab" id="t-stock" data-tab="stock" aria-controls="v-stock" aria-selected="false">Stock</button>
     <button type="button" role="tab" id="t-plats" data-tab="plats" aria-controls="v-plats" aria-selected="false">Plats</button>
     <button type="button" role="tab" id="t-semaines" data-tab="semaines" aria-controls="v-semaines" aria-selected="false">Semaines</button>
   </nav>
@@ -234,6 +258,24 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
         <div class="extra-row">
           <input id="extra-nom" placeholder="Ex. citrons" autocomplete="off" required>
           <input id="extra-qte" placeholder="Quantité" autocomplete="off">
+          <button type="submit" class="btn primary">Ajouter</button>
+        </div>
+      </form>
+    </section>
+    <section id="v-stock" role="tabpanel" aria-labelledby="t-stock" hidden>
+      <div id="stock-head"></div>
+      <div id="stock-list"><p class="state">Chargement du stock…</p></div>
+      <form id="stock-form" class="extra" hidden>
+        <label for="stock-nom" class="eyebrow">Ajouter au stock</label>
+        <div class="extra-row">
+          <select id="stock-zone" aria-label="Où le ranger">
+            <option value="frigo">Frigo</option>
+            <option value="congel">Congélateur</option>
+            <option value="epicerie">Épicerie</option>
+            <option value="placard">Placard</option>
+          </select>
+          <input id="stock-nom" placeholder="Ex. reste de chili" autocomplete="off" required>
+          <input id="stock-qte" placeholder="Quantité" autocomplete="off">
           <button type="submit" class="btn primary">Ajouter</button>
         </div>
       </form>
@@ -659,6 +701,108 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
    ],
    "id": "2026-10-05"
   }
+ ],
+ "stockInitial": [
+  {
+   "id": "pl-huile-olive",
+   "zone": "placard",
+   "nom": "Huile d'olive"
+  },
+  {
+   "id": "pl-farine",
+   "zone": "placard",
+   "nom": "Farine"
+  },
+  {
+   "id": "pl-moutarde",
+   "zone": "placard",
+   "nom": "Moutarde"
+  },
+  {
+   "id": "pl-sauce-soja",
+   "zone": "placard",
+   "nom": "Sauce soja"
+  },
+  {
+   "id": "pl-miel",
+   "zone": "placard",
+   "nom": "Miel ou sirop d'érable"
+  },
+  {
+   "id": "pl-sesame",
+   "zone": "placard",
+   "nom": "Sésame"
+  },
+  {
+   "id": "pl-bouillon",
+   "zone": "placard",
+   "nom": "Bouillon de légumes (cubes)"
+  },
+  {
+   "id": "pl-cumin",
+   "zone": "placard",
+   "nom": "Cumin"
+  },
+  {
+   "id": "pl-paprika",
+   "zone": "placard",
+   "nom": "Paprika fumé"
+  },
+  {
+   "id": "pl-piment",
+   "zone": "placard",
+   "nom": "Piment"
+  },
+  {
+   "id": "pl-thym",
+   "zone": "placard",
+   "nom": "Thym"
+  },
+  {
+   "id": "pl-sauge",
+   "zone": "placard",
+   "nom": "Sauge"
+  },
+  {
+   "id": "pl-sel-poivre",
+   "zone": "placard",
+   "nom": "Sel, poivre"
+  },
+  {
+   "id": "ep-pates",
+   "zone": "epicerie",
+   "nom": "Pâtes"
+  },
+  {
+   "id": "ep-riz",
+   "zone": "epicerie",
+   "nom": "Riz"
+  },
+  {
+   "id": "ep-quinoa",
+   "zone": "epicerie",
+   "nom": "Quinoa"
+  },
+  {
+   "id": "ep-legumineuses",
+   "zone": "epicerie",
+   "nom": "Légumineuses en boîte"
+  },
+  {
+   "id": "ep-tomates",
+   "zone": "epicerie",
+   "nom": "Tomates en boîte"
+  },
+  {
+   "id": "ep-lait-vegetal",
+   "zone": "epicerie",
+   "nom": "Lait végétal"
+  },
+  {
+   "id": "ep-creme-vegetale",
+   "zone": "epicerie",
+   "nom": "Crème d'avoine ou de soja"
+  }
  ]
 }
 </script>
@@ -682,7 +826,7 @@ window.FIREBASE_CONFIG = {
   const fShort = new Intl.DateTimeFormat('fr-FR',{day:'numeric',month:'short',year:'numeric'});
   const fDay = new Intl.DateTimeFormat('fr-FR',{weekday:'long',day:'numeric',month:'long'});
   const toDate = iso => { const [y,m,d] = String(iso).split('-').map(Number); return new Date(y,(m||1)-1,d||1); };
-  const TABS = ['repas','courses','plats','semaines'];
+  const TABS = ['repas','courses','stock','plats','semaines'];
   const JOURS = [['lundi','Lun'],['mardi','Mar'],['mercredi','Mer'],['jeudi','Jeu'],['vendredi','Ven']];
   const MOMENTS = [['midi','Midi'],['soir','Soir']];
   const isoOf = x => x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0');
@@ -693,7 +837,7 @@ window.FIREBASE_CONFIG = {
   }
 
   const S = {
-    status:'loading', dbErr:null, loaded:{plats:false, semaines:false, listes:false, plannings:false, reglages:false, avis:false}, platsBase:[], avis:{}, plats:[], semaines:[], listes:{}, plannings:{}, reglages:{}, planId:nextMondays(1)[0], tab:'courses', weekId:null,
+    status:'loading', dbErr:null, loaded:{plats:false, semaines:false, listes:false, plannings:false, reglages:false, avis:false, stock:false}, stock:{}, stockPending:false, stockSeeded:false, platsBase:[], avis:{}, plats:[], semaines:[], listes:{}, plannings:{}, reglages:{}, planId:nextMondays(1)[0], tab:'courses', weekId:null,
     hideDone:false, confirmReset:false, canWrite:true, open:new Set(), openInit:false,
     f:{type:'tous',saison:'toutes',cong:'toutes',avis:'tous',statut:'tout',q:''}
   };
@@ -748,7 +892,7 @@ window.FIREBASE_CONFIG = {
 
   /* ---------- helpers ---------- */
   const weeksSorted = () => S.semaines.slice().sort((a,b)=> String(b.debut||b.id).localeCompare(String(a.debut||a.id)));
-  const DBKEYS = ['listes','plannings','reglages','avis'];
+  const DBKEYS = ['listes','plannings','reglages','avis','stock'];
   function gate(el, what, keys){
     if (S.status === 'nodb' && keys.some(k => DBKEYS.includes(k))) {
       el.innerHTML = S.dbErr === 'config'
@@ -832,6 +976,75 @@ window.FIREBASE_CONFIG = {
     if ((P.note || '') === v) return;
     P.note = v;
     writeDoc('plannings/'+pid, {note:v}, {repas:{}, note:''}).then(ok => { if (ok !== false) $('#note-state').textContent = 'Enregistré'; });
+  }
+
+  /* ---------- stock ---------- */
+  const ZONES = [
+    ['placard', 'Placard', 'Épices, huiles, sauces : on note juste où on en est.'],
+    ['epicerie', 'Épicerie et conserves', 'Ce qui reste : grammes, boîtes, paquets.'],
+    ['frigo', 'Frigo', 'Restes et produits frais, avec la date.'],
+    ['congel', 'Congélateur', 'Portions congelées, avec la date.']
+  ];
+  const ETATS = [['ok','OK'], ['bas','Bientôt fini'], ['vide','Plus rien']];
+  const today = () => isoOf(new Date());
+  const writeStock = (id, patch) => writeDoc('reglages/stock', {items: {[id]: Object.assign({}, patch, {maj: today()})}});
+  function seedStock(){
+    S.stockSeeded = true;
+    let init = [];
+    try { init = JSON.parse(document.getElementById('carnet-data').textContent).stockInitial || []; } catch(e){}
+    const items = {};
+    init.forEach((it, i) => { items[it.id] = {zone: it.zone, nom: it.nom, etat: '', qte: '', date: '', ordre: i}; });
+    if (store) writeDoc('reglages/stock', {initialise: true, items});
+  }
+  function stockRow(it){
+    const nomId = 'sn-'+it.id;
+    let ctl;
+    if (it.zone === 'placard') {
+      ctl = '<span class="etats" role="group" aria-labelledby="'+nomId+'">' + ETATS.map(([v,l]) =>
+        '<button type="button" data-etat="'+v+'" data-sid="'+esc(it.id)+'" aria-pressed="'+(it.etat===v)+'">'+l+'</button>').join('') + '</span>';
+    } else {
+      ctl = '<input class="sq" id="sq-'+esc(it.id)+'" data-sq="'+esc(it.id)+'" value="'+esc(it.qte||'')+'" placeholder="Quantité ?" autocomplete="off" aria-labelledby="'+nomId+'">'
+        + ((it.zone === 'frigo' || it.zone === 'congel') ? '<input class="sd" type="date" id="sd-'+esc(it.id)+'" data-sd="'+esc(it.id)+'" value="'+esc(it.date||'')+'" aria-label="Date pour '+esc(it.nom)+'">' : '');
+    }
+    const todo = it.zone === 'placard' ? !it.etat : !it.qte;
+    return '<li class="srow'+(todo?' todo':'')+(it.etat==='vide'?' vide':'')+'"><span class="snm" id="'+nomId+'">'+esc(it.nom)+'</span>'+ctl
+      + '<button type="button" class="srm" data-srm="'+esc(it.id)+'" aria-label="Retirer '+esc(it.nom)+' du stock">×</button></li>';
+  }
+  function renderStock(){
+    const list = $('#stock-list'), head = $('#stock-head'), form = $('#stock-form');
+    if (gate(list, 'du stock', ['stock'])) { head.innerHTML = ''; form.hidden = true; return; }
+    const a = document.activeElement;
+    if (a && list.contains(a) && a.tagName === 'INPUT') { S.stockPending = true; return; }
+    S.stockPending = false;
+    const items = Object.entries(S.stock).filter(([,v]) => v && v.zone && !v.supprime).map(([id,v]) => Object.assign({id}, v));
+    const racheter = items.filter(i => i.zone === 'placard' && (i.etat === 'bas' || i.etat === 'vide'));
+    const verifier = items.filter(i => (i.zone === 'placard' && !i.etat) || (i.zone === 'epicerie' && !i.qte));
+    head.innerHTML = '<div class="stock-sum">'
+      + '<div><b>'+racheter.length+'</b><span>à racheter</span></div>'
+      + '<div><b>'+verifier.length+'</b><span>à vérifier</span></div>'
+      + '<p class="hint-txt">Ce qui est noté ici n’est pas racheté : Claude s’en sert pour préparer la liste de courses.</p></div>';
+    list.innerHTML = ZONES.map(([z, titre, aide]) => {
+      const zi = items.filter(i => i.zone === z).sort((x,y) => (x.ordre??999) - (y.ordre??999) || String(x.nom).localeCompare(String(y.nom),'fr'));
+      return '<section class="rayon"><h2><span class="eyebrow">'+titre+'</span><span class="cnt">'+zi.length+'</span></h2><p class="hint">'+aide+'</p>'
+        + (zi.length ? '<ul class="items">'+zi.map(stockRow).join('')+'</ul>' : '<div class="allok">Rien pour l’instant.</div>') + '</section>';
+    }).join('');
+    form.hidden = false;
+  }
+  function onStockClick(t){
+    if (t.dataset.etat) {
+      if (!canEdit()) return true;
+      const id = t.dataset.sid, it = S.stock[id]; if (!it) return true;
+      const nv = it.etat === t.dataset.etat ? '' : t.dataset.etat;
+      it.etat = nv; renderStock(); writeStock(id, {etat: nv}); return true;
+    }
+    if (t.dataset.srm) {
+      if (!canEdit()) return true;
+      const id = t.dataset.srm, nom = (S.stock[id] || {}).nom || '';
+      delete S.stock[id]; renderStock();
+      enqueue('reglages/stock', () => store.dropKey('reglages/stock', 'items', id));
+      toast(nom ? nom+' retiré du stock.' : 'Retiré du stock.'); return true;
+    }
+    return false;
   }
 
   /* ---------- courses ---------- */
@@ -1000,7 +1213,7 @@ window.FIREBASE_CONFIG = {
   function renderAll(){
     $('#ro').hidden = S.canWrite || S.status !== 'ready';
     /* status 'ready' = la base répond ; chaque onglet attend ses propres données (S.loaded) */
-    renderRepas(); renderCourses(); renderPlats(); renderSemaines();
+    renderRepas(); renderCourses(); renderStock(); renderPlats(); renderSemaines();
   }
 
   /* ---------- events ---------- */
@@ -1018,6 +1231,7 @@ window.FIREBASE_CONFIG = {
       L.extras[id] = Object.assign({}, L.extras[id], {supprime:true});
       renderCourses(); writeList(wid, {extras:{[id]:{supprime:true}}}); return;
     }
+    if (onStockClick(t)) return;
     if (t.dataset.meal) {
       if (!canEdit()) return;
       const [j, m] = t.dataset.meal.split('.'), pid = S.planId, nv = !planRepas(pid)[j][m];
@@ -1064,6 +1278,30 @@ window.FIREBASE_CONFIG = {
     if (e.target.id === 'week-select') { S.weekId = e.target.value; S.confirmReset = false; renderCourses(); }
     if (e.target.id === 'plan-select') { saveNote(); S.planId = e.target.value; $('#note-state').textContent = ''; $('#plan-note').value = (S.plannings[S.planId] || {}).note || ''; renderRepas(); }
   });
+  document.addEventListener('change', e => {
+    const t = e.target;
+    if (!t.dataset || !(t.dataset.sq || t.dataset.sd)) return;
+    if (!canEdit()) return;
+    const id = t.dataset.sq || t.dataset.sd, it = S.stock[id]; if (!it) return;
+    const k = t.dataset.sq ? 'qte' : 'date', v = t.value.trim();
+    if ((it[k] || '') === v) return;
+    it[k] = v; writeStock(id, {[k]: v});
+  });
+  $('#stock-list').addEventListener('focusout', () => setTimeout(() => {
+    const a = document.activeElement;
+    if (S.stockPending && !(a && $('#stock-list').contains(a) && a.tagName === 'INPUT')) renderStock();
+  }, 0));
+  $('#stock-list').addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.dataset && e.target.dataset.sq) e.target.blur(); });
+  $('#stock-form').addEventListener('submit', e => {
+    e.preventDefault();
+    if (!canEdit()) return;
+    const zone = $('#stock-zone').value, nom = $('#stock-nom').value.trim(), qte = $('#stock-qte').value.trim();
+    if (!nom) return;
+    const id = 's' + Date.now().toString(36) + Math.random().toString(36).slice(2,5);
+    const it = {zone, nom, qte, etat:'', date: (zone === 'frigo' || zone === 'congel') ? today() : '', ordre: 999};
+    S.stock[id] = it; $('#stock-nom').value = ''; $('#stock-qte').value = '';
+    renderStock(); writeStock(id, it); toast(nom+' ajouté au stock.');
+  });
   $('#plan-note').addEventListener('input', () => { clearTimeout(noteTimer); $('#note-state').textContent = ''; noteTimer = setTimeout(saveNote, 900); });
   $('#plan-note').addEventListener('blur', () => { clearTimeout(noteTimer); saveNote(); });
   document.addEventListener('toggle', e => {
@@ -1106,7 +1344,8 @@ window.FIREBASE_CONFIG = {
     return {
       watchCol: (name, next, err) => fs.onSnapshot(fs.collection(fdb, name), s => next(s.docs.map(d => ({id:d.id, data:d.data()}))), err),
       watchDoc: (path, next, err) => fs.onSnapshot(fs.doc(fdb, path), s => next(s.exists() ? s.data() : null), err),
-      merge: (path, patch) => fs.setDoc(fs.doc(fdb, path), patch, {merge:true})
+      merge: (path, patch) => fs.setDoc(fs.doc(fdb, path), patch, {merge:true}),
+      dropKey: (path, ...keys) => fs.updateDoc(fs.doc(fdb, path), new fs.FieldPath(...keys), fs.deleteField())
     };
   }
 
@@ -1125,6 +1364,11 @@ window.FIREBASE_CONFIG = {
     store.watchCol('plannings', docs => { S.plannings = asMap(docs); ready('plannings'); renderAll(); }, onErrFor('plannings'));
     store.watchCol('listes', docs => { S.listes = asMap(docs); ready('listes'); renderAll(); }, onErrFor('listes'));
     store.watchDoc('reglages/foyer', d => { S.reglages = d ? Object.assign({}, d) : {}; ready('reglages'); renderAll(); }, onErrFor('reglages'));
+    store.watchDoc('reglages/stock', d => {
+      if ((!d || !d.initialise) && !S.stockSeeded) seedStock();
+      S.stock = d && d.items ? JSON.parse(JSON.stringify(d.items)) : {};
+      ready('stock'); renderStock();
+    }, onErrFor('stock'));
     store.watchCol('avis', docs => { S.avis = {}; docs.forEach(d => { S.avis[d.id] = d.data.avis || ''; }); mergeAvis(); ready('avis'); renderAll(); }, onErrFor('avis'));
   })();
 })();
