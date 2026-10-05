@@ -114,7 +114,15 @@ select{appearance:none;background:var(--surface) url("data:image/svg+xml,%3Csvg 
 .stock-sum .hint-txt{grid-column:1/-1}
 .srow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;padding:10px 6px 10px 14px;border-top:1px solid var(--line)}
 .srow:first-child{border-top:0}
-.srow.todo .snm::after{content:"à vérifier";margin-left:8px;font-size:.72rem;color:var(--accent);font-weight:700}
+.srow.todo:not(.has-sst) .snm::after{content:"à vérifier";margin-left:8px;font-size:.72rem;color:var(--accent);font-weight:700}
+.sst{margin-left:8px;font-size:.74rem;font-weight:700;white-space:nowrap}
+.sst[data-st="saving"]{color:var(--muted)}
+.sst[data-st="saved"]{color:var(--leaf)}
+.sst[data-st="offline"]{color:var(--accent)}
+.sst[data-st="error"]{color:var(--warn)}
+.srow.flash{animation:flash 1.2s ease-out}
+@keyframes flash{from{background:var(--leaf-soft)}to{background:transparent}}
+.sq.saved{border-color:var(--leaf)}
 .srow.vide .snm{color:var(--warn)}
 .snm{flex:1 1 9rem;min-width:0;overflow-wrap:anywhere}
 .etats{display:flex;gap:4px;flex-wrap:wrap}
@@ -837,7 +845,7 @@ window.FIREBASE_CONFIG = {
   }
 
   const S = {
-    status:'loading', dbErr:null, loaded:{plats:false, semaines:false, listes:false, plannings:false, reglages:false, avis:false, stock:false}, stock:{}, stockPending:false, stockSeeded:false, platsBase:[], avis:{}, plats:[], semaines:[], listes:{}, plannings:{}, reglages:{}, planId:nextMondays(1)[0], tab:'courses', weekId:null,
+    status:'loading', dbErr:null, loaded:{plats:false, semaines:false, listes:false, plannings:false, reglages:false, avis:false, stock:false}, stock:{}, stockPending:false, stockSeeded:false, sst:{}, sqTimers:{}, platsBase:[], avis:{}, plats:[], semaines:[], listes:{}, plannings:{}, reglages:{}, planId:nextMondays(1)[0], tab:'courses', weekId:null,
     hideDone:false, confirmReset:false, canWrite:true, open:new Set(), openInit:false,
     f:{type:'tous',saison:'toutes',cong:'toutes',avis:'tous',statut:'tout',q:''}
   };
@@ -996,6 +1004,25 @@ window.FIREBASE_CONFIG = {
     init.forEach((it, i) => { items[it.id] = {zone: it.zone, nom: it.nom, etat: '', qte: '', date: '', ordre: i}; });
     if (store) writeDoc('reglages/stock', {initialise: true, items});
   }
+  const SST = {'':'', saving:'Enregistrement…', saved:'✓ Enregistré', offline:'En attente du réseau', error:'Non enregistré'};
+  function setSst(id, st){
+    if (st) S.sst[id] = st; else delete S.sst[id];
+    const el = document.querySelector('[data-sst="'+id+'"]'); if (!el) return;
+    el.dataset.st = st; el.textContent = SST[st];
+    const row = el.closest('.srow'); row.classList.toggle('has-sst', !!st);
+    const q = row.querySelector('.sq'); if (q) q.classList.toggle('saved', st === 'saved');
+    if (st === 'saved') { row.classList.remove('flash'); void row.offsetWidth; row.classList.add('flash'); }
+  }
+  function saveStock(id, patch){
+    setSst(id, 'saving');
+    const slow = setTimeout(() => { if (S.sst[id] === 'saving') setSst(id, 'offline'); }, 4000);
+    return writeStock(id, patch).then(ok => {
+      clearTimeout(slow);
+      if (ok === false) { setSst(id, 'error'); return; }
+      setSst(id, 'saved');
+      setTimeout(() => { if (S.sst[id] === 'saved') setSst(id, ''); }, 2500);
+    });
+  }
   function stockRow(it){
     const nomId = 'sn-'+it.id;
     let ctl;
@@ -1003,11 +1030,12 @@ window.FIREBASE_CONFIG = {
       ctl = '<span class="etats" role="group" aria-labelledby="'+nomId+'">' + ETATS.map(([v,l]) =>
         '<button type="button" data-etat="'+v+'" data-sid="'+esc(it.id)+'" aria-pressed="'+(it.etat===v)+'">'+l+'</button>').join('') + '</span>';
     } else {
-      ctl = '<input class="sq" id="sq-'+esc(it.id)+'" data-sq="'+esc(it.id)+'" value="'+esc(it.qte||'')+'" placeholder="Quantité ?" autocomplete="off" aria-labelledby="'+nomId+'">'
+      ctl = '<input class="sq" id="sq-'+esc(it.id)+'" data-sq="'+esc(it.id)+'" value="'+esc(it.qte||'')+'" placeholder="Quantité ?" autocomplete="off" enterkeyhint="done" aria-labelledby="'+nomId+'">'
         + ((it.zone === 'frigo' || it.zone === 'congel') ? '<input class="sd" type="date" id="sd-'+esc(it.id)+'" data-sd="'+esc(it.id)+'" value="'+esc(it.date||'')+'" aria-label="Date pour '+esc(it.nom)+'">' : '');
     }
     const todo = it.zone === 'placard' ? !it.etat : !it.qte;
-    return '<li class="srow'+(todo?' todo':'')+(it.etat==='vide'?' vide':'')+'"><span class="snm" id="'+nomId+'">'+esc(it.nom)+'</span>'+ctl
+    const st = S.sst[it.id] || '';
+    return '<li class="srow'+(todo?' todo':'')+(st?' has-sst':'')+(it.etat==='vide'?' vide':'')+'"><span class="snm" id="'+nomId+'">'+esc(it.nom)+'<span class="sst" data-sst="'+esc(it.id)+'" data-st="'+st+'" role="status">'+SST[st]+'</span></span>'+ctl
       + '<button type="button" class="srm" data-srm="'+esc(it.id)+'" aria-label="Retirer '+esc(it.nom)+' du stock">×</button></li>';
   }
   function renderStock(){
@@ -1035,7 +1063,7 @@ window.FIREBASE_CONFIG = {
       if (!canEdit()) return true;
       const id = t.dataset.sid, it = S.stock[id]; if (!it) return true;
       const nv = it.etat === t.dataset.etat ? '' : t.dataset.etat;
-      it.etat = nv; renderStock(); writeStock(id, {etat: nv}); return true;
+      it.etat = nv; renderStock(); saveStock(id, {etat: nv}); return true;
     }
     if (t.dataset.srm) {
       if (!canEdit()) return true;
@@ -1285,12 +1313,23 @@ window.FIREBASE_CONFIG = {
     const id = t.dataset.sq || t.dataset.sd, it = S.stock[id]; if (!it) return;
     const k = t.dataset.sq ? 'qte' : 'date', v = t.value.trim();
     if ((it[k] || '') === v) return;
-    it[k] = v; writeStock(id, {[k]: v});
+    it[k] = v; clearTimeout(S.sqTimers[id]); saveStock(id, {[k]: v});
   });
   $('#stock-list').addEventListener('focusout', () => setTimeout(() => {
     const a = document.activeElement;
     if (S.stockPending && !(a && $('#stock-list').contains(a) && a.tagName === 'INPUT')) renderStock();
   }, 0));
+  $('#stock-list').addEventListener('input', e => {
+    const t = e.target; if (!t.dataset || !t.dataset.sq) return;
+    const id = t.dataset.sq;
+    clearTimeout(S.sqTimers[id]);
+    if (S.sst[id] === 'saved') setSst(id, '');
+    S.sqTimers[id] = setTimeout(() => {
+      const it = S.stock[id], v = t.value.trim();
+      if (!it || (it.qte || '') === v || !store) return;
+      it.qte = v; saveStock(id, {qte: v});
+    }, 900);
+  });
   $('#stock-list').addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.dataset && e.target.dataset.sq) e.target.blur(); });
   $('#stock-form').addEventListener('submit', e => {
     e.preventDefault();
@@ -1300,7 +1339,7 @@ window.FIREBASE_CONFIG = {
     const id = 's' + Date.now().toString(36) + Math.random().toString(36).slice(2,5);
     const it = {zone, nom, qte, etat:'', date: (zone === 'frigo' || zone === 'congel') ? today() : '', ordre: 999};
     S.stock[id] = it; $('#stock-nom').value = ''; $('#stock-qte').value = '';
-    renderStock(); writeStock(id, it); toast(nom+' ajouté au stock.');
+    renderStock(); saveStock(id, it); toast(nom+' ajouté au stock.');
   });
   $('#plan-note').addEventListener('input', () => { clearTimeout(noteTimer); $('#note-state').textContent = ''; noteTimer = setTimeout(saveNote, 900); });
   $('#plan-note').addEventListener('blur', () => { clearTimeout(noteTimer); saveNote(); });
