@@ -1806,7 +1806,8 @@ window.FIREBASE_CONFIG = {
 </script>
 <script>
 /* Mise à jour de l'application : bouton manuel + vérification à l'ouverture et au retour au premier plan.
-   Compare le code et les données de la page (scripts + styles) avec la version en ligne : aucune version à numéroter. */
+   Compare le code et les données de la page (scripts + styles) avec la version en ligne : aucune version à numéroter.
+   Sur iPhone, l'appli ouverte depuis l'écran d'accueil n'a pas de bouton recharger : cette vérification la remplace. */
 (function(){
   const btn = document.getElementById('maj-btn'), bar = document.getElementById('maj-bar');
   const signature = doc => [...doc.querySelectorAll('script, style')].map(n => n.textContent).join('\u0001');
