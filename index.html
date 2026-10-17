@@ -58,8 +58,9 @@ button{cursor:pointer}
 .brand h1 span{color:var(--accent)}
 .brand p{margin:0;color:var(--muted);font-size:.85rem}
 
-.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:18px}
-.tabs button{flex:1;min-width:0;background:none;border:0;padding:12px 2px 10px;font-family:var(--f-display);font-weight:600;font-size:clamp(.86rem,3.6vw,1rem);color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-1px}
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;gap:2px;border-bottom:1px solid var(--line);margin-bottom:18px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:1 0 auto;background:none;border:0;padding:12px 9px 10px;white-space:nowrap;font-family:var(--f-display);font-weight:600;font-size:clamp(.86rem,3.6vw,1rem);color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-1px}
 .tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
 
 .ro{background:var(--sunk);color:var(--muted);border-radius:var(--r);padding:10px 12px;font-size:.88rem;margin-bottom:14px}
@@ -112,6 +113,48 @@ select{appearance:none;background:var(--surface) url("data:image/svg+xml,%3Csvg 
 .extra input{flex:2 1 160px;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 12px}
 .extra input#extra-qte{flex:1 1 100px}
 .extra button{flex:0 0 auto;border-radius:var(--r);padding:10px 16px}
+
+/* Cuisine */
+.cuis-head{display:grid;gap:10px;margin-bottom:16px}
+.cuis-tools{display:flex;flex-wrap:wrap;gap:8px}
+.cuis-h2{font-family:var(--f-display);font-weight:600;font-size:1.15rem;margin:22px 0 8px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.cuis-h2 small{font-family:var(--f-mono);font-weight:500;font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.cuis-intro{margin:0 0 12px;color:var(--muted);font-size:.92rem;max-width:62ch}
+.steps-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.dstep{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px}
+.dstep.current{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.dstep .tick-btn{flex:0 0 auto;background:none;border:0;padding:2px 0 0;display:grid;place-items:center}
+.dstep .box{width:24px;height:24px}
+.dstep.done .box{background:var(--leaf);border-color:var(--leaf)}
+.dstep.done .box::after{content:"";width:10px;height:6px;border-left:2.5px solid var(--surface);border-bottom:2.5px solid var(--surface);transform:translateY(-1px) rotate(-45deg)}
+.dstep-body{flex:1;min-width:0;display:grid;gap:6px}
+.dstep-top{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.dstep-num{font-family:var(--f-mono);font-size:.8rem;color:var(--accent);font-variant-numeric:tabular-nums}
+.dstep-top h3{margin:0;font-family:var(--f-display);font-weight:600;font-size:1.02rem;line-height:1.3;flex:1 1 12rem;min-width:0}
+.dstep-time{font-family:var(--f-mono);font-size:.78rem;color:var(--muted);white-space:nowrap}
+.dstep ul{margin:0;padding-left:18px;display:grid;gap:4px;font-size:.93rem}
+.dstep.done{background:transparent}
+.dstep.done h3{color:var(--muted);text-decoration:line-through;text-decoration-thickness:1px}
+.dstep.done ul,.dstep.done .dstep-plats{display:none}
+.dstep-plats{display:flex;flex-wrap:wrap;gap:4px}
+.dstep-plats span{font-size:.72rem;padding:2px 8px;border-radius:6px;background:var(--sunk);color:var(--muted)}
+.cuis-empty{background:var(--surface);border:1px dashed var(--line);border-radius:var(--r);padding:14px 16px;color:var(--muted);font-size:.92rem}
+.cuis-empty b{color:var(--ink)}
+.fiches{display:grid;gap:10px}
+.fiche{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+.fiche summary{list-style:none;cursor:pointer;padding:13px 16px;display:flex;gap:10px;align-items:baseline}
+.fiche summary::-webkit-details-marker{display:none}
+.fiche summary .fj{font-family:var(--f-mono);font-size:.78rem;text-transform:uppercase;color:var(--accent);flex:0 0 2.6rem}
+.fiche summary .fn{flex:1;min-width:0;font-family:var(--f-display);font-weight:600;line-height:1.3}
+.fiche summary::after{content:"+";font-family:var(--f-mono);color:var(--muted)}
+.fiche[open] summary::after{content:"–"}
+.fiche-body{padding:0 16px 16px;display:grid;gap:14px}
+.fiche-infos{margin:0;font-size:.84rem;color:var(--muted)}
+.ingr-tab{width:100%;border-collapse:collapse;font-size:.92rem}
+.ingr-tab td{padding:6px 0;border-top:1px dotted var(--line);vertical-align:top}
+.ingr-tab td:last-child{text-align:right;font-family:var(--f-mono);font-size:.86rem;padding-left:12px;font-variant-numeric:tabular-nums}
+.methode{margin:0;padding-left:20px;display:grid;gap:8px;font-size:.95rem;line-height:1.55}
+.methode strong,.dstep strong{color:var(--accent);font-weight:700}
 
 /* Stock */
 .stock-sum{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:18px}
@@ -259,6 +302,7 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
   <nav class="tabs" role="tablist" aria-label="Sections">
     <button type="button" role="tab" id="t-repas" data-tab="repas" aria-controls="v-repas" aria-selected="false">Repas</button>
     <button type="button" role="tab" id="t-courses" data-tab="courses" aria-controls="v-courses" aria-selected="true">Courses</button>
+    <button type="button" role="tab" id="t-cuisine" data-tab="cuisine" aria-controls="v-cuisine" aria-selected="false">Cuisine</button>
     <button type="button" role="tab" id="t-stock" data-tab="stock" aria-controls="v-stock" aria-selected="false">Stock</button>
     <button type="button" role="tab" id="t-plats" data-tab="plats" aria-controls="v-plats" aria-selected="false">Plats</button>
     <button type="button" role="tab" id="t-semaines" data-tab="semaines" aria-controls="v-semaines" aria-selected="false">Semaines</button>
@@ -273,6 +317,10 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
         <span class="note-state" id="note-state" aria-live="polite"></span>
       </div>
       <div id="reglages"></div>
+    </section>
+    <section id="v-cuisine" role="tabpanel" aria-labelledby="t-cuisine" hidden>
+      <div id="cuisine-head"></div>
+      <div id="cuisine-main"><p class="state">Chargement…</p></div>
     </section>
     <section id="v-courses" role="tabpanel" aria-labelledby="t-courses">
       <div id="courses-head"></div>
@@ -349,7 +397,31 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
    ],
    "statut": "fait",
    "type": "viande",
-   "id": "poulet-champignons-poireaux"
+   "id": "poulet-champignons-poireaux",
+   "fiche": {
+    "infos": "Viande · plaques + four · à manger en début de semaine · congélation moyenne (sans les pommes de terre) · ~45 min",
+    "ingredients": [
+     "Poulet (hauts de cuisse ou blancs) : 600 g",
+     "Champignons de Paris : 400 g",
+     "Poireaux : 3 (~450 g)",
+     "Oignon : 1 (~120 g)",
+     "Ail : 1 gousse",
+     "Pommes de terre grenaille : 800 g",
+     "Crème d'avoine : 20 cl",
+     "Lait végétal (avoine ou soja) : 10 cl",
+     "Moutarde : 2 c.s. (~30 g)",
+     "Farine : 1 c.s. (~10 g)",
+     "Huile d'olive : 4 c.s. (2 grenaille, 2 poulet)",
+     "Thym, ½ c.c. de sel, poivre"
+    ],
+    "methode": [
+     "Four à 200 °C. Lave la grenaille sans l'éplucher, coupe-la en deux (en quatre si grosse). Sur une plaque avec 2 c.s. d'huile, ½ c.c. de sel, poivre et thym. **35 min à 200 °C.**",
+     "Coupe l'oignon en petits dés et hache l'ail. Fends les poireaux, rince-les et taille des demi-rondelles de 5 mm. Essuie les champignons et coupe-les en lamelles de 5 mm.",
+     "Coupe le poulet en morceaux de 3 cm, roule-les dans la farine et fais-les dorer dans 2 c.s. d'huile, **6 à 8 min**. Sors-les.",
+     "Dans la même poêle : oignon, ail, poireaux et champignons, **10 min**.",
+     "Remets le poulet, ajoute la crème d'avoine, le lait végétal et la moutarde. Mijote **5 min**, sale, poivre."
+    ]
+   }
   },
   {
    "avis": "",
@@ -374,7 +446,29 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
    ],
    "statut": "fait",
    "type": "vege",
-   "id": "gratin-pates-butternut"
+   "id": "gratin-pates-butternut",
+   "fiche": {
+    "infos": "Végé · four · tient en fin de semaine · congélation moyenne · ~1 h 10 (dont 1 h de four)",
+    "ingredients": [
+     "Pâtes courtes : 350 g",
+     "Courge butternut : ~950 g (une courge de ~1,2 kg, dont ~250 g étaient partis dans le chili la semaine du 05/10)",
+     "Haricots blancs : 1 boîte de 400 g, égouttée et rincée",
+     "Chèvre (bûche) : 200 g (100 g dans la sauce, 100 g dessus)",
+     "Crème d'avoine : 20 cl",
+     "Lait végétal : 30 cl",
+     "Ail : 1 gousse",
+     "Huile d'olive : 1 c.s.",
+     "Sauge ou thym : 1 c.c.",
+     "Sel (½ c.c. + 1 pincée, + 1 c.s. pour l'eau des pâtes), poivre"
+    ],
+    "methode": [
+     "Four à 200 °C. Épluche la butternut, retire les graines, taille des cubes de 2 cm. Sur une plaque avec 1 c.s. d'huile et une pincée de sel : **35 min à 200 °C.**",
+     "Cuis les pâtes dans 2 L d'eau bouillante salée, 2 min de moins que le temps du paquet. Égoutte.",
+     "Dans un grand bol, écrase ⅓ de la butternut rôtie avec la crème d'avoine, le lait végétal, 100 g de chèvre, l'ail haché, la sauge, ½ c.c. de sel et du poivre.",
+     "Ajoute les pâtes, le reste de la butternut et les haricots blancs, mélange. Verse dans un plat à gratin et couvre avec les 100 g de chèvre restants en rondelles.",
+     "**25 min à 200 °C.**"
+    ]
+   }
   },
   {
    "avis": "",
@@ -401,7 +495,30 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
    ],
    "statut": "fait",
    "type": "vege",
-   "id": "tofu-laque-poireaux-brocoli"
+   "id": "tofu-laque-poireaux-brocoli",
+   "fiche": {
+    "infos": "Végé · plaques · tient en fin de semaine · pas de congélation · ~45 min",
+    "ingredients": [
+     "Tofu ferme nature : 400 g",
+     "Poireaux : 2 (~300 g)",
+     "Brocolis : 2 (~700 g)",
+     "Riz : 250 g (+ 400 ml d'eau salée)",
+     "Sauce, version doublée : 8 c.s. de sauce soja, 4 c.s. de miel ou sirop d'érable, 4 gousses d'ail hachées, 4 cm de gingembre râpé, 6 c.s. d'eau",
+     "Sésame : 2 c.s. (~15 g)",
+     "Huile : 3 c.s. (2 tofu, 1 poêlée)",
+     "Sel (+ 1 c.s. pour l'eau des brocolis)"
+    ],
+    "methode": [
+     "Riz : 250 g de riz et 400 ml d'eau salée dans une petite casserole. Porte à ébullition, couvre, **12 min à feu très doux**, puis 10 min de repos hors du feu sans ouvrir.",
+     "Presse le tofu 5 min dans un torchon sous un poids, puis coupe-le en cubes de 2 cm. Mélange tous les ingrédients de la sauce dans un bol.",
+     "Détaille les brocolis en petits bouquets, épluche les tiges et coupe-les en dés. Plonge-les **2 min** dans l'eau bouillante salée, puis sous l'eau froide.",
+     "Fends les poireaux, rince-les, taille des demi-rondelles de 5 mm.",
+     "Tofu : dore-le dans 2 c.s. d'huile **8 à 10 min** en le retournant. Verse **la moitié de la sauce** et laisse réduire **2 à 3 min**, jusqu'à ce qu'elle nappe. Parsème de sésame. Garde l'autre moitié de sauce dans un pot à part.",
+     "Poêlée : 1 c.s. d'huile, poireaux **6 min**, ajoute les brocolis **3 min**, sale.",
+     "Au réchauffage, verse la sauce gardée à part sur le tofu et les légumes."
+    ],
+    "retours": "La première fois (sem. 05/10), la sauce était simple (4 c.s. soja, 2 c.s. miel, 2 gousses d'ail, 2 cm de gingembre, 3 c.s. d'eau), avec l'impression que ce serait trop sec. La fiche intègre la version doublée."
+   }
   },
   {
    "avis": "",
@@ -426,7 +543,30 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
    ],
    "statut": "fait",
    "type": "vege",
-   "id": "hachis-champignons-tofu-fume"
+   "id": "hachis-champignons-tofu-fume",
+   "fiche": {
+    "infos": "Végé · four · tient en fin de semaine · se congèle bien · ~1 h (dont 25 min de four)",
+    "ingredients": [
+     "Patates douces : 900 g",
+     "Lait végétal : 15 cl",
+     "Champignons de Paris : 400 g",
+     "Tofu fumé : ~350 g (2 blocs)",
+     "Oignons : 2 (~240 g)",
+     "Ail : 2 gousses",
+     "Brebis à râper (ossau-iraty ou pecorino) : 100 g",
+     "Sauce soja : 2 c.s.",
+     "Thym : 1 c.c.",
+     "Huile d'olive : 2 c.s. (1 purée, 1 farce)",
+     "Sel (½ c.c. + 1 c.s. pour l'eau de cuisson)"
+    ],
+    "methode": [
+     "Épluche les patates douces, coupe-les en morceaux de 3 cm et cuis-les **20 min** dans 2 L d'eau bouillante salée. Égoutte, écrase avec le lait végétal, 1 c.s. d'huile et ½ c.c. de sel.",
+     "Coupe les oignons en petits dés, hache l'ail. Essuie les champignons et coupe-les en petits dés de 5 mm. Émiette le tofu fumé à la main.",
+     "Farce : 1 c.s. d'huile, oignons et ail **3 min**. Ajoute les champignons **10 min**, jusqu'à ce qu'il n'y ait plus d'eau au fond. Ajoute le tofu fumé, la sauce soja et le thym, **3 min**.",
+     "Étale la farce dans un plat, couvre de purée, trace des stries à la fourchette, râpe le brebis dessus.",
+     "**25 min à 200 °C.**"
+    ]
+   }
   },
   {
    "avis": "",
@@ -452,7 +592,33 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
    ],
    "statut": "fait",
    "type": "vege",
-   "id": "chili-sin-carne"
+   "id": "chili-sin-carne",
+   "fiche": {
+    "infos": "Végé · plaques · tient en fin de semaine · se congèle bien · ~1 h (dont 40 min de mijotage)",
+    "ingredients": [
+     "Haricots rouges : 2 boîtes de 400 g, égouttées et rincées",
+     "Patate douce : 300 g",
+     "Courge butternut crue : ~250 g",
+     "Poivrons : 2",
+     "Oignons : 2 (~240 g)",
+     "Ail : 3 gousses",
+     "Tomates concassées : 2 boîtes de 400 g",
+     "Maïs : 1 petite boîte, égouttée",
+     "Eau : 20 cl + ½ cube de bouillon de légumes",
+     "Cumin : 2 c.c. · paprika fumé : 1 c.c. · piment selon le goût",
+     "Huile : 1 c.s.",
+     "Quinoa : 250 g (+ 500 ml d'eau salée)",
+     "Citron vert : 1, pour servir"
+    ],
+    "methode": [
+     "Coupe les oignons en petits dés, hache l'ail. Poivrons en dés de 1,5 cm, patate douce épluchée en cubes de 1,5 cm, butternut épluchée en cubes de 2 cm.",
+     "Dans **la plus grande casserole** (ou répartis dans deux) : 1 c.s. d'huile, oignons et poivrons **5 min**. Ajoute l'ail et les épices, **1 min**.",
+     "Ajoute la patate douce, la butternut, les tomates, les haricots rouges, le maïs, l'eau et le ½ cube de bouillon. Mijote **40 min à feu doux**, couvercle entrouvert, en remuant toutes les 10 min. Rectifie le sel.",
+     "Quinoa : rince-le et cuis-le avec 500 ml d'eau salée, à couvert, **12 à 15 min**, jusqu'à absorption.",
+     "Sers avec un filet de citron vert pressé."
+    ],
+    "retours": "Sem. 05/10, le volume débordait d'une casserole normale, d'où la grande casserole."
+   }
   },
   {
    "avis": "",
@@ -503,7 +669,39 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
    ],
    "statut": "fait",
    "type": "viande",
-   "id": "poulet-pane-riz-four-feta"
+   "id": "poulet-pane-riz-four-feta",
+   "fiche": {
+    "infos": "Viande · four · à manger en début de semaine · pas de congélation · ~1 h (dont 40 min de four) · protéines : poulet, feta, œufs, yaourt de brebis (~50 g/portion)",
+    "ingredients": [
+     "Blancs de poulet : 600 g",
+     "Farine : 40 g",
+     "Œufs : 2",
+     "Chapelure (ou panko) : 100 g",
+     "Paprika : 1 c.c. · ail en poudre : ½ c.c.",
+     "Riz long (basmati ou thaï) : 250 g",
+     "Bouillon de légumes : 55 cl d'eau bouillante + 1 cube",
+     "Feta : 200 g",
+     "Olives noires dénoyautées (kalamata) : 100 g",
+     "Grenade : 1 (~150 g de grains)",
+     "Oignon rouge : 1 (~120 g)",
+     "Ail : 3 gousses (2 riz, 1 sauce)",
+     "Citron : 1 (½ riz, ½ sauce)",
+     "Persil ou menthe : 1 petit bouquet (~20 g)",
+     "Origan : 1 c.c.",
+     "Yaourt de brebis : 250 g (2 pots)",
+     "Huile d'olive : 5 c.s. (2 riz, 3 poulet)",
+     "Sel (½ c.c. poulet + 1 pincée sauce), poivre"
+    ],
+    "methode": [
+     "Four à 200 °C. Riz au four : rince le riz. Émince l'oignon rouge, hache 2 gousses d'ail, coupe les olives en deux. Dans un plat à four (~25 × 30 cm), mélange le riz, l'oignon, l'ail, les olives, l'origan et 2 c.s. d'huile. Verse le bouillon bouillant, couvre hermétiquement de papier aluminium. **35 min à 200 °C** (grille du haut).",
+     "Poulet : coupe les blancs en aiguillettes de 2 cm d'épaisseur. Prépare 3 assiettes : la farine ; les œufs battus avec ½ c.c. de sel ; la chapelure mélangée au paprika et à l'ail en poudre. Passe chaque morceau dans la farine, l'œuf puis la chapelure.",
+     "Huile une plaque avec 1 c.s. d'huile, pose les aiguillettes sans qu'elles se touchent, arrose avec 2 c.s. d'huile. **20 min à 200 °C** (plaque du bas), en les retournant à mi-cuisson, jusqu'à ce qu'elles soient dorées.",
+     "Sors le riz, retire l'aluminium, émiette la feta dessus et remets **10 min** à découvert.",
+     "Sauce : mélange le yaourt de brebis, 1 gousse d'ail râpée, le jus d'½ citron et une pincée de sel. Garde-la dans un pot à part.",
+     "Égrène la grenade et hache les herbes ; garde-les dans une boîte à part avec le jus d'½ citron.",
+     "Au service : réchauffe le riz avec 1 c.s. d'eau (micro-ondes, couvert), puis ajoute la grenade, les herbes et la sauce yaourt. Le poulet pané se réchauffe mieux au four ou à la poêle (5 min) qu'au micro-ondes."
+    ]
+   }
   },
   {
    "avis": "",
@@ -529,7 +727,33 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
    ],
    "statut": "fait",
    "type": "vege",
-   "id": "mafe-pois-chiches-potimarron"
+   "id": "mafe-pois-chiches-potimarron",
+   "fiche": {
+    "infos": "Végé · plaques · tient en fin de semaine · se congèle bien (sans la semoule) · ~45 min (dont 25 min de mijotage) · protéines : pois chiches, cacahuète (~30 g/portion avec la semoule)",
+    "ingredients": [
+     "Pois chiches : 3 boîtes de 400 g, égouttées et rincées (~720 g)",
+     "Potimarron : ~600 g net (un petit potimarron de ~800 g, la peau se mange)",
+     "Oignons : 2 (~240 g)",
+     "Ail : 2 gousses",
+     "Gingembre frais : 2 cm",
+     "Beurre de cacahuète nature (sans sucre) : 100 g",
+     "Concentré de tomate : 2 c.s. (~30 g)",
+     "Tomates concassées : 1 boîte de 400 g",
+     "Bouillon de légumes : 50 cl d'eau + 1 cube",
+     "Paprika : 1 c.c. · cumin : 1 c.c. · piment selon le goût",
+     "Huile : 1 c.s.",
+     "Sel, poivre",
+     "Semoule complète : 250 g (+ 30 cl d'eau bouillante salée + 1 c.s. d'huile)",
+     "Cacahuètes grillées concassées : 30 g, pour servir (facultatif)"
+    ],
+    "methode": [
+     "Coupe les oignons en petits dés, hache l'ail, râpe le gingembre. Lave le potimarron, retire les graines et coupe-le en cubes de 2 cm sans l'éplucher.",
+     "Dans **la grande casserole** : 1 c.s. d'huile, oignons **5 min**. Ajoute l'ail, le gingembre et les épices, **1 min**, puis le concentré de tomate, **1 min**.",
+     "Délaie le beurre de cacahuète dans le bouillon chaud. Ajoute-le avec les tomates, le potimarron et les pois chiches. Mijote **25 min à feu doux**, à demi couvert, en remuant de temps en temps (ça attache facilement), jusqu'à ce que le potimarron soit tendre. Rectifie le sel.",
+     "Semoule : verse 30 cl d'eau bouillante salée sur la semoule avec 1 c.s. d'huile, couvre **5 min**, égrène à la fourchette.",
+     "La sauce épaissit au frigo : au réchauffage, ajoute 2 à 3 c.s. d'eau. Parsème de cacahuètes au service."
+    ]
+   }
   },
   {
    "avis": "",
@@ -555,7 +779,33 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
    ],
    "statut": "fait",
    "type": "vege",
-   "id": "risotto-champignons-chataignes"
+   "id": "risotto-champignons-chataignes",
+   "fiche": {
+    "infos": "Végé · plaques · tient 3 jours au frigo · pas de congélation · ~45 min · protéines : tofu fumé, pecorino (~30 g/portion)",
+    "ingredients": [
+     "Riz à risotto (arborio ou carnaroli) : 320 g",
+     "Bouillon de légumes : 1,6 L d'eau + 2 cubes (dont 30 cl gardés pour le réchauffage)",
+     "Champignons de Paris : 500 g",
+     "Châtaignes cuites (sous vide) : 200 g",
+     "Tofu fumé : ~350 g (2 blocs)",
+     "Oignon : 1 (~120 g)",
+     "Ail : 2 gousses",
+     "Vin blanc sec : 10 cl (facultatif, sinon du bouillon)",
+     "Pecorino râpé : 80 g",
+     "Huile d'olive : 3 c.s. (1 risotto, 2 poêlée)",
+     "Thym : 1 c.c. · persil : quelques brins",
+     "Sel, poivre"
+    ],
+    "methode": [
+     "Garde le bouillon chaud à feu doux dans la petite casserole.",
+     "Coupe l'oignon en petits dés, hache l'ail. Essuie les champignons et coupe-les en lamelles de 5 mm. Coupe le tofu fumé en petits dés de 1 cm, émiette grossièrement les châtaignes.",
+     "Poêlée : 2 c.s. d'huile, tofu fumé **5 min** jusqu'à ce qu'il dore, sors-le. Dans la même poêle, champignons et thym **8 à 10 min** jusqu'à évaporation de l'eau, ajoute les châtaignes **2 min**, sale.",
+     "Risotto, dans une grande casserole : 1 c.s. d'huile, oignon et ail **3 min**. Ajoute le riz, remue **2 min** jusqu'à ce qu'il soit nacré. Verse le vin blanc et laisse évaporer.",
+     "Ajoute le bouillon louche par louche en remuant, en attendant que chaque louche soit absorbée, **16 à 18 min** : arrête quand le riz est encore un peu ferme (il continue de gonfler au frigo). Garde 30 cl de bouillon dans un pot pour le réchauffage.",
+     "Hors du feu, incorpore le pecorino, les champignons, les châtaignes et le tofu. Poivre, persil.",
+     "Au réchauffage : ajoute 5 à 7 c.s. du bouillon gardé (ou d'eau) par portion pour le rendre crémeux."
+    ]
+   }
   },
   {
    "avis": "",
@@ -583,7 +833,33 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
    ],
    "statut": "fait",
    "type": "vege",
-   "id": "bourguignon-tempeh"
+   "id": "bourguignon-tempeh",
+   "fiche": {
+    "infos": "Végé · plaques · tient en fin de semaine · se congèle bien · ~1 h 15 (dont 45 min de mijotage) · protéines : tempeh (~25 g/portion)",
+    "ingredients": [
+     "Tempeh nature : 400 g (2 blocs)",
+     "Champignons de Paris : 400 g",
+     "Carottes : 4 (~400 g)",
+     "Oignons : 2 (~240 g)",
+     "Ail : 3 gousses",
+     "Vin rouge (type bourgogne ou côtes-du-rhône) : 50 cl",
+     "Bouillon de légumes : 30 cl d'eau + ½ cube",
+     "Concentré de tomate : 2 c.s. (~30 g)",
+     "Farine : 2 c.s. (~20 g)",
+     "Sauce soja : 3 c.s. (1 marinade, 2 sauce)",
+     "Thym : 1 c.c. · laurier : 2 feuilles",
+     "Huile : 3 c.s. (2 tempeh, 1 légumes)",
+     "Poivre (pas de sel avant d'avoir goûté, la sauce soja sale)",
+     "Purée : pommes de terre 600 g, céleri-rave 400 g, lait végétal 20 cl, huile d'olive 2 c.s., ½ c.c. de sel + 1 c.s. pour l'eau, muscade"
+    ],
+    "methode": [
+     "Coupe le tempeh en cubes de 2 cm et mélange-les avec 1 c.s. de sauce soja. Coupe les oignons en dés, hache l'ail, coupe les carottes en rondelles de 1 cm et les champignons en quartiers.",
+     "Dans **la grande casserole** : 2 c.s. d'huile, dore le tempeh **6 à 8 min**, sors-le.",
+     "1 c.s. d'huile, oignons et carottes **5 min**, puis champignons **5 min**. Ajoute l'ail et le concentré de tomate **1 min**, saupoudre de farine et remue **1 min**.",
+     "Verse le vin rouge, le bouillon et 2 c.s. de sauce soja, ajoute le thym et le laurier. Porte à ébullition, puis remets le tempeh. Mijote **45 min à feu doux**, à demi couvert, en remuant toutes les 10 min. La sauce doit rester abondante : rajoute un peu d'eau si elle réduit trop. Retire le laurier.",
+     "Purée : épluche les pommes de terre et le céleri-rave, coupe-les en morceaux de 3 cm. Cuis-les **20 à 25 min** dans 2 L d'eau bouillante salée. Égoutte, écrase avec le lait végétal chaud, l'huile, ½ c.c. de sel et une pincée de muscade."
+    ]
+   }
   },
   {
    "avis": "",
@@ -1226,7 +1502,7 @@ window.FIREBASE_CONFIG = {
   const fShort = new Intl.DateTimeFormat('fr-FR',{day:'numeric',month:'short',year:'numeric'});
   const fDay = new Intl.DateTimeFormat('fr-FR',{weekday:'long',day:'numeric',month:'long'});
   const toDate = iso => { const [y,m,d] = String(iso).split('-').map(Number); return new Date(y,(m||1)-1,d||1); };
-  const TABS = ['repas','courses','stock','plats','semaines'];
+  const TABS = ['repas','courses','cuisine','stock','plats','semaines'];
   const JOURS = [['lundi','Lun'],['mardi','Mar'],['mercredi','Mer'],['jeudi','Jeu'],['vendredi','Ven']];
   const MOMENTS = [['midi','Midi'],['soir','Soir']];
   const isoOf = x => x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0');
@@ -1237,7 +1513,7 @@ window.FIREBASE_CONFIG = {
   }
 
   const S = {
-    status:'loading', dbErr:null, loaded:{plats:false, semaines:false, listes:false, plannings:false, reglages:false, avis:false, stock:false}, stock:{}, stockPending:false, stockSeeded:false, sst:{}, sqTimers:{}, platsBase:[], avis:{}, plats:[], semaines:[], listes:{}, plannings:{}, reglages:{}, planId:nextMondays(1)[0], tab:'courses', weekId:null,
+    cuisineId:null, confirmDeroule:false, wake:null, status:'loading', dbErr:null, loaded:{plats:false, semaines:false, listes:false, plannings:false, reglages:false, avis:false, stock:false}, stock:{}, stockPending:false, stockSeeded:false, sst:{}, sqTimers:{}, platsBase:[], avis:{}, plats:[], semaines:[], listes:{}, plannings:{}, reglages:{}, planId:nextMondays(1)[0], tab:'courses', weekId:null,
     hideDone:false, confirmReset:false, canWrite:true, open:new Set(), openInit:false,
     f:{type:'tous',saison:'toutes',cong:'toutes',avis:'tous',statut:'tout',q:''}
   };
@@ -1253,6 +1529,7 @@ window.FIREBASE_CONFIG = {
       $('#t-'+k).setAttribute('aria-selected', String(k===t));
       $('#v-'+k).hidden = k !== t;
     });
+    try { $('#t-'+t).scrollIntoView({block:'nearest', inline:'nearest'}); } catch(e){}
     try { localStorage.setItem('bc-tab', t); } catch(e){}
     try { history.replaceState(null,'','#'+t); } catch(e){}
   }
@@ -1377,6 +1654,82 @@ window.FIREBASE_CONFIG = {
     P.note = v;
     writeDoc('plannings/'+pid, {note:v}, {repas:{}, note:''}).then(ok => { if (ok !== false) $('#note-state').textContent = 'Enregistré'; });
   }
+
+  /* ---------- cuisine ---------- */
+  const md = t => esc(t).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  const etapesOf = w => Array.isArray(w.deroule) ? w.deroule : ((w.deroule && w.deroule.etapes) || []);
+  function splitIngr(line){ const i = line.indexOf(' : '); return i < 0 ? [line, ''] : [line.slice(0, i), line.slice(i + 3)]; }
+  function renderCuisine(){
+    const head = $('#cuisine-head'), el = $('#cuisine-main');
+    if (gate(el, 'du déroulé', ['semaines','plats','listes'])) { head.innerHTML = ''; return; }
+    const weeks = weeksSorted();
+    if (!weeks.length) { head.innerHTML = ''; el.innerHTML = empty('Rien à cuisiner pour l’instant', 'Dès qu’un menu est validé, ses fiches recettes et le déroulé du dimanche s’affichent ici.'); return; }
+    if (!S.cuisineId || !weeks.some(w => w.id === S.cuisineId)) S.cuisineId = weeks[0].id;
+    const w = weeks.find(x => x.id === S.cuisineId);
+    const etapes = etapesOf(w), L = S.listes[w.id] || {}, fait = L.deroule || {};
+    const nbFait = etapes.filter(e => fait[e.id]).length;
+    const wakeOk = 'wakeLock' in navigator;
+    head.innerHTML = '<div class="cuis-head"><div class="week-pick"><label for="cuisine-select" class="eyebrow">Semaine</label><select id="cuisine-select">'
+      + weeks.map(x => '<option value="'+esc(x.id)+'"'+(x.id===w.id?' selected':'')+'>'+esc(weekLabel(x))+(x.batch ? ' · batch le '+esc(fShort.format(toDate(x.batch))) : '')+'</option>').join('')
+      + '</select></div>'
+      + '<div class="cuis-tools">'
+      + (wakeOk ? '<button type="button" class="btn" id="wake-btn" aria-pressed="'+(!!S.wake)+'">'+(S.wake ? 'Écran maintenu allumé' : 'Garder l’écran allumé')+'</button>' : '')
+      + (S.canWrite && nbFait ? '<button type="button" class="btn danger" id="deroule-reset">Tout décocher</button>' : '')
+      + '</div>'
+      + (S.confirmDeroule ? '<div class="confirm" role="group" aria-label="Confirmation"><span>Décocher les '+nbFait+' étapes faites, pour vous deux ?</span><button type="button" class="btn primary" id="deroule-yes">Oui, tout décocher</button><button type="button" class="btn" id="deroule-no">Annuler</button></div>' : '')
+      + '</div>';
+
+    let html = '<h2 class="cuis-h2">Déroulé du dimanche'+(etapes.length ? '<small>'+nbFait+' / '+etapes.length+' étapes</small>' : '')+'</h2>';
+    if (!etapes.length) {
+      html += '<div class="cuis-empty"><b>Le déroulé de cette semaine n’est pas encore prêt.</b> Il s’affichera ici, étape par étape, dès qu’il est validé avec Claude. En attendant, les fiches ci-dessous suffisent pour cuisiner chaque plat.</div>';
+    } else {
+      const pct = Math.round(nbFait / etapes.length * 100);
+      const intro = !Array.isArray(w.deroule) && w.deroule.intro;
+      html += (intro ? '<p class="cuis-intro">'+md(intro)+'</p>' : '')
+        + '<div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="'+etapes.length+'" aria-valuenow="'+nbFait+'" aria-label="Étapes faites" style="margin-bottom:12px"><i style="width:'+pct+'%"></i></div>';
+      const cur = etapes.findIndex(e => !fait[e.id]);
+      const nomPlat = id => { const m = (w.menu||[]).find(x => x.platId === id); return m ? String(m.jour||'').slice(0,3) : ((S.plats.find(p => p.id === id) || {}).nom || id); };
+      html += '<ol class="steps-list">' + etapes.map((e, i) => {
+        const done = !!fait[e.id];
+        return '<li class="dstep'+(done?' done':'')+(i===cur?' current':'')+'">'
+          + '<button type="button" class="tick-btn" data-dstep="'+esc(e.id)+'" aria-pressed="'+done+'" aria-label="Étape '+(i+1)+(done?' faite':' à faire')+'"><span class="box"></span></button>'
+          + '<div class="dstep-body"><div class="dstep-top"><span class="dstep-num">'+String(i+1).padStart(2,'0')+'</span><h3>'+md(e.titre)+'</h3>'+(e.temps ? '<span class="dstep-time">'+esc(e.temps)+'</span>' : '')+'</div>'
+          + ((e.details||[]).length ? '<ul>'+e.details.map(x => '<li>'+md(x)+'</li>').join('')+'</ul>' : '')
+          + ((e.plats||[]).length ? '<div class="dstep-plats">'+e.plats.map(id => '<span>'+esc(nomPlat(id))+'</span>').join('')+'</div>' : '')
+          + '</div></li>';
+      }).join('') + '</ol>';
+      if (cur < 0) html += '<div class="allok" style="margin-top:10px">Tout est fait. Bon appétit pour la semaine !</div>';
+    }
+
+    html += '<h2 class="cuis-h2">Fiches recettes<small>4 portions</small></h2><div class="fiches">';
+    html += (w.menu||[]).map(m => {
+      const p = S.plats.find(x => x.id === m.platId) || {}, f = p.fiche;
+      const open = S.ficheOpen && S.ficheOpen.has(w.id+'/'+m.platId);
+      let body;
+      if (!f) body = '<p class="fiche-infos">Fiche pas encore publiée dans l’application.</p>';
+      else body = '<p class="fiche-infos">'+esc(f.infos||'')+'</p>'
+        + '<div><h4 class="eyebrow" style="margin:0 0 4px">Ingrédients</h4><table class="ingr-tab"><tbody>'
+        + (f.ingredients||[]).map(l => { const [a,b] = splitIngr(l); return '<tr><td>'+esc(a)+'</td><td>'+esc(b)+'</td></tr>'; }).join('') + '</tbody></table></div>'
+        + '<div><h4 class="eyebrow" style="margin:0 0 6px">Méthode</h4><ol class="methode">'+(f.methode||[]).map(x => '<li>'+md(x)+'</li>').join('')+'</ol></div>'
+        + (f.retours ? '<p class="remarque"><b>Retour :</b> '+esc(f.retours)+'</p>' : '');
+      return '<details class="fiche" data-fiche="'+esc(w.id+'/'+m.platId)+'"'+(open?' open':'')+'><summary><span class="fj">'+esc(String(m.jour||'').slice(0,3))+'</span><span class="fn">'+esc(p.nom || m.plat)+'</span></summary><div class="fiche-body">'+body+'</div></details>';
+    }).join('') + '</div>';
+    el.innerHTML = html;
+  }
+  async function toggleWake(){
+    try {
+      if (S.wake) { const l = S.wake; S.wake = null; await l.release(); }
+      else { S.wake = await navigator.wakeLock.request('screen'); S.wake.addEventListener('release', () => { if (S.wake && S.wake.released) { S.wantWake = true; S.wake = null; renderCuisine(); } }); }
+      S.wantWake = !!S.wake;
+    } catch(e){ S.wake = null; toast('Ce téléphone ne permet pas de garder l’écran allumé depuis l’application.'); }
+    renderCuisine();
+  }
+  document.addEventListener('toggle', e => {
+    const d = e.target; if (!d.matches || !d.matches('details[data-fiche]')) return;
+    S.ficheOpen = S.ficheOpen || new Set();
+    if (d.open) S.ficheOpen.add(d.dataset.fiche); else S.ficheOpen.delete(d.dataset.fiche);
+  }, true);
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && S.wantWake && !S.wake) toggleWake(); });
 
   /* ---------- stock ---------- */
   const ZONES = [
@@ -1633,13 +1986,29 @@ window.FIREBASE_CONFIG = {
   function renderAll(){
     $('#ro').hidden = S.canWrite || S.status !== 'ready';
     /* status 'ready' = la base répond ; chaque onglet attend ses propres données (S.loaded) */
-    renderRepas(); renderCourses(); renderStock(); renderPlats(); renderSemaines();
+    renderRepas(); renderCourses(); renderCuisine(); renderStock(); renderPlats(); renderSemaines();
   }
 
   /* ---------- events ---------- */
   document.addEventListener('click', e => {
     const t = e.target.closest('button'); if (!t) return;
     if (t.dataset.tab) { setTab(t.dataset.tab); return; }
+    if (t.dataset.dstep) {
+      if (!canEdit()) return;
+      const wid = S.cuisineId, L = localList(wid); L.deroule = L.deroule || {};
+      const id = t.dataset.dstep, v = !L.deroule[id];
+      L.deroule[id] = v; renderCuisine(); writeList(wid, {deroule:{[id]:v}}); return;
+    }
+    if (t.id === 'wake-btn') { toggleWake(); return; }
+    if (t.id === 'deroule-reset') { S.confirmDeroule = true; renderCuisine(); return; }
+    if (t.id === 'deroule-no') { S.confirmDeroule = false; renderCuisine(); return; }
+    if (t.id === 'deroule-yes') {
+      S.confirmDeroule = false;
+      if (!canEdit()) { renderCuisine(); return; }
+      const wid = S.cuisineId, L = localList(wid), patch = {};
+      Object.keys(L.deroule || {}).forEach(k => { if (L.deroule[k]) { patch[k] = false; L.deroule[k] = false; } });
+      renderCuisine(); if (Object.keys(patch).length) writeList(wid, {deroule:patch}); toast('Déroulé remis à zéro.'); return;
+    }
     if (t.dataset.tick) {
       if (!canEdit()) return;
       const wid = S.weekId, L = localList(wid), id = t.dataset.tick, v = !L.coche[id];
@@ -1696,6 +2065,7 @@ window.FIREBASE_CONFIG = {
   });
   document.addEventListener('change', e => {
     if (e.target.id === 'week-select') { S.weekId = e.target.value; S.confirmReset = false; renderCourses(); }
+    if (e.target.id === 'cuisine-select') { S.cuisineId = e.target.value; S.confirmDeroule = false; renderCuisine(); }
     if (e.target.id === 'plan-select') { saveNote(); S.planId = e.target.value; $('#note-state').textContent = ''; $('#plan-note').value = (S.plannings[S.planId] || {}).note || ''; renderRepas(); }
   });
   document.addEventListener('change', e => {

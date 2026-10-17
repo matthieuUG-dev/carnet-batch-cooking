@@ -1,0 +1,29 @@
+# Carnet de batch cooking — notes pour Claude
+
+Application du foyer (2 personnes), publiée par GitHub Pages : https://matthieuug-dev.github.io/carnet-batch-cooking/
+Tout tient dans `index.html`. La référence du contenu (règles, fiches, semaines) reste le document de projet `claude/carnet-batch-cooking.md` ; l'application en est la version cuisine/téléphone.
+
+## Ce qu'il faut publier à chaque étape
+Modifier uniquement le bloc `<script type="application/json" id="carnet-data">`, vérifier que le JSON est valide (et que `</` y est écrit `<\/`), puis commit + push sur `main`.
+
+1. **Menu validé** : ajouter chaque nouveau plat dans `plats` avec sa **fiche** (champ `fiche`, voir plus bas), et la semaine dans `semaines` (`menu`, `nbRepas`, `etapes.menu = true`).
+2. **Liste de courses** : `semaines[].courses` (rayons → articles avec un `id` unique), `etapes.courses = true`. Pas de rayon « Placard à vérifier » : le placard est suivi dans l'onglet Stock.
+3. **Déroulé du dimanche** : `semaines[].deroule` (voir plus bas), `etapes.deroule = true`. Il s'affiche dans l'onglet **Cuisine**, étape par étape, à cocher à deux.
+
+## Formats
+- `plats[]` : `id`, `nom`, `type` (vege | viande), `cuisson`, `conservation` (tot | tient), `congelation` (oui | moyen | non), `congelationNote`, `saisons[]`, `ingredients[]` (ingrédients clés, pour la recherche), `faitLe[]` (dates des lundis), `statut` (fait | idee), `ordre`, `remarque`, `avis` (vide : les avis vivent dans Firestore), et
+  `fiche` = `{ infos, ingredients: ["Nom : quantité", …], methode: ["…", …], retours? }` — recopiée de la fiche du carnet, 4 portions, mêmes quantités. `**texte**` est affiché en gras (temps et températures).
+- `semaines[]` : `id` = `debut` = date du lundi (AAAA-MM-JJ), `batch` (date du dimanche), `choix`, `menu[]` = `{ jour, plat, platId }`, `nbRepas`, `courses[]` = `{ rayon, hint?, items: [{ id, nom, qte, note? }] }`, `retours[]`, `etapes { menu, courses, deroule }`, et
+  `deroule` = `{ intro?, etapes: [{ id, titre, temps?, details: ["…"], plats: [platId] }] }` — une entrée par étape du déroulé, `id` court et stable (`d01`, `d02`…), `temps` = repère horaire (« 0:00 », « 0:25 ») ou durée, `details` = quantités et découpes de l'étape, exactement celles des fiches.
+- `stockInitial[]` : articles créés dans le stock au tout premier lancement seulement.
+
+## Données partagées (Firebase, projet `carnet-batch-cooking`)
+Règles Firestore : seules les collections `listes`, `plannings`, `avis`, `reglages` sont autorisées.
+- `listes/<lundi>` : `coche.<idArticle>`, `extras`, `deroule.<idÉtape>` (étapes cochées dans l'onglet Cuisine)
+- `plannings/<lundi>` : `repas.<jour>.<midi|soir>` (false = dehors), `note`
+- `avis/<idPlat>` : `avis`
+- `reglages/foyer` : `personnes`, `portionsParPlat` ; `reglages/stock` : `items.<id>`
+
+## À ne pas casser
+- Mise à jour automatique : la page compare le texte de ses `<script>` et `<style>` avec la version en ligne (à l'ouverture et au retour au premier plan) et se recharge si besoin. Aucun numéro de version à gérer, mais ne jamais créer ni modifier de `<script>`/`<style>` dynamiquement, sinon la page croirait toujours à une nouvelle version.
+- Une seule page, aucun fichier annexe : l'utilisateur ne peut pas déposer de dossier sur GitHub.
