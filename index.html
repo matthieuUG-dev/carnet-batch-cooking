@@ -46,7 +46,14 @@ button{cursor:pointer}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
-.brand{padding-block:22px 10px;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px}
+.brand{padding-block:22px 10px;display:flex;align-items:center;gap:12px}
+.brand-txt{flex:1;min-width:0;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px}
+.maj-btn{flex:0 0 auto;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);display:grid;place-items:center;padding:0}
+.maj-btn:active{background:var(--sunk)}
+.maj-btn.busy svg{animation:majspin .8s linear infinite}
+@keyframes majspin{to{transform:rotate(360deg)}}
+.maj-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;background:var(--leaf-soft);color:var(--leaf);border-radius:var(--r);padding:10px 12px;margin-bottom:12px;font-size:.92rem;font-weight:700}
+@media (prefers-reduced-motion: reduce){.maj-btn.busy svg{animation:none;opacity:.5}}
 .brand h1{font-family:var(--f-display);font-weight:800;font-size:clamp(1.55rem,5vw,2.1rem);line-height:1.05;letter-spacing:-0.02em;margin:0;text-wrap:balance}
 .brand h1 span{color:var(--accent)}
 .brand p{margin:0;color:var(--muted);font-size:.85rem}
@@ -237,9 +244,18 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
 
 <div class="wrap">
   <header class="brand">
-    <h1>Carnet de <span>batch cooking</span></h1>
-    <p>Dimanche en cuisine · 2 personnes · 5 plats</p>
+    <div class="brand-txt">
+      <h1>Carnet de <span>batch cooking</span></h1>
+      <p>Dimanche en cuisine · 2 personnes · 5 plats</p>
+    </div>
+    <button type="button" id="maj-btn" class="maj-btn" aria-label="Mettre à jour l’application" title="Mettre à jour">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M20 4v5h-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
   </header>
+  <div id="maj-bar" class="maj-bar" role="status" hidden>
+    <span>Une nouvelle version est disponible.</span>
+    <button type="button" class="btn primary" id="maj-bar-btn">Mettre à jour</button>
+  </div>
   <nav class="tabs" role="tablist" aria-label="Sections">
     <button type="button" role="tab" id="t-repas" data-tab="repas" aria-controls="v-repas" aria-selected="false">Repas</button>
     <button type="button" role="tab" id="t-courses" data-tab="courses" aria-controls="v-courses" aria-selected="true">Courses</button>
@@ -1786,6 +1802,60 @@ window.FIREBASE_CONFIG = {
     }, onErrFor('stock'));
     store.watchCol('avis', docs => { S.avis = {}; docs.forEach(d => { S.avis[d.id] = d.data.avis || ''; }); mergeAvis(); ready('avis'); renderAll(); }, onErrFor('avis'));
   })();
+})();
+</script>
+<script>
+/* Mise à jour de l'application : bouton manuel + vérification à l'ouverture et au retour au premier plan.
+   Compare le code et les données de la page (scripts + styles) avec la version en ligne : aucune version à numéroter. */
+(function(){
+  const btn = document.getElementById('maj-btn'), bar = document.getElementById('maj-bar');
+  const signature = doc => [...doc.querySelectorAll('script, style')].map(n => n.textContent).join('\u0001');
+  const current = signature(document);
+  let checking = false, lastCheck = 0;
+  function say(msg){
+    const el = document.getElementById('toast'); if (!el) return;
+    el.textContent = msg; el.hidden = false;
+    clearTimeout(say.t); say.t = setTimeout(() => { el.hidden = true; }, 3600);
+  }
+  async function fetchLatest(){
+    const r = await fetch(location.pathname + '?check=' + Date.now(), {cache: 'no-store'});
+    if (!r.ok) throw new Error('http ' + r.status);
+    return signature(new DOMParser().parseFromString(await r.text(), 'text/html'));
+  }
+  function reload(){
+    try { sessionStorage.setItem('maj-ok', '1'); } catch(e){}
+    location.replace(location.pathname + '?v=' + Date.now() + location.hash);
+  }
+  const editing = () => { const a = document.activeElement; return a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName); };
+  async function autoCheck(){
+    if (checking || Date.now() - lastCheck < 20000 || !navigator.onLine) return;
+    checking = true; lastCheck = Date.now();
+    try {
+      if (await fetchLatest() !== current) {
+        let recent = false;
+        try { recent = Date.now() - Number(sessionStorage.getItem('maj-auto') || 0) < 60000; } catch(e){}
+        if (editing() || recent) bar.hidden = false;
+        else { try { sessionStorage.setItem('maj-auto', String(Date.now())); } catch(e){} reload(); }
+      }
+    } catch(e){}
+    checking = false;
+  }
+  async function manual(){
+    if (btn.classList.contains('busy')) return;
+    btn.classList.add('busy');
+    try { await fetchLatest(); reload(); }
+    catch(e){ btn.classList.remove('busy'); say('Pas de réseau : impossible de mettre à jour pour l’instant.'); }
+  }
+  btn.addEventListener('click', manual);
+  document.getElementById('maj-bar-btn').addEventListener('click', reload);
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') autoCheck(); });
+  window.addEventListener('pageshow', e => { if (e.persisted) autoCheck(); });
+  window.addEventListener('focus', autoCheck);
+  try {
+    if (sessionStorage.getItem('maj-ok')) { sessionStorage.removeItem('maj-ok'); setTimeout(() => say('✓ Application à jour'), 400); }
+  } catch(e){}
+  if (/[?&]v=/.test(location.search)) { try { history.replaceState(null, '', location.pathname + location.hash); } catch(e){} }
+  setTimeout(autoCheck, 1500);
 })();
 </script>
 </body>
