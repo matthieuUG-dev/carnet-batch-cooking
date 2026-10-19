@@ -16,6 +16,7 @@ Modifier uniquement le bloc `<script type="application/json" id="carnet-data">`,
 - **Banque de recettes** (`statut: "banque"` = à tester, affichées « À tester » dans Plats ; `fait` = déjà cuisiné) : en plus des champs ci-dessus, chaque recette porte
   `categorie` (soupe, gratin, poêlée, mijoté…), `equipement` = équipement principal (`four` | `poele` | `casserole`) pour équilibrer un menu (retour du 18/10 : ne pas cumuler les plats en casserole), `materiel[]` (four, poele, sauteuse, casserole, petite-casserole, mixeur), `feculent`, `proteinesPortion` (g), `duree { active, totale }` (min),
   `contient[]` pour les régimes et allergies (`porc`, `boeuf`, `volaille`, `poisson`, `oeuf`, `gluten`, `lactose-vache`, `soja`, `arachide`, `fruits-a-coque`, `alcool`), `motsCles[]` pour les envies (« soupe », « chorizo »…).
+  Fiche : `variantes[]` = `{ titre, texte }` facultatif (ex. version 100 % viande).
   Fiche structurée : `ingredients[]` = `{ nom, qte, unite, rayon, note? }` (rayons : Fruits & légumes, Frais, Épicerie, Surgelés, Placard ; `qte` null = au goût), `methode[]` = `{ texte, min?, actif }` (`actif: false` = cuisson ou attente sans surveillance, pour assembler le déroulé). Les anciennes fiches en texte restent acceptées.
 - `semaines[]` : `id` = `debut` = date du lundi (AAAA-MM-JJ), `batch` (date du dimanche), `choix`, `menu[]` = `{ jour, plat, platId }`, `nbRepas`, `courses[]` = `{ rayon, hint?, items: [{ id, nom, qte, note? }] }`, `retours[]`, `etapes { menu, courses, deroule }`, et
   `deroule` = `{ intro?, etapes: [{ id, titre, temps?, details: ["…"], plats: [platId] }] }` — une entrée par étape du déroulé, `id` court et stable (`d01`, `d02`…), `temps` = repère horaire (« 0:00 », « 0:25 ») ou durée, `details` = quantités et découpes de l'étape, exactement celles des fiches.
@@ -24,8 +25,8 @@ Modifier uniquement le bloc `<script type="application/json" id="carnet-data">`,
 ## Données partagées (Firebase, projet `carnet-batch-cooking`)
 Règles Firestore : seules les collections `listes`, `plannings`, `avis`, `reglages` sont autorisées.
 - `listes/<lundi>` : `coche.<idArticle>`, `extras`, `deroule.<idÉtape>` (étapes cochées dans l'onglet Cuisine)
-- `plannings/<lundi>` : `repas.<jour>.<midi|soir>` (false = dehors), `note`
-- `avis/<idPlat>` : `avis`
+- `plannings/<lundi>` : `repas.<jour>.<midi|soir>` (false = dehors), `note`, `commentaires.<id>` = `{ texte, date, auteur }` (commentaires sur le menu / le batch de la semaine)
+- `avis/<idPlat>` : `avis`, `commentaires.<id>` = `{ texte, date (ISO), auteur, semaine? }` (commentaires sur un plat)
 - `reglages/foyer` : `personnes`, `portionsParPlat` ; `reglages/stock` : `items.<id>`
 
 ## Serveur (dossier `api/`)
@@ -34,3 +35,6 @@ Cloudflare Worker déployé automatiquement à chaque push (Workers Builds, doss
 ## À ne pas casser
 - Mise à jour automatique : la page compare le texte de ses `<script>` et `<style>` avec la version en ligne (à l'ouverture et au retour au premier plan) et se recharge si besoin. Aucun numéro de version à gérer, mais ne jamais créer ni modifier de `<script>`/`<style>` dynamiquement, sinon la page croirait toujours à une nouvelle version.
 - Une seule page, aucun fichier annexe : l'utilisateur ne peut pas déposer de dossier sur GitHub.
+
+## Relire les retours
+Les commentaires (plats et menus) servent à améliorer la banque : pour les relire, ouvrir l'application dans le navigateur de l'ordinateur et lire `avis/*` et `plannings/*` (champ `commentaires`) avec le SDK Firebase de la page ; puis ajuster les fiches dans `carnet-data`.

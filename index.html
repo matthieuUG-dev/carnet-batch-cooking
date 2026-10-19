@@ -121,6 +121,21 @@ select{appearance:none;background:var(--surface) url("data:image/svg+xml,%3Csvg 
 .mot{background:none;border:1px solid var(--line);border-radius:99px;padding:2px 9px;font-size:.76rem;color:var(--muted)}
 .mot:hover{color:var(--ink);border-color:var(--muted)}
 
+/* Commentaires */
+.comments{display:grid;gap:8px}
+.clist{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.clist li{background:var(--sunk);border-radius:8px;padding:8px 10px;display:grid;gap:4px}
+.clist p{margin:0;font-size:.92rem;white-space:pre-wrap;overflow-wrap:anywhere}
+.cmeta{display:flex;justify-content:space-between;gap:8px;font-size:.78rem;color:var(--muted)}
+.cmeta .linkbtn{font-size:.78rem;color:var(--muted)}
+.cnone{margin:0;font-size:.86rem;color:var(--muted)}
+.comments textarea{width:100%;resize:vertical;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:9px 11px;font:inherit;font-size:.93rem;color:var(--ink)}
+.crow{display:flex;flex-wrap:wrap;gap:8px}
+.crow input{flex:1 1 9rem;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:8px 11px;font:inherit;font-size:.9rem;color:var(--ink)}
+.variante{background:var(--leaf-soft);border-radius:8px;padding:8px 10px}
+.variante h4{margin:0 0 4px;color:var(--leaf)}
+.variante p{margin:0;font-size:.92rem}
+
 /* Recette dans Plats */
 .recette{border-top:1px solid var(--line);margin-inline:-16px;padding-inline:16px}
 .recette summary{list-style:none;cursor:pointer;padding:12px 0 2px;font-weight:700;color:var(--accent);display:flex;justify-content:space-between;gap:8px}
@@ -1479,7 +1494,8 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
     "purée",
     "gratin",
     "réconfortant",
-    "classique"
+    "classique",
+    "100 % viande possible"
    ],
    "ingredients": [
     "bœuf haché",
@@ -1612,6 +1628,12 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
       "texte": "Dans un plat : la farce, puis la purée, des stries à la fourchette, le brebis râpé. **20 min à 200 °C.**",
       "min": 20,
       "actif": false
+     }
+    ],
+    "variantes": [
+     {
+      "titre": "100 % bœuf",
+      "texte": "Remplace les 300 g de bœuf haché et la boîte de lentilles par **500 g de bœuf haché 5 %** (2 barquettes de 250 g). À l’étape de la farce, ajoute seulement 5 cl d’eau au lieu de 10 cl. Le reste ne change pas, les protéines non plus (~30 g par portion)."
      }
     ]
    },
@@ -4117,7 +4139,7 @@ window.FIREBASE_CONFIG = {
   }
 
   const S = {
-    cuisineId:null, confirmDeroule:false, wake:null, status:'loading', dbErr:null, loaded:{plats:false, semaines:false, listes:false, plannings:false, reglages:false, avis:false, stock:false}, stock:{}, stockPending:false, stockSeeded:false, sst:{}, sqTimers:{}, platsBase:[], avis:{}, plats:[], semaines:[], listes:{}, plannings:{}, reglages:{}, planId:nextMondays(1)[0], tab:'courses', weekId:null,
+    cuisineId:null, comments:{}, drafts:{}, held:{}, confirmDeroule:false, wake:null, status:'loading', dbErr:null, loaded:{plats:false, semaines:false, listes:false, plannings:false, reglages:false, avis:false, stock:false}, stock:{}, stockPending:false, stockSeeded:false, sst:{}, sqTimers:{}, platsBase:[], avis:{}, plats:[], semaines:[], listes:{}, plannings:{}, reglages:{}, planId:nextMondays(1)[0], tab:'courses', weekId:null,
     hideDone:false, confirmReset:false, canWrite:true, open:new Set(), openInit:false,
     f:{type:'tous',saison:'toutes',cong:'toutes',avis:'tous',statut:'tout',q:''}
   };
@@ -4275,10 +4297,68 @@ window.FIREBASE_CONFIG = {
       + '<div><h4 class="eyebrow" style="margin:0 0 4px">Ingrédients · 4 portions</h4><table class="ingr-tab"><tbody>'
       + (f.ingredients||[]).map(it => { const [a,b] = ingrCells(it); return '<tr><td>'+esc(a)+'</td><td>'+esc(b)+'</td></tr>'; }).join('') + '</tbody></table></div>'
       + '<div><h4 class="eyebrow" style="margin:0 0 6px">Méthode</h4><ol class="methode">'+steps.map(x => '<li>'+md(x)+'</li>').join('')+'</ol></div>'
+      + (f.variantes||[]).map(v => '<div class="variante"><h4 class="eyebrow">Variante · '+esc(v.titre)+'</h4><p>'+md(v.texte)+'</p></div>').join('')
       + (f.retours ? '<p class="remarque"><b>Retour :</b> '+esc(f.retours)+'</p>' : '');
+  }
+
+  /* ---------- commentaires (plats et menus) ---------- */
+  const fCom = new Intl.DateTimeFormat('fr-FR', {day:'numeric', month:'short', year:'numeric'});
+  let monNom = ''; try { monNom = localStorage.getItem('bc-nom') || ''; } catch(e){}
+  const comPath = (kind, id) => (kind === 'plat' ? 'avis/' : 'plannings/') + id;
+  const comList = (kind, id) => kind === 'plat' ? (S.comments[id] || {}) : ((S.plannings[id] || {}).commentaires || {});
+  function commentsHTML(kind, id){
+    const key = kind + ':' + id;
+    const items = Object.entries(comList(kind, id)).filter(([,c]) => c && c.texte)
+      .map(([cid, c]) => Object.assign({cid}, c)).sort((a, b) => String(a.date).localeCompare(String(b.date)));
+    const ph = kind === 'plat' ? 'Ce que vous en avez pensé, ce que vous changeriez : quantités, cuisson, goût…'
+      : 'Comment s’est passé le batch : temps, organisation, ce qui a manqué ou débordé…';
+    return '<div class="comments">'
+      + (items.length ? '<ul class="clist">' + items.map(c => '<li><p>'+esc(c.texte)+'</p><div class="cmeta"><span>'
+          + esc([c.auteur, c.date ? fCom.format(new Date(c.date)) : ''].filter(Boolean).join(' · ')) + '</span>'
+          + '<button type="button" class="linkbtn" data-cdel="'+esc(key+':'+c.cid)+'">Supprimer</button></div></li>').join('') + '</ul>'
+        : '<p class="cnone">Pas encore de commentaire.</p>')
+      + '<label class="sr" for="ct-'+esc(kind+'-'+id)+'">Ajouter un commentaire</label>'
+      + '<textarea id="ct-'+esc(kind+'-'+id)+'" data-cdraft="'+esc(key)+'" rows="2" placeholder="'+esc(ph)+'">'+esc(S.drafts[key] || '')+'</textarea>'
+      + '<div class="crow"><input data-cname aria-label="Votre prénom (facultatif)" placeholder="Prénom (facultatif)" value="'+esc(monNom)+'" autocomplete="given-name">'
+      + '<button type="button" class="btn primary" data-csend="'+esc(key)+'">Publier</button></div></div>';
+  }
+  function lastWeekWith(platId){
+    const w = weeksSorted().find(x => (x.menu || []).some(m => m.platId === platId) && x.debut <= isoOf(new Date(Date.now() + 7 * 864e5)));
+    return w ? w.id : '';
+  }
+  function sendComment(key, btn){
+    const [kind, id] = key.split(':');
+    const ta = document.querySelector('[data-cdraft="'+key+'"]'); if (!ta) return;
+    const texte = ta.value.trim();
+    if (!texte) { ta.focus(); return; }
+    if (!canEdit()) return;
+    const nomEl = btn.closest('.comments').querySelector('[data-cname]');
+    monNom = (nomEl && nomEl.value.trim()) || ''; try { localStorage.setItem('bc-nom', monNom); } catch(e){}
+    const cid = 'c' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+    const c = {texte, date: new Date().toISOString(), auteur: monNom};
+    if (kind === 'plat') { const w = lastWeekWith(id); if (w) c.semaine = w; S.comments[id] = Object.assign({}, S.comments[id], {[cid]: c}); }
+    else { const P = S.plannings[id] = S.plannings[id] || {}; P.commentaires = Object.assign({}, P.commentaires, {[cid]: c}); }
+    delete S.drafts[key]; ta.value = ''; ta.blur();
+    renderAll();
+    writeDoc(comPath(kind, id), {commentaires: {[cid]: c}}).then(ok => { if (ok !== false) toast('✓ Commentaire enregistré'); });
+  }
+  function deleteComment(ref){
+    const [kind, id, cid] = ref.split(':');
+    if (!canEdit()) return;
+    if (kind === 'plat') { if (S.comments[id]) delete S.comments[id][cid]; }
+    else if (S.plannings[id] && S.plannings[id].commentaires) delete S.plannings[id].commentaires[cid];
+    renderAll();
+    enqueue(comPath(kind, id), () => store.dropKey(comPath(kind, id), 'commentaires', cid)).then(ok => { if (ok !== false) toast('Commentaire supprimé.'); });
+  }
+  /* Ne pas redessiner une liste pendant qu'on y écrit : on redessine à la sortie du champ. */
+  function holdIfTyping(el){
+    const a = document.activeElement;
+    if (a && el.contains(a) && (a.tagName === 'TEXTAREA' || a.hasAttribute('data-cname'))) { S.held[el.id] = true; return true; }
+    return false;
   }
   function renderCuisine(){
     const head = $('#cuisine-head'), el = $('#cuisine-main');
+    if (holdIfTyping(el)) return;
     if (gate(el, 'du déroulé', ['semaines','plats','listes'])) { head.innerHTML = ''; return; }
     const weeks = weeksSorted();
     if (!weeks.length) { head.innerHTML = ''; el.innerHTML = empty('Rien à cuisiner pour l’instant', 'Dès qu’un menu est validé, ses fiches recettes et le déroulé du dimanche s’affichent ici.'); return; }
@@ -4317,6 +4397,7 @@ window.FIREBASE_CONFIG = {
           + '</div></li>';
       }).join('') + '</ol>';
       if (cur < 0) html += '<div class="allok" style="margin-top:10px">Tout est fait. Bon appétit pour la semaine !</div>';
+      html += '<h2 class="cuis-h2">Votre avis sur ce batch</h2>' + commentsHTML('semaine', w.id);
     }
 
     html += '<h2 class="cuis-h2">Fiches recettes<small>4 portions</small></h2><div class="fiches">';
@@ -4325,7 +4406,7 @@ window.FIREBASE_CONFIG = {
       const open = S.ficheOpen && S.ficheOpen.has(w.id+'/'+m.platId);
       let body;
       if (!f) body = '<p class="fiche-infos">Fiche pas encore publiée dans l’application.</p>';
-      else body = ficheHTML(f);
+      else body = ficheHTML(f) + '<div><h4 class="eyebrow" style="margin:0 0 6px">Vos commentaires sur ce plat</h4>' + commentsHTML('plat', m.platId) + '</div>';
       return '<details class="fiche" data-fiche="'+esc(w.id+'/'+m.platId)+'"'+(open?' open':'')+'><summary><span class="fj">'+esc(String(m.jour||'').slice(0,3))+'</span><span class="fn">'+esc(p.nom || m.plat)+'</span></summary><div class="fiche-body">'+body+'</div></details>';
     }).join('') + '</div>';
     el.innerHTML = html;
@@ -4339,6 +4420,7 @@ window.FIREBASE_CONFIG = {
     renderCuisine();
   }
   document.addEventListener('toggle', e => {
+    const c = e.target; if (c.matches && c.matches('details[data-com]')) { S.comOpen = S.comOpen || new Set(); if (c.open) S.comOpen.add(c.dataset.com); else S.comOpen.delete(c.dataset.com); return; }
     const r = e.target; if (r.matches && r.matches('details[data-recette]')) { S.recOpen = S.recOpen || new Set(); if (r.open) S.recOpen.add(r.dataset.recette); else S.recOpen.delete(r.dataset.recette); return; }
   }, true);
   document.addEventListener('toggle', e => {
@@ -4528,6 +4610,7 @@ window.FIREBASE_CONFIG = {
 
   function renderPlats(){
     const el = $('#plats-list');
+    if (holdIfTyping(el)) return;
     syncChips();
     if (gate(el, 'des plats', ['plats'])) return;
     if (!S.plats.length) { el.innerHTML = empty('Le catalogue est vide', 'Chaque plat validé pour une semaine vient s’ajouter ici, avec sa saison, sa conservation et votre avis.'); return; }
@@ -4570,6 +4653,8 @@ window.FIREBASE_CONFIG = {
         + ((p.motsCles||[]).length ? '<p class="mots">'+p.motsCles.map(k => '<button type="button" class="mot" data-mot="'+esc(k)+'">'+esc(k)+'</button>').join('')+'</p>' : '')
         + (p.remarque ? '<p class="remarque"><b>Retour :</b> '+esc(p.remarque)+'</p>' : '')
         + (p.fiche ? '<details class="recette" data-recette="'+esc(p.id)+'"'+(S.recOpen && S.recOpen.has(p.id) ? ' open' : '')+'><summary>Voir la recette complète</summary><div class="fiche-body">'+ficheHTML(p.fiche)+'</div></details>' : '')
+        + (() => { const n = Object.values(S.comments[p.id] || {}).filter(c => c && c.texte).length;
+            return '<details class="recette com" data-com="'+esc(p.id)+'"'+(S.comOpen && S.comOpen.has(p.id) ? ' open' : '')+'><summary>Commentaires'+(n ? ' ('+n+')' : '')+'</summary><div class="fiche-body">'+commentsHTML('plat', p.id)+'</div></details>'; })()
         + '<div class="plat-foot"><span class="fait">'+(idee ? 'Pas encore cuisiné' : (fait ? 'Fait : '+esc(fait) : ''))+'</span>'+avis+'</div>'
         + '</article>';
     }).join('') + '</div>';
@@ -4579,6 +4664,7 @@ window.FIREBASE_CONFIG = {
   /* ---------- semaines ---------- */
   function renderSemaines(){
     const el = $('#semaines-list');
+    if (holdIfTyping(el)) return;
     if (gate(el, 'des semaines', ['semaines'])) return;
     const weeks = weeksSorted();
     if (!weeks.length) { el.innerHTML = empty('Aucune semaine enregistrée', 'Chaque semaine validée s’ajoute ici avec son menu, sa liste de courses et les retours du dimanche.'); return; }
@@ -4598,6 +4684,7 @@ window.FIREBASE_CONFIG = {
         + (menu ? '<div><h4 class="eyebrow">Menu</h4><dl class="menu">'+menu+'</dl></div>' : '')
         + (w.choix ? '<div><h4 class="eyebrow">Comment on a choisi</h4><p class="txt">'+esc(w.choix)+'</p></div>' : '')
         + ((w.retours||[]).length ? '<div><h4 class="eyebrow">Retours du dimanche</h4><ul class="retours">'+w.retours.map(r => '<li>'+esc(r)+'</li>').join('')+'</ul></div>' : '')
+        + '<div><h4 class="eyebrow">Commentaires sur ce menu</h4>' + commentsHTML('semaine', w.id) + '</div>'
         + (mini ? '<div><h4 class="eyebrow">Liste de courses</h4><div class="mini">'+mini+'</div></div>' : '')
         + '<div><button type="button" class="btn primary" data-openlist="'+esc(w.id)+'">Ouvrir la liste à cocher</button></div>'
         + '</div></details>';
@@ -4614,6 +4701,8 @@ window.FIREBASE_CONFIG = {
   document.addEventListener('click', e => {
     const t = e.target.closest('button'); if (!t) return;
     if (t.dataset.tab) { setTab(t.dataset.tab); return; }
+    if (t.dataset.csend) { sendComment(t.dataset.csend, t); return; }
+    if (t.dataset.cdel) { deleteComment(t.dataset.cdel); return; }
     if (t.dataset.dstep) {
       if (!canEdit()) return;
       const wid = S.cuisineId, L = localList(wid); L.deroule = L.deroule || {};
@@ -4731,6 +4820,12 @@ window.FIREBASE_CONFIG = {
     const d = e.target; if (!d.matches || !d.matches('details[data-week]')) return;
     if (d.open) S.open.add(d.dataset.week); else S.open.delete(d.dataset.week);
   }, true);
+  document.addEventListener('input', e => { const k = e.target.dataset && e.target.dataset.cdraft; if (k) S.drafts[k] = e.target.value; });
+  document.addEventListener('focusout', () => setTimeout(() => {
+    const redraw = {'plats-list': renderPlats, 'semaines-list': renderSemaines, 'cuisine-main': renderCuisine};
+    Object.keys(S.held).forEach(id => { const el = $('#'+id), a = document.activeElement;
+      if (!(a && el.contains(a) && (a.tagName === 'TEXTAREA' || a.hasAttribute('data-cname')))) { delete S.held[id]; redraw[id](); } });
+  }, 0));
   $('#plat-search').addEventListener('input', e => { S.f.q = e.target.value; renderPlats(); });
   $('#extra-form').addEventListener('submit', e => {
     e.preventDefault();
@@ -4792,7 +4887,7 @@ window.FIREBASE_CONFIG = {
       S.stock = d && d.items ? JSON.parse(JSON.stringify(d.items)) : {};
       ready('stock'); renderStock();
     }, onErrFor('stock'));
-    store.watchCol('avis', docs => { S.avis = {}; docs.forEach(d => { S.avis[d.id] = d.data.avis || ''; }); mergeAvis(); ready('avis'); renderAll(); }, onErrFor('avis'));
+    store.watchCol('avis', docs => { S.avis = {}; S.comments = {}; docs.forEach(d => { S.avis[d.id] = d.data.avis || ''; S.comments[d.id] = JSON.parse(JSON.stringify(d.data.commentaires || {})); }); mergeAvis(); ready('avis'); renderAll(); }, onErrFor('avis'));
   })();
 })();
 </script>
