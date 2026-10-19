@@ -1,0 +1,11 @@
+name = "carnet-batch-cooking-api"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+
+# Les secrets (ANTHROPIC_API_KEY) et la liste des invités (ALLOWED_EMAILS)
+# se règlent dans le tableau de bord Cloudflare, jamais dans ce fichier public.
+[vars]
+FIREBASE_PROJECT_ID = "carnet-batch-cooking"
+ALLOWED_ORIGINS = "https://matthieuug-dev.github.io"
+MODEL = "claude-sonnet-5-5"
+MAX_TOKENS_CAP = "8000"

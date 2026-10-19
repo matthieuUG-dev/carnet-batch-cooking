@@ -24,6 +24,9 @@ Règles Firestore : seules les collections `listes`, `plannings`, `avis`, `regla
 - `avis/<idPlat>` : `avis`
 - `reglages/foyer` : `personnes`, `portionsParPlat` ; `reglages/stock` : `items.<id>`
 
+## Serveur (dossier `api/`)
+Cloudflare Worker déployé automatiquement à chaque push (Workers Builds, dossier racine `api`). Il vérifie le jeton Google/Firebase, la liste d'invités (`ALLOWED_EMAILS`, réglée dans Cloudflare) et appelle l'API Claude avec la clé gardée côté serveur (`ANTHROPIC_API_KEY`, secret Cloudflare). Routes : `GET /health`, `POST /claude` (`{ system, messages, max_tokens, stream }`, modèle et plafond de tokens fixés côté serveur). Ne jamais mettre de clé ni d'adresse e-mail dans le dépôt : il est public.
+
 ## À ne pas casser
 - Mise à jour automatique : la page compare le texte de ses `<script>` et `<style>` avec la version en ligne (à l'ouverture et au retour au premier plan) et se recharge si besoin. Aucun numéro de version à gérer, mais ne jamais créer ni modifier de `<script>`/`<style>` dynamiquement, sinon la page croirait toujours à une nouvelle version.
 - Une seule page, aucun fichier annexe : l'utilisateur ne peut pas déposer de dossier sur GitHub.
