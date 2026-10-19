@@ -365,6 +365,7 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
       <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M20 4v5h-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
   </header>
+  <div id="foyer-bar" class="maj-bar" role="status" hidden></div>
   <div id="maj-bar" class="maj-bar" role="status" hidden>
     <span>Une nouvelle version est disponible.</span>
     <button type="button" class="btn primary" id="maj-bar-btn">Mettre à jour</button>
@@ -7132,6 +7133,21 @@ window.FIREBASE_CONFIG = {
     return Array.from({length:n}, (_,i) => { const x = new Date(d); x.setDate(d.getDate()+7*i); return isoOf(x); });
   }
 
+  /* ---------- foyers séparés ----------
+     Lien ?foyer=<nom> : un foyer à part (planning, courses, stock, avis, Mon foyer), mémorisé sur l'appareil.
+     ?foyer=principal revient au foyer principal. Les documents d'un autre foyer portent le préfixe "<nom>~". */
+  const FOYER_SEP = '~';
+  const FOYER = (() => {
+    let f = ''; try { f = localStorage.getItem('bc-foyer') || ''; } catch(e){}
+    let q = null; try { q = new URLSearchParams(location.search).get('foyer'); } catch(e){}
+    if (q !== null) {
+      q = q.trim().toLowerCase();
+      f = (q === '' || q === 'principal') ? '' : q.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9-]/g,'').slice(0,30);
+      try { if (f) localStorage.setItem('bc-foyer', f); else localStorage.removeItem('bc-foyer'); } catch(e){}
+    }
+    return f;
+  })();
+  const FOYER_PRE = FOYER ? FOYER + FOYER_SEP : '';
   const S = {
     cuisineId:null, comments:{}, drafts:{}, held:{}, confirmDeroule:false, wake:null, status:'loading', dbErr:null, loaded:{plats:false, semaines:false, listes:false, plannings:false, reglages:false, avis:false, stock:false}, stock:{}, stockPending:false, stockSeeded:false, sst:{}, sqTimers:{}, platsBase:[], avis:{}, plats:[], semaines:[], listes:{}, plannings:{}, reglages:{}, planId:nextMondays(1)[0], tab:'courses', weekId:null,
     hideDone:false, confirmReset:false, canWrite:true, open:new Set(), openInit:false,
@@ -8258,7 +8274,9 @@ window.FIREBASE_CONFIG = {
   function loadStatic(){
     try {
       const d = JSON.parse(document.getElementById('carnet-data').textContent);
-      S.platsBase = d.plats || []; S.semainesBase = d.semaines || []; S.semaines = S.semainesBase.slice(); mergeAvis();
+      S.platsBase = d.plats || []; S.semainesBase = d.semaines || [];
+      if (FOYER) { S.semainesBase = []; S.platsBase = S.platsBase.map(p => Object.assign({}, p, {avis: '', faitLe: []})); }
+      S.semaines = S.semainesBase.slice(); mergeAvis();
     } catch(e){ toast('Impossible de lire les menus et les plats de l’application.'); }
     ready('plats'); ready('semaines'); renderAll();
   }
@@ -8274,14 +8292,18 @@ window.FIREBASE_CONFIG = {
     let fdb;
     try { fdb = fs.initializeFirestore(app, {localCache: fs.persistentLocalCache({tabManager: fs.persistentMultipleTabManager()})}); }
     catch(e){ fdb = fs.getFirestore(app); }
+    /* Chaque foyer ne voit et n'écrit que ses propres documents. */
+    const P = path => { const i = path.indexOf('/'); return path.slice(0, i+1) + FOYER_PRE + path.slice(i+1); };
+    const mine = id => FOYER ? id.startsWith(FOYER_PRE) : !id.includes(FOYER_SEP);
     return {
-      watchCol: (name, next, err) => fs.onSnapshot(fs.collection(fdb, name), s => next(s.docs.map(d => ({id:d.id, data:d.data()}))), err),
-      watchDoc: (path, next, err) => fs.onSnapshot(fs.doc(fdb, path), s => next(s.exists() ? s.data() : null), err),
-      merge: (path, patch) => fs.setDoc(fs.doc(fdb, path), patch, {merge:true}),
-      dropKey: (path, ...keys) => fs.updateDoc(fs.doc(fdb, path), new fs.FieldPath(...keys), fs.deleteField())
+      watchCol: (name, next, err) => fs.onSnapshot(fs.collection(fdb, name), s => next(s.docs.filter(d => mine(d.id)).map(d => ({id:d.id.slice(FOYER_PRE.length), data:d.data()}))), err),
+      watchDoc: (path, next, err) => fs.onSnapshot(fs.doc(fdb, P(path)), s => next(s.exists() ? s.data() : null), err),
+      merge: (path, patch) => fs.setDoc(fs.doc(fdb, P(path)), patch, {merge:true}),
+      dropKey: (path, ...keys) => fs.updateDoc(fs.doc(fdb, P(path)), new fs.FieldPath(...keys), fs.deleteField())
     };
   }
 
+  if (FOYER) { const fb = $('#foyer-bar'); if (fb) { fb.textContent = 'Foyer « ' + FOYER + ' » : planning, courses, stock, avis et réglages séparés du foyer principal.'; fb.hidden = false; } }
   buildChips(); setTab(S.tab); renderAll();
   loadStatic();
   (async () => {
