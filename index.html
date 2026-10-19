@@ -7145,6 +7145,8 @@ window.FIREBASE_CONFIG = {
       f = (q === '' || q === 'principal') ? '' : q.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9-]/g,'').slice(0,30);
       try { if (f) localStorage.setItem('bc-foyer', f); else localStorage.removeItem('bc-foyer'); } catch(e){}
     }
+    /* garder ?foyer= dans l'adresse : l'appli ajoutée à l'écran d'accueil (iPhone) repart de cette adresse, sans la mémoire du navigateur */
+    if (f) { try { const qs = new URLSearchParams(location.search); if (qs.get('foyer') !== f) { qs.set('foyer', f); history.replaceState(null, '', location.pathname + '?' + qs.toString() + location.hash); } } catch(e){} }
     return f;
   })();
   const FOYER_PRE = FOYER ? FOYER + FOYER_SEP : '';
@@ -8349,7 +8351,8 @@ window.FIREBASE_CONFIG = {
   }
   function reload(){
     try { sessionStorage.setItem('maj-ok', '1'); } catch(e){}
-    location.replace(location.pathname + '?v=' + Date.now() + location.hash);
+    const qs = new URLSearchParams(location.search); qs.set('v', Date.now());
+    location.replace(location.pathname + '?' + qs.toString() + location.hash);
   }
   const editing = () => { const a = document.activeElement; return a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName); };
   async function autoCheck(){
@@ -8379,7 +8382,7 @@ window.FIREBASE_CONFIG = {
   try {
     if (sessionStorage.getItem('maj-ok')) { sessionStorage.removeItem('maj-ok'); setTimeout(() => say('✓ Application à jour'), 400); }
   } catch(e){}
-  if (/[?&]v=/.test(location.search)) { try { history.replaceState(null, '', location.pathname + location.hash); } catch(e){} }
+  if (/[?&]v=/.test(location.search)) { try { const qs = new URLSearchParams(location.search); qs.delete('v'); const q = qs.toString(); history.replaceState(null, '', location.pathname + (q ? '?' + q : '') + location.hash); } catch(e){} }
   setTimeout(autoCheck, 1500);
 })();
 </script>
