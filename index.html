@@ -114,6 +114,13 @@ select{appearance:none;background:var(--surface) url("data:image/svg+xml,%3Csvg 
 .extra input#extra-qte{flex:1 1 100px}
 .extra button{flex:0 0 auto;border-radius:var(--r);padding:10px 16px}
 
+/* Étiquettes et mots-clés */
+.tags{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;flex:0 0 auto}
+.tag.poisson{background:var(--sunk);color:var(--ink)}
+.mots{display:flex;flex-wrap:wrap;gap:4px;margin:0}
+.mot{background:none;border:1px solid var(--line);border-radius:99px;padding:2px 9px;font-size:.76rem;color:var(--muted)}
+.mot:hover{color:var(--ink);border-color:var(--muted)}
+
 /* Recette dans Plats */
 .recette{border-top:1px solid var(--line);margin-inline:-16px;padding-inline:16px}
 .recette summary{list-style:none;cursor:pointer;padding:12px 0 2px;font-weight:700;color:var(--accent);display:flex;justify-content:space-between;gap:8px}
@@ -429,7 +436,27 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
      "Dans la même poêle : oignon, ail, poireaux et champignons, **10 min**.",
      "Remets le poulet, ajoute la crème d'avoine, le lait végétal et la moutarde. Mijote **5 min**, sale, poivre."
     ]
-   }
+   },
+   "equipement": "poele",
+   "materiel": [
+    "poele",
+    "four"
+   ],
+   "contient": [
+    "volaille"
+   ],
+   "feculent": "pomme-de-terre",
+   "categorie": "sauté",
+   "proteinesPortion": 33,
+   "motsCles": [
+    "poulet",
+    "champignons",
+    "poireaux",
+    "moutarde",
+    "sauce crémeuse",
+    "grenaille",
+    "classique"
+   ]
   },
   {
    "avis": "a-refaire",
@@ -479,7 +506,29 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
      "Au réchauffage, verse la sauce gardée à part sur le tofu et les légumes."
     ],
     "retours": "La première fois (sem. 05/10), la sauce était simple (4 c.s. soja, 2 c.s. miel, 2 gousses d'ail, 2 cm de gingembre, 3 c.s. d'eau), avec l'impression que ce serait trop sec. La fiche intègre la version doublée."
-   }
+   },
+   "equipement": "poele",
+   "materiel": [
+    "poele",
+    "petite-casserole"
+   ],
+   "contient": [
+    "soja",
+    "gluten"
+   ],
+   "feculent": "riz",
+   "categorie": "poêlée",
+   "proteinesPortion": 22,
+   "motsCles": [
+    "tofu",
+    "laqué",
+    "asiatique",
+    "sauce soja",
+    "brocoli",
+    "poireaux",
+    "riz",
+    "végé"
+   ]
   },
   {
    "avis": "a-refaire",
@@ -527,7 +576,28 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
      "Étale la farce dans un plat, couvre de purée, trace des stries à la fourchette, râpe le brebis dessus.",
      "**25 min à 200 °C.**"
     ]
-   }
+   },
+   "equipement": "four",
+   "materiel": [
+    "four",
+    "casserole",
+    "poele"
+   ],
+   "contient": [
+    "soja"
+   ],
+   "feculent": "patate-douce",
+   "categorie": "gratin",
+   "proteinesPortion": 22,
+   "motsCles": [
+    "parmentier",
+    "hachis",
+    "tofu fumé",
+    "champignons",
+    "patate douce",
+    "purée",
+    "végé"
+   ]
   },
   {
    "avis": "a-refaire",
@@ -579,29 +649,179 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
      "Sers avec un filet de citron vert pressé."
     ],
     "retours": "Sem. 05/10 : bon, mais beaucoup trop copieux (ça débordait d'une casserole normale). Fiche réduite : butternut retirée, 1 poivron, 1 oignon, 1 boîte de tomates, 200 g de quinoa ; les 2 boîtes de haricots rouges sont gardées pour les protéines."
-   }
+   },
+   "equipement": "casserole",
+   "materiel": [
+    "casserole",
+    "petite-casserole"
+   ],
+   "contient": [],
+   "feculent": "quinoa",
+   "categorie": "mijoté",
+   "proteinesPortion": 20,
+   "motsCles": [
+    "chili",
+    "haricots rouges",
+    "épicé",
+    "mexicain",
+    "mijoté",
+    "quinoa",
+    "végé"
+   ]
   },
   {
-   "avis": "",
-   "congelation": "",
-   "conservation": "tot",
-   "cuisson": "four",
-   "faitLe": [],
-   "ingredients": [
-    "poireaux",
-    "chèvre",
-    "pâte à tarte"
+   "id": "tarte-poireaux-chevre",
+   "nom": "Tarte poireaux-chèvre, salade verte",
+   "type": "vege",
+   "categorie": "tarte",
+   "equipement": "four",
+   "materiel": [
+    "four",
+    "poele"
    ],
-   "nom": "Tarte poireaux-chèvre",
-   "ordre": 6,
-   "remarque": "Bonne idée à reproposer. Plutôt en début de semaine : se réchauffe moins bien.",
+   "cuisson": "four",
+   "conservation": "tot",
+   "congelation": "moyen",
    "saisons": [
     "automne",
     "hiver"
    ],
-   "statut": "idee",
-   "type": "vege",
-   "id": "tarte-poireaux-chevre"
+   "feculent": "pate-a-tarte",
+   "proteinesPortion": 20,
+   "duree": {
+    "active": 25,
+    "totale": 70
+   },
+   "contient": [
+    "oeuf",
+    "gluten"
+   ],
+   "motsCles": [
+    "tarte",
+    "quiche",
+    "poireau",
+    "chèvre",
+    "œufs",
+    "four",
+    "végé",
+    "se mange froid"
+   ],
+   "ingredients": [
+    "poireaux",
+    "chèvre",
+    "œufs",
+    "pâte brisée"
+   ],
+   "fiche": {
+    "infos": "Végé · four · plutôt en début de semaine (se réchauffe moins bien) · congélation moyenne · ~1 h 10 (dont 40 min de four) · protéines ~20 g/portion",
+    "ingredients": [
+     {
+      "nom": "Pâte brisée",
+      "qte": 1,
+      "unite": "rouleau",
+      "rayon": "Frais",
+      "note": "idéalement à l’huile d’olive, sans beurre"
+     },
+     {
+      "nom": "Poireaux",
+      "qte": 4,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "~600 g"
+     },
+     {
+      "nom": "Œufs",
+      "qte": 5,
+      "unite": "",
+      "rayon": "Frais"
+     },
+     {
+      "nom": "Bûche de chèvre",
+      "qte": 200,
+      "unite": "g",
+      "rayon": "Frais"
+     },
+     {
+      "nom": "Crème d’avoine",
+      "qte": 20,
+      "unite": "cl",
+      "rayon": "Épicerie"
+     },
+     {
+      "nom": "Huile d’olive",
+      "qte": 1,
+      "unite": "c.s.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Thym",
+      "qte": 1,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Muscade",
+      "qte": null,
+      "unite": "1 pincée",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Sel",
+      "qte": 0.5,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Poivre",
+      "qte": null,
+      "unite": "",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Mâche ou salade",
+      "qte": 1,
+      "unite": "sachet",
+      "rayon": "Fruits & légumes",
+      "note": "pour servir"
+     }
+    ],
+    "methode": [
+     {
+      "texte": "Four à **200 °C**. Fends les poireaux, rince-les et émince-les en demi-rondelles de 5 mm.",
+      "min": 8,
+      "actif": true
+     },
+     {
+      "texte": "Poêle : 1 c.s. d’huile, poireaux et thym **12 min** à feu moyen, jusqu’à ce qu’ils soient fondants. Sale légèrement, laisse tiédir.",
+      "min": 12,
+      "actif": false
+     },
+     {
+      "texte": "Étale la pâte dans un moule de 26 à 28 cm, pique-la à la fourchette. **Précuis 10 min à 200 °C.**",
+      "min": 10,
+      "actif": false
+     },
+     {
+      "texte": "Bats les 5 œufs avec la crème d’avoine, ½ c.c. de sel, poivre et muscade. Répartis les poireaux sur la pâte, puis la moitié du chèvre émietté. Verse l’appareil, finis avec le reste du chèvre en rondelles.",
+      "min": 5,
+      "actif": true
+     },
+     {
+      "texte": "**30 min à 180 °C**, jusqu’à ce que ce soit doré et pris au centre. Laisse refroidir sur une grille avant de couper en 4.",
+      "min": 30,
+      "actif": false
+     },
+     {
+      "texte": "Réchauffage : **10 min au four à 160 °C** (la pâte reste croustillante, mieux qu’au micro-ondes). Salade assaisonnée au moment.",
+      "actif": true
+     }
+    ]
+   },
+   "statut": "banque",
+   "faitLe": [],
+   "avis": "",
+   "remarque": "",
+   "ordre": 6
   },
   {
    "avis": "",
@@ -662,7 +882,28 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
      "Égrène la grenade et hache les herbes ; garde-les dans une boîte à part avec le jus d'½ citron.",
      "Au service : réchauffe le riz avec 1 c.s. d'eau (micro-ondes, couvert), puis ajoute la grenade, les herbes et la sauce yaourt. Le poulet pané se réchauffe mieux au four ou à la poêle (5 min) qu'au micro-ondes."
     ]
-   }
+   },
+   "equipement": "four",
+   "materiel": [
+    "four"
+   ],
+   "contient": [
+    "volaille",
+    "oeuf",
+    "gluten"
+   ],
+   "feculent": "riz",
+   "categorie": "four",
+   "proteinesPortion": 50,
+   "motsCles": [
+    "poulet pané",
+    "riz au four",
+    "feta",
+    "olives",
+    "grenade",
+    "yaourt",
+    "croustillant"
+   ]
   },
   {
    "avis": "",
@@ -715,7 +956,27 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
      "La sauce épaissit au frigo : au réchauffage, ajoute 2 à 3 c.s. d'eau. Parsème de cacahuètes au service."
     ],
     "retours": "Sem. 19/10 : quantités trop importantes (3 boîtes de pois chiches, 600 g de potimarron, 250 g de semoule). Fiche réduite d'environ un tiers. Avis sur le goût à venir."
-   }
+   },
+   "equipement": "casserole",
+   "materiel": [
+    "casserole"
+   ],
+   "contient": [
+    "arachide",
+    "gluten"
+   ],
+   "feculent": "semoule",
+   "categorie": "mijoté",
+   "proteinesPortion": 30,
+   "motsCles": [
+    "mafé",
+    "africain",
+    "cacahuète",
+    "pois chiches",
+    "potimarron",
+    "mijoté",
+    "végé"
+   ]
   },
   {
    "avis": "",
@@ -767,7 +1028,29 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
      "Hors du feu, incorpore le pecorino, les champignons, les châtaignes et le tofu. Poivre, persil.",
      "Au réchauffage : ajoute 5 à 7 c.s. du bouillon gardé (ou d'eau) par portion pour le rendre crémeux."
     ]
-   }
+   },
+   "equipement": "casserole",
+   "materiel": [
+    "casserole",
+    "petite-casserole",
+    "poele"
+   ],
+   "contient": [
+    "soja",
+    "alcool"
+   ],
+   "feculent": "riz",
+   "categorie": "risotto",
+   "proteinesPortion": 30,
+   "motsCles": [
+    "risotto",
+    "champignons",
+    "châtaignes",
+    "tofu fumé",
+    "italien",
+    "crémeux",
+    "végé"
+   ]
   },
   {
    "avis": "",
@@ -822,33 +1105,2339 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
      "Purée : épluche les pommes de terre et le céleri-rave, coupe-les en morceaux de 3 cm. Cuis-les **20 à 25 min** dans 3 L d'eau bouillante salée. Égoutte, écrase avec le lait végétal chaud, l'huile, ¾ c.c. de sel et une pincée de muscade."
     ],
     "retours": "Sem. 19/10 : purée un peu juste (600 g de pommes de terre, 400 g de céleri). Fiche passée à 800 g + 500 g. Avis sur le goût à venir."
-   }
+   },
+   "equipement": "casserole",
+   "materiel": [
+    "casserole"
+   ],
+   "contient": [
+    "soja",
+    "alcool",
+    "gluten"
+   ],
+   "feculent": "pomme-de-terre",
+   "categorie": "mijoté",
+   "proteinesPortion": 25,
+   "motsCles": [
+    "bourguignon",
+    "tempeh",
+    "vin rouge",
+    "mijoté",
+    "purée",
+    "champignons",
+    "végé"
+   ]
   },
   {
-   "avis": "",
-   "congelation": "",
-   "congelationNote": "",
-   "conservation": "tot",
-   "cuisson": "four",
-   "faitLe": [],
-   "ingredients": [
-    "gnocchis",
-    "saucisse",
-    "tomates",
-    "haricots blancs",
-    "brebis",
-    "épinards"
+   "id": "gratin-gnocchis-saucisse",
+   "nom": "Gratin de gnocchis à la saucisse, tomate, haricots blancs et épinards",
+   "type": "viande",
+   "categorie": "gratin",
+   "equipement": "four",
+   "materiel": [
+    "four",
+    "poele"
    ],
-   "nom": "Gratin de gnocchis à la saucisse, sauce tomate, haricots blancs et brebis",
-   "ordre": 11,
-   "remarque": "À ressortir. Remplacer le chou kale (pas toujours facile à trouver) par des épinards ou du chou vert.",
+   "cuisson": "plaques + four",
+   "conservation": "tot",
+   "congelation": "moyen",
    "saisons": [
     "automne",
     "hiver"
    ],
-   "statut": "idee",
+   "feculent": "gnocchis",
+   "proteinesPortion": 26,
+   "duree": {
+    "active": 20,
+    "totale": 50
+   },
+   "contient": [
+    "porc",
+    "gluten"
+   ],
+   "motsCles": [
+    "gratin",
+    "gnocchis",
+    "saucisse",
+    "tomate",
+    "haricots blancs",
+    "épinards",
+    "réconfortant",
+    "four"
+   ],
+   "ingredients": [
+    "gnocchis",
+    "saucisse",
+    "haricots blancs",
+    "tomates",
+    "épinards",
+    "brebis"
+   ],
+   "fiche": {
+    "infos": "Viande · plaques + four · à manger en début de semaine · congélation moyenne · ~50 min (dont 25 min de four) · protéines ~26 g/portion",
+    "ingredients": [
+     {
+      "nom": "Gnocchis frais",
+      "qte": 600,
+      "unite": "g",
+      "rayon": "Frais"
+     },
+     {
+      "nom": "Saucisses de Toulouse",
+      "qte": 300,
+      "unite": "g",
+      "rayon": "Frais",
+      "note": "ou chipolatas"
+     },
+     {
+      "nom": "Haricots blancs",
+      "qte": 1,
+      "unite": "boîte de 400 g",
+      "rayon": "Épicerie",
+      "note": "égouttée et rincée"
+     },
+     {
+      "nom": "Tomates concassées",
+      "qte": 2,
+      "unite": "boîtes de 400 g",
+      "rayon": "Épicerie"
+     },
+     {
+      "nom": "Épinards frais",
+      "qte": 200,
+      "unite": "g",
+      "rayon": "Fruits & légumes",
+      "note": "ou 250 g surgelés"
+     },
+     {
+      "nom": "Oignon",
+      "qte": 1,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "~120 g"
+     },
+     {
+      "nom": "Ail",
+      "qte": 2,
+      "unite": "gousses",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Brebis râpé",
+      "qte": 80,
+      "unite": "g",
+      "rayon": "Frais",
+      "note": "ossau-iraty ou pecorino"
+     },
+     {
+      "nom": "Huile d’olive",
+      "qte": 1,
+      "unite": "c.s.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Origan",
+      "qte": 1,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Sel",
+      "qte": 0.5,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Poivre",
+      "qte": null,
+      "unite": "",
+      "rayon": "Placard"
+     }
+    ],
+    "methode": [
+     {
+      "texte": "Four à **200 °C**. Coupe l’oignon en petits dés, hache l’ail. Retire la peau des saucisses et coupe la chair en morceaux de 2 cm.",
+      "min": 6,
+      "actif": true
+     },
+     {
+      "texte": "Grande poêle ou sauteuse : 1 c.s. d’huile, saucisse **5 min** jusqu’à ce qu’elle dore, puis oignon **3 min** et ail **1 min**.",
+      "min": 9,
+      "actif": true
+     },
+     {
+      "texte": "Ajoute les tomates, l’origan, le sel et le poivre. **Mijote 10 min.** Ajoute les épinards (ils tombent en 2 min) et les haricots blancs.",
+      "min": 12,
+      "actif": false
+     },
+     {
+      "texte": "Hors du feu, mélange les gnocchis crus dans la sauce (pas besoin de les précuire). Verse dans un plat à gratin, couvre de brebis râpé.",
+      "min": 3,
+      "actif": true
+     },
+     {
+      "texte": "**25 min à 200 °C**, jusqu’à ce que les gnocchis soient tendres et le dessus gratiné.",
+      "min": 25,
+      "actif": false
+     },
+     {
+      "texte": "Réchauffage : micro-ondes avec 1 c.s. d’eau par portion.",
+      "actif": true
+     }
+    ]
+   },
+   "statut": "banque",
+   "faitLe": [],
+   "avis": "",
+   "remarque": "",
+   "ordre": 11
+  },
+  {
+   "id": "poulet-roti-patates-douces",
+   "nom": "Hauts de cuisse de poulet rôtis, patates douces et carottes, sauce yaourt-citron",
    "type": "viande",
-   "id": "gratin-gnocchis-saucisse"
+   "categorie": "rôti",
+   "equipement": "four",
+   "materiel": [
+    "four"
+   ],
+   "cuisson": "four",
+   "conservation": "tot",
+   "congelation": "moyen",
+   "congelationNote": "le poulet, pas les légumes",
+   "saisons": [
+    "automne",
+    "hiver"
+   ],
+   "feculent": "patate-douce",
+   "proteinesPortion": 32,
+   "duree": {
+    "active": 15,
+    "totale": 60
+   },
+   "contient": [
+    "volaille"
+   ],
+   "motsCles": [
+    "poulet",
+    "rôti",
+    "plaque",
+    "patate douce",
+    "carottes",
+    "paprika",
+    "facile",
+    "four"
+   ],
+   "ingredients": [
+    "poulet",
+    "patates douces",
+    "carottes",
+    "oignons rouges",
+    "yaourt de brebis"
+   ],
+   "fiche": {
+    "infos": "Viande · four uniquement · à manger en début de semaine · congélation moyenne (le poulet) · ~1 h (dont 45 min de four) · protéines ~32 g/portion",
+    "ingredients": [
+     {
+      "nom": "Hauts de cuisse de poulet",
+      "qte": 8,
+      "unite": "",
+      "rayon": "Frais",
+      "note": "avec peau, ~1 kg"
+     },
+     {
+      "nom": "Patates douces",
+      "qte": 800,
+      "unite": "g",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Carottes",
+      "qte": 4,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "~400 g"
+     },
+     {
+      "nom": "Oignons rouges",
+      "qte": 2,
+      "unite": "",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Ail",
+      "qte": 4,
+      "unite": "gousses",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Citron",
+      "qte": 1,
+      "unite": "",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Yaourt de brebis",
+      "qte": 250,
+      "unite": "g",
+      "rayon": "Frais",
+      "note": "2 pots"
+     },
+     {
+      "nom": "Huile d’olive",
+      "qte": 3,
+      "unite": "c.s.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Paprika fumé",
+      "qte": 2,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Cumin",
+      "qte": 1,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Thym",
+      "qte": 1,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Sel",
+      "qte": 1,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Poivre",
+      "qte": null,
+      "unite": "",
+      "rayon": "Placard"
+     }
+    ],
+    "methode": [
+     {
+      "texte": "Four à **210 °C**. Lave les patates douces sans les éplucher, coupe-les en cubes de 3 cm. Carottes en bâtonnets de 1 cm, oignons rouges en quartiers.",
+      "min": 10,
+      "actif": true
+     },
+     {
+      "texte": "Mélange 3 c.s. d’huile, le paprika, le cumin, le thym, ½ c.c. de sel et du poivre. Enrobe le poulet avec la moitié, les légumes avec l’autre moitié.",
+      "min": 5,
+      "actif": true
+     },
+     {
+      "texte": "Légumes et gousses d’ail entières (en chemise) sur une plaque, poulet peau vers le haut sur l’autre. **40 à 45 min à 210 °C**, en échangeant les plaques à mi-cuisson. Le poulet est cuit quand le jus est clair et la peau dorée.",
+      "min": 45,
+      "actif": false
+     },
+     {
+      "texte": "Sauce : yaourt de brebis + jus d’½ citron + 1 gousse d’ail rôtie écrasée + ½ c.c. de sel, dans un pot à part.",
+      "min": 3,
+      "actif": true
+     },
+     {
+      "texte": "Presse l’autre ½ citron sur les légumes. Réchauffage : **10 min au four** ou au micro-ondes ; la sauce se sert froide.",
+      "actif": true
+     }
+    ]
+   },
+   "statut": "banque",
+   "faitLe": [],
+   "avis": "",
+   "remarque": "",
+   "ordre": 14
+  },
+  {
+   "id": "parmentier-boeuf-lentilles",
+   "nom": "Hachis parmentier bœuf et lentilles",
+   "type": "viande",
+   "categorie": "gratin",
+   "equipement": "four",
+   "materiel": [
+    "four",
+    "casserole",
+    "poele"
+   ],
+   "cuisson": "plaques + four",
+   "conservation": "tot",
+   "congelation": "oui",
+   "saisons": [
+    "automne",
+    "hiver"
+   ],
+   "feculent": "pomme-de-terre",
+   "proteinesPortion": 30,
+   "duree": {
+    "active": 35,
+    "totale": 65
+   },
+   "contient": [
+    "boeuf"
+   ],
+   "motsCles": [
+    "parmentier",
+    "hachis",
+    "bœuf",
+    "steak haché",
+    "lentilles",
+    "purée",
+    "gratin",
+    "réconfortant",
+    "classique"
+   ],
+   "ingredients": [
+    "bœuf haché",
+    "lentilles vertes",
+    "pommes de terre",
+    "carottes",
+    "brebis"
+   ],
+   "fiche": {
+    "infos": "Viande · plaques + four · à manger en début de semaine · se congèle bien · ~1 h 05 (dont 20 min de four) · protéines ~30 g/portion",
+    "ingredients": [
+     {
+      "nom": "Bœuf haché 5 %",
+      "qte": 300,
+      "unite": "g",
+      "rayon": "Frais"
+     },
+     {
+      "nom": "Lentilles vertes cuites",
+      "qte": 1,
+      "unite": "boîte de 400 g",
+      "rayon": "Épicerie",
+      "note": "égouttée"
+     },
+     {
+      "nom": "Pommes de terre à purée",
+      "qte": 1000,
+      "unite": "g",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Oignons",
+      "qte": 2,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "~240 g"
+     },
+     {
+      "nom": "Carottes",
+      "qte": 2,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "~200 g"
+     },
+     {
+      "nom": "Ail",
+      "qte": 2,
+      "unite": "gousses",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Concentré de tomate",
+      "qte": 2,
+      "unite": "c.s.",
+      "rayon": "Épicerie"
+     },
+     {
+      "nom": "Lait végétal",
+      "qte": 20,
+      "unite": "cl",
+      "rayon": "Épicerie"
+     },
+     {
+      "nom": "Brebis râpé",
+      "qte": 60,
+      "unite": "g",
+      "rayon": "Frais"
+     },
+     {
+      "nom": "Sauce soja",
+      "qte": 1,
+      "unite": "c.s.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Thym",
+      "qte": 1,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Huile d’olive",
+      "qte": 3,
+      "unite": "c.s.",
+      "rayon": "Placard",
+      "note": "1 farce, 2 purée"
+     },
+     {
+      "nom": "Sel",
+      "qte": 1,
+      "unite": "c.c.",
+      "rayon": "Placard",
+      "note": "+ 1 c.s. pour l’eau"
+     },
+     {
+      "nom": "Poivre",
+      "qte": null,
+      "unite": "",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Muscade",
+      "qte": null,
+      "unite": "1 pincée",
+      "rayon": "Placard"
+     }
+    ],
+    "methode": [
+     {
+      "texte": "Purée : épluche les pommes de terre, coupe-les en morceaux de 3 cm. **20 à 25 min** dans 2 L d’eau bouillante salée (grande casserole).",
+      "min": 25,
+      "actif": false
+     },
+     {
+      "texte": "Pendant ce temps : oignons en petits dés, carottes en dés de 5 mm, ail haché.",
+      "min": 8,
+      "actif": true
+     },
+     {
+      "texte": "Sauteuse : 1 c.s. d’huile, oignons et carottes **5 min**, bœuf **5 min** en l’émiettant, ail et concentré de tomate **1 min**. Ajoute les lentilles, la sauce soja, le thym et 10 cl d’eau, **5 min**. Sel, poivre.",
+      "min": 16,
+      "actif": true
+     },
+     {
+      "texte": "Four à **200 °C**. Égoutte les pommes de terre, écrase-les avec le lait végétal chaud, 2 c.s. d’huile, ½ c.c. de sel et la muscade.",
+      "min": 5,
+      "actif": true
+     },
+     {
+      "texte": "Dans un plat : la farce, puis la purée, des stries à la fourchette, le brebis râpé. **20 min à 200 °C.**",
+      "min": 20,
+      "actif": false
+     }
+    ]
+   },
+   "statut": "banque",
+   "faitLe": [],
+   "avis": "",
+   "remarque": "",
+   "ordre": 15
+  },
+  {
+   "id": "legumes-rotis-pois-chiches-boulgour",
+   "nom": "Courge et chou-fleur rôtis, pois chiches croustillants, feta et boulgour",
+   "type": "vege",
+   "categorie": "plaque",
+   "equipement": "four",
+   "materiel": [
+    "four"
+   ],
+   "cuisson": "four",
+   "conservation": "tient",
+   "congelation": "non",
+   "saisons": [
+    "automne",
+    "hiver"
+   ],
+   "feculent": "boulgour",
+   "proteinesPortion": 25,
+   "duree": {
+    "active": 20,
+    "totale": 50
+   },
+   "contient": [
+    "gluten"
+   ],
+   "motsCles": [
+    "légumes rôtis",
+    "courge",
+    "chou-fleur",
+    "pois chiches",
+    "feta",
+    "boulgour",
+    "se mange froid",
+    "à emporter",
+    "four",
+    "végé"
+   ],
+   "ingredients": [
+    "butternut",
+    "chou-fleur",
+    "pois chiches",
+    "feta",
+    "boulgour"
+   ],
+   "fiche": {
+    "infos": "Végé · four (+ eau bouillante pour le boulgour) · tient en fin de semaine · pas de congélation · ~50 min (dont 35 min de four) · chaud ou froid · protéines ~25 g/portion",
+    "ingredients": [
+     {
+      "nom": "Courge butternut",
+      "qte": 1,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "petite, ~1 kg"
+     },
+     {
+      "nom": "Chou-fleur",
+      "qte": 1,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "petit, ~600 g"
+     },
+     {
+      "nom": "Oignon rouge",
+      "qte": 1,
+      "unite": "",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Pois chiches",
+      "qte": 2,
+      "unite": "boîtes de 400 g",
+      "rayon": "Épicerie"
+     },
+     {
+      "nom": "Feta",
+      "qte": 200,
+      "unite": "g",
+      "rayon": "Frais"
+     },
+     {
+      "nom": "Boulgour",
+      "qte": 250,
+      "unite": "g",
+      "rayon": "Épicerie"
+     },
+     {
+      "nom": "Citron",
+      "qte": 1,
+      "unite": "",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Persil",
+      "qte": 15,
+      "unite": "g",
+      "rayon": "Fruits & légumes",
+      "note": "½ bouquet"
+     },
+     {
+      "nom": "Huile d’olive",
+      "qte": 5,
+      "unite": "c.s.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Cumin",
+      "qte": 2,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Paprika",
+      "qte": 1,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Sel",
+      "qte": 1,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     }
+    ],
+    "methode": [
+     {
+      "texte": "Four à **210 °C**. Épluche la butternut, cubes de 2 cm. Chou-fleur en petits bouquets, oignon rouge en quartiers. Égoutte et rince les pois chiches, sèche-les bien dans un torchon.",
+      "min": 15,
+      "actif": true
+     },
+     {
+      "texte": "Plaque 1 : courge et oignon, 2 c.s. d’huile, 1 c.c. de cumin, sel. Plaque 2 : chou-fleur et pois chiches, 2 c.s. d’huile, 1 c.c. de cumin, le paprika, sel. **30 à 35 min à 210 °C**, en échangeant les plaques à mi-cuisson.",
+      "min": 35,
+      "actif": false
+     },
+     {
+      "texte": "Boulgour : verse 50 cl d’eau bouillante salée sur les 250 g de boulgour, couvre **15 min**, égrène à la fourchette.",
+      "min": 3,
+      "actif": true
+     },
+     {
+      "texte": "Mélange le boulgour, les légumes, les pois chiches, le persil haché, le jus du citron et 1 c.s. d’huile. Garde la feta émiettée dans une boîte à part, elle reste plus fraîche.",
+      "min": 5,
+      "actif": true
+     }
+    ]
+   },
+   "statut": "banque",
+   "faitLe": [],
+   "avis": "",
+   "remarque": "",
+   "ordre": 16
+  },
+  {
+   "id": "gratin-pates-thon-brocoli",
+   "nom": "Gratin de pâtes au thon, brocoli et brebis",
+   "type": "poisson",
+   "categorie": "gratin",
+   "equipement": "four",
+   "materiel": [
+    "four",
+    "casserole",
+    "poele"
+   ],
+   "cuisson": "plaques + four",
+   "conservation": "tient",
+   "congelation": "moyen",
+   "saisons": [
+    "automne",
+    "hiver",
+    "printemps"
+   ],
+   "feculent": "pates",
+   "proteinesPortion": 37,
+   "duree": {
+    "active": 20,
+    "totale": 45
+   },
+   "contient": [
+    "poisson",
+    "gluten"
+   ],
+   "motsCles": [
+    "gratin",
+    "pâtes",
+    "thon",
+    "poisson",
+    "brocoli",
+    "réconfortant",
+    "économique",
+    "four"
+   ],
+   "ingredients": [
+    "pâtes",
+    "thon",
+    "brocoli",
+    "brebis"
+   ],
+   "fiche": {
+    "infos": "Poisson · plaques + four · tient en fin de semaine · congélation moyenne · ~45 min (dont 20 min de four) · protéines ~37 g/portion",
+    "ingredients": [
+     {
+      "nom": "Pâtes courtes",
+      "qte": 350,
+      "unite": "g",
+      "rayon": "Épicerie"
+     },
+     {
+      "nom": "Thon au naturel",
+      "qte": 3,
+      "unite": "boîtes de 140 g",
+      "rayon": "Épicerie"
+     },
+     {
+      "nom": "Brocoli",
+      "qte": 1,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "gros, ~500 g"
+     },
+     {
+      "nom": "Oignon",
+      "qte": 1,
+      "unite": "",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Ail",
+      "qte": 1,
+      "unite": "gousse",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Crème d’avoine",
+      "qte": 20,
+      "unite": "cl",
+      "rayon": "Épicerie"
+     },
+     {
+      "nom": "Lait végétal",
+      "qte": 30,
+      "unite": "cl",
+      "rayon": "Épicerie"
+     },
+     {
+      "nom": "Moutarde",
+      "qte": 1,
+      "unite": "c.s.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Brebis râpé",
+      "qte": 80,
+      "unite": "g",
+      "rayon": "Frais"
+     },
+     {
+      "nom": "Huile d’olive",
+      "qte": 1,
+      "unite": "c.s.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Sel",
+      "qte": 0.5,
+      "unite": "c.c.",
+      "rayon": "Placard",
+      "note": "+ 1 c.s. pour l’eau"
+     },
+     {
+      "nom": "Poivre",
+      "qte": null,
+      "unite": "",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Muscade",
+      "qte": null,
+      "unite": "1 pincée",
+      "rayon": "Placard"
+     }
+    ],
+    "methode": [
+     {
+      "texte": "Four à **200 °C**. Grande casserole d’eau salée à ébullition. Brocoli en petits bouquets, tige épluchée en dés.",
+      "min": 8,
+      "actif": true
+     },
+     {
+      "texte": "Pâtes : 2 min de moins que le temps du paquet, en ajoutant le brocoli **les 3 dernières minutes**. Égoutte.",
+      "min": 12,
+      "actif": false
+     },
+     {
+      "texte": "Poêle : 1 c.s. d’huile, oignon en dés **4 min**, ail **1 min**. Hors du feu : crème d’avoine, lait végétal, moutarde, la moitié du brebis, sel, poivre, muscade.",
+      "min": 6,
+      "actif": true
+     },
+     {
+      "texte": "Dans un plat à gratin : pâtes, brocoli, thon égoutté et émietté, sauce. Mélange, couvre avec le reste du brebis.",
+      "min": 3,
+      "actif": true
+     },
+     {
+      "texte": "**20 min à 200 °C.** Réchauffage : micro-ondes avec 1 c.s. d’eau par portion.",
+      "min": 20,
+      "actif": false
+     }
+    ]
+   },
+   "statut": "banque",
+   "faitLe": [],
+   "avis": "",
+   "remarque": "",
+   "ordre": 17
+  },
+  {
+   "id": "riz-saute-tofu-chou",
+   "nom": "Riz sauté au tofu, chou, carottes et œufs",
+   "type": "vege",
+   "categorie": "poêlée",
+   "equipement": "poele",
+   "materiel": [
+    "poele",
+    "petite-casserole"
+   ],
+   "cuisson": "plaques",
+   "conservation": "tient",
+   "congelation": "non",
+   "saisons": [
+    "automne",
+    "hiver"
+   ],
+   "feculent": "riz",
+   "proteinesPortion": 25,
+   "duree": {
+    "active": 35,
+    "totale": 45
+   },
+   "contient": [
+    "soja",
+    "oeuf",
+    "gluten"
+   ],
+   "motsCles": [
+    "riz sauté",
+    "wok",
+    "tofu",
+    "œufs",
+    "chou",
+    "asiatique",
+    "sauce soja",
+    "rapide",
+    "poêle",
+    "végé"
+   ],
+   "ingredients": [
+    "riz",
+    "tofu",
+    "œufs",
+    "chou",
+    "carottes",
+    "petits pois"
+   ],
+   "fiche": {
+    "infos": "Végé · plaques (poêle + petite casserole) · tient 3 jours · pas de congélation · ~45 min · protéines ~25 g/portion",
+    "ingredients": [
+     {
+      "nom": "Riz long",
+      "qte": 250,
+      "unite": "g",
+      "rayon": "Épicerie",
+      "note": "+ 40 cl d’eau"
+     },
+     {
+      "nom": "Tofu ferme nature",
+      "qte": 400,
+      "unite": "g",
+      "rayon": "Frais"
+     },
+     {
+      "nom": "Œufs",
+      "qte": 4,
+      "unite": "",
+      "rayon": "Frais"
+     },
+     {
+      "nom": "Chou blanc ou chou chinois",
+      "qte": 0.5,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "~400 g"
+     },
+     {
+      "nom": "Carottes",
+      "qte": 3,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "~300 g"
+     },
+     {
+      "nom": "Petits pois surgelés",
+      "qte": 200,
+      "unite": "g",
+      "rayon": "Surgelés"
+     },
+     {
+      "nom": "Oignon",
+      "qte": 1,
+      "unite": "",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Ail",
+      "qte": 3,
+      "unite": "gousses",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Gingembre frais",
+      "qte": 3,
+      "unite": "cm",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Sauce soja",
+      "qte": 6,
+      "unite": "c.s.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Huile",
+      "qte": 4,
+      "unite": "c.s.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Sésame",
+      "qte": 1,
+      "unite": "c.s.",
+      "rayon": "Placard",
+      "note": "facultatif"
+     }
+    ],
+    "methode": [
+     {
+      "texte": "Riz : 250 g et 40 cl d’eau salée dans la petite casserole. Porte à ébullition, couvre, **12 min à feu très doux**, puis 10 min de repos. Étale-le sur une plaque pour qu’il refroidisse (le riz froid se sauté mieux).",
+      "min": 22,
+      "actif": false
+     },
+     {
+      "texte": "Presse le tofu 5 min dans un torchon, coupe-le en cubes de 1,5 cm. Chou émincé finement, carottes en fins bâtonnets, oignon émincé, ail et gingembre hachés.",
+      "min": 12,
+      "actif": true
+     },
+     {
+      "texte": "Grande poêle : 2 c.s. d’huile, tofu **8 min** jusqu’à ce qu’il dore, puis 2 c.s. de sauce soja. Sors-le.",
+      "min": 9,
+      "actif": true
+     },
+     {
+      "texte": "1 c.s. d’huile, oignon et carottes **4 min**, chou **4 min**, ail et gingembre **1 min**, petits pois **2 min**.",
+      "min": 11,
+      "actif": true
+     },
+     {
+      "texte": "Pousse les légumes sur le côté, 1 c.s. d’huile, verse les 4 œufs battus, brouille **1 min**. Ajoute le riz, le tofu et 4 c.s. de sauce soja, saute **3 min à feu vif**. Sésame.",
+      "min": 5,
+      "actif": true
+     }
+    ]
+   },
+   "statut": "banque",
+   "faitLe": [],
+   "avis": "",
+   "remarque": "",
+   "ordre": 18
+  },
+  {
+   "id": "poelee-pdt-chorizo-pois-chiches",
+   "nom": "Poêlée de pommes de terre, chorizo, pois chiches et épinards",
+   "type": "viande",
+   "categorie": "poêlée",
+   "equipement": "poele",
+   "materiel": [
+    "poele",
+    "casserole"
+   ],
+   "cuisson": "plaques",
+   "conservation": "tient",
+   "congelation": "moyen",
+   "saisons": [
+    "automne",
+    "hiver"
+   ],
+   "feculent": "pomme-de-terre",
+   "proteinesPortion": 24,
+   "duree": {
+    "active": 30,
+    "totale": 40
+   },
+   "contient": [
+    "porc"
+   ],
+   "motsCles": [
+    "chorizo",
+    "pommes de terre",
+    "pois chiches",
+    "épinards",
+    "espagnol",
+    "paprika",
+    "épicé",
+    "poêle"
+   ],
+   "ingredients": [
+    "pommes de terre",
+    "chorizo",
+    "pois chiches",
+    "épinards",
+    "tomates"
+   ],
+   "fiche": {
+    "infos": "Viande (chorizo, en petite quantité) · plaques · tient en fin de semaine · congélation moyenne · ~40 min · protéines ~24 g/portion",
+    "ingredients": [
+     {
+      "nom": "Pommes de terre à chair ferme",
+      "qte": 800,
+      "unite": "g",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Chorizo",
+      "qte": 150,
+      "unite": "g",
+      "rayon": "Frais"
+     },
+     {
+      "nom": "Pois chiches",
+      "qte": 2,
+      "unite": "boîtes de 400 g",
+      "rayon": "Épicerie"
+     },
+     {
+      "nom": "Épinards frais",
+      "qte": 200,
+      "unite": "g",
+      "rayon": "Fruits & légumes",
+      "note": "ou 250 g surgelés"
+     },
+     {
+      "nom": "Tomates concassées",
+      "qte": 1,
+      "unite": "boîte de 400 g",
+      "rayon": "Épicerie"
+     },
+     {
+      "nom": "Oignon",
+      "qte": 1,
+      "unite": "",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Ail",
+      "qte": 2,
+      "unite": "gousses",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Persil",
+      "qte": 10,
+      "unite": "g",
+      "rayon": "Fruits & légumes",
+      "note": "quelques brins"
+     },
+     {
+      "nom": "Paprika fumé",
+      "qte": 1,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Huile d’olive",
+      "qte": 2,
+      "unite": "c.s.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Sel",
+      "qte": 0.5,
+      "unite": "c.c.",
+      "rayon": "Placard",
+      "note": "+ 1 c.s. pour l’eau"
+     },
+     {
+      "nom": "Poivre",
+      "qte": null,
+      "unite": "",
+      "rayon": "Placard"
+     }
+    ],
+    "methode": [
+     {
+      "texte": "Lave les pommes de terre, coupe-les en cubes de 2 cm. **Précuis-les 8 min** dans l’eau bouillante salée (ou 10 min au micro-ondes, couvertes, en remuant à mi-temps). Égoutte.",
+      "min": 10,
+      "actif": false
+     },
+     {
+      "texte": "Chorizo en fines demi-rondelles, oignon émincé, ail haché. Égoutte et rince les pois chiches.",
+      "min": 6,
+      "actif": true
+     },
+     {
+      "texte": "Grande poêle : 1 c.s. d’huile, chorizo **3 min** (il rend son huile), sors-le. Dans cette huile + 1 c.s., pommes de terre **12 min** à feu moyen-vif, jusqu’à ce qu’elles dorent.",
+      "min": 15,
+      "actif": true
+     },
+     {
+      "texte": "Oignon **4 min**, ail et paprika **1 min**, puis tomates et pois chiches **8 min**.",
+      "min": 13,
+      "actif": true
+     },
+     {
+      "texte": "Remets le chorizo, ajoute les épinards **2 min**, jusqu’à ce qu’ils tombent. Sel, poivre, persil.",
+      "min": 3,
+      "actif": true
+     }
+    ]
+   },
+   "statut": "banque",
+   "faitLe": [],
+   "avis": "",
+   "remarque": "",
+   "ordre": 19
+  },
+  {
+   "id": "bolognaise-boeuf-lentilles",
+   "nom": "Spaghetti bolognaise mi-bœuf mi-lentilles",
+   "type": "viande",
+   "categorie": "pâtes",
+   "equipement": "casserole",
+   "materiel": [
+    "casserole",
+    "sauteuse"
+   ],
+   "cuisson": "plaques",
+   "conservation": "tient",
+   "congelation": "oui",
+   "congelationNote": "la sauce",
+   "saisons": [
+    "automne",
+    "hiver",
+    "printemps",
+    "ete"
+   ],
+   "feculent": "pates",
+   "proteinesPortion": 33,
+   "duree": {
+    "active": 20,
+    "totale": 45
+   },
+   "contient": [
+    "boeuf",
+    "gluten"
+   ],
+   "motsCles": [
+    "bolognaise",
+    "spaghetti",
+    "pâtes",
+    "bœuf",
+    "steak haché",
+    "lentilles",
+    "tomate",
+    "classique",
+    "enfants"
+   ],
+   "ingredients": [
+    "bœuf haché",
+    "lentilles corail",
+    "spaghetti",
+    "tomates",
+    "carottes"
+   ],
+   "fiche": {
+    "infos": "Viande · plaques (sauteuse + casserole) · tient en fin de semaine · la sauce se congèle bien · ~45 min (dont 25 min de mijotage) · protéines ~33 g/portion",
+    "ingredients": [
+     {
+      "nom": "Bœuf haché 5 %",
+      "qte": 300,
+      "unite": "g",
+      "rayon": "Frais"
+     },
+     {
+      "nom": "Lentilles corail",
+      "qte": 100,
+      "unite": "g",
+      "rayon": "Épicerie"
+     },
+     {
+      "nom": "Spaghetti",
+      "qte": 350,
+      "unite": "g",
+      "rayon": "Épicerie"
+     },
+     {
+      "nom": "Tomates concassées",
+      "qte": 2,
+      "unite": "boîtes de 400 g",
+      "rayon": "Épicerie"
+     },
+     {
+      "nom": "Concentré de tomate",
+      "qte": 2,
+      "unite": "c.s.",
+      "rayon": "Épicerie"
+     },
+     {
+      "nom": "Oignons",
+      "qte": 2,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "~240 g"
+     },
+     {
+      "nom": "Carottes",
+      "qte": 2,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "~200 g"
+     },
+     {
+      "nom": "Ail",
+      "qte": 3,
+      "unite": "gousses",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Brebis râpé",
+      "qte": 60,
+      "unite": "g",
+      "rayon": "Frais",
+      "note": "pour servir"
+     },
+     {
+      "nom": "Huile d’olive",
+      "qte": 3,
+      "unite": "c.s.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Origan",
+      "qte": 1,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Thym",
+      "qte": 1,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Laurier",
+      "qte": 1,
+      "unite": "feuille",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Sel",
+      "qte": 1,
+      "unite": "c.c.",
+      "rayon": "Placard",
+      "note": "+ 1 c.s. pour l’eau"
+     },
+     {
+      "nom": "Poivre",
+      "qte": null,
+      "unite": "",
+      "rayon": "Placard"
+     }
+    ],
+    "methode": [
+     {
+      "texte": "Oignons et carottes en petits dés de 5 mm, ail haché.",
+      "min": 8,
+      "actif": true
+     },
+     {
+      "texte": "Sauteuse ou faitout : 2 c.s. d’huile, oignons et carottes **6 min**, bœuf **5 min** en l’émiettant, ail et concentré de tomate **1 min**.",
+      "min": 12,
+      "actif": true
+     },
+     {
+      "texte": "Ajoute les tomates, les lentilles corail rincées, 30 cl d’eau, l’origan, le thym, le laurier et le sel. **Mijote 25 min** à feu doux, à demi couvert, en remuant de temps en temps : les lentilles fondent et épaississent la sauce.",
+      "min": 25,
+      "actif": false
+     },
+     {
+      "texte": "Spaghetti : 3 L d’eau salée, 1 min de moins que le temps du paquet. Égoutte, mélange avec 1 c.s. d’huile.",
+      "min": 12,
+      "actif": false
+     },
+     {
+      "texte": "Garde les pâtes et la sauce dans des boîtes séparées. Brebis râpé au service.",
+      "actif": true
+     }
+    ]
+   },
+   "statut": "banque",
+   "faitLe": [],
+   "avis": "",
+   "remarque": "",
+   "ordre": 20
+  },
+  {
+   "id": "curry-tofu-chou-fleur",
+   "nom": "Curry doux de tofu, chou-fleur et petits pois, riz",
+   "type": "vege",
+   "categorie": "curry",
+   "equipement": "poele",
+   "materiel": [
+    "sauteuse",
+    "petite-casserole"
+   ],
+   "cuisson": "plaques",
+   "conservation": "tient",
+   "congelation": "oui",
+   "congelationNote": "sans le riz",
+   "saisons": [
+    "automne",
+    "hiver"
+   ],
+   "feculent": "riz",
+   "proteinesPortion": 22,
+   "duree": {
+    "active": 25,
+    "totale": 40
+   },
+   "contient": [
+    "soja"
+   ],
+   "motsCles": [
+    "curry",
+    "tofu",
+    "chou-fleur",
+    "lait de coco",
+    "épicé doux",
+    "indien",
+    "riz",
+    "végé"
+   ],
+   "ingredients": [
+    "tofu",
+    "chou-fleur",
+    "petits pois",
+    "lait de coco",
+    "riz"
+   ],
+   "fiche": {
+    "infos": "Végé · plaques (sauteuse + petite casserole) · tient en fin de semaine · se congèle bien sans le riz · ~40 min · protéines ~22 g/portion",
+    "ingredients": [
+     {
+      "nom": "Tofu ferme nature",
+      "qte": 400,
+      "unite": "g",
+      "rayon": "Frais"
+     },
+     {
+      "nom": "Chou-fleur",
+      "qte": 1,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "petit, ~600 g"
+     },
+     {
+      "nom": "Petits pois surgelés",
+      "qte": 200,
+      "unite": "g",
+      "rayon": "Surgelés"
+     },
+     {
+      "nom": "Lait de coco",
+      "qte": 1,
+      "unite": "boîte de 400 ml",
+      "rayon": "Épicerie"
+     },
+     {
+      "nom": "Riz basmati",
+      "qte": 250,
+      "unite": "g",
+      "rayon": "Épicerie",
+      "note": "+ 40 cl d’eau"
+     },
+     {
+      "nom": "Oignon",
+      "qte": 1,
+      "unite": "",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Ail",
+      "qte": 2,
+      "unite": "gousses",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Gingembre frais",
+      "qte": 2,
+      "unite": "cm",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Curry en poudre doux",
+      "qte": 2,
+      "unite": "c.s.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Huile",
+      "qte": 2,
+      "unite": "c.s.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Sel",
+      "qte": 1,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Citron vert",
+      "qte": 0.5,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "facultatif"
+     }
+    ],
+    "methode": [
+     {
+      "texte": "Riz : 250 g et 40 cl d’eau salée dans la petite casserole, porte à ébullition, couvre, **12 min à feu très doux**, puis 10 min de repos.",
+      "min": 22,
+      "actif": false
+     },
+     {
+      "texte": "Presse le tofu 5 min, coupe-le en cubes de 2 cm. Chou-fleur en petits bouquets, oignon en dés, ail et gingembre hachés.",
+      "min": 10,
+      "actif": true
+     },
+     {
+      "texte": "Sauteuse : 1 c.s. d’huile, tofu **8 min** jusqu’à ce qu’il dore, sors-le.",
+      "min": 8,
+      "actif": true
+     },
+     {
+      "texte": "1 c.s. d’huile, oignon **4 min**, ail, gingembre et curry **1 min**. Ajoute le chou-fleur, le lait de coco, 10 cl d’eau et ½ c.c. de sel. **Couvre 12 min** à feu doux.",
+      "min": 17,
+      "actif": false
+     },
+     {
+      "texte": "Petits pois et tofu **3 min**. Rectifie le sel, un filet de citron vert.",
+      "min": 3,
+      "actif": true
+     }
+    ]
+   },
+   "statut": "banque",
+   "faitLe": [],
+   "avis": "",
+   "remarque": "",
+   "ordre": 21
+  },
+  {
+   "id": "frittata-pdt-epinards",
+   "nom": "Frittata au four, pommes de terre, épinards et brebis",
+   "type": "vege",
+   "categorie": "œufs",
+   "equipement": "four",
+   "materiel": [
+    "four",
+    "poele",
+    "casserole"
+   ],
+   "cuisson": "plaques + four",
+   "conservation": "tient",
+   "congelation": "non",
+   "saisons": [
+    "automne",
+    "hiver",
+    "printemps"
+   ],
+   "feculent": "pomme-de-terre",
+   "proteinesPortion": 23,
+   "duree": {
+    "active": 20,
+    "totale": 55
+   },
+   "contient": [
+    "oeuf"
+   ],
+   "motsCles": [
+    "frittata",
+    "omelette",
+    "tortilla",
+    "œufs",
+    "pommes de terre",
+    "épinards",
+    "se mange froid",
+    "à emporter",
+    "four",
+    "végé"
+   ],
+   "ingredients": [
+    "œufs",
+    "pommes de terre",
+    "épinards",
+    "brebis"
+   ],
+   "fiche": {
+    "infos": "Végé · plaques + four · tient 3 à 4 jours · pas de congélation · ~55 min (dont 35 min de four) · chaud ou froid · protéines ~23 g/portion",
+    "ingredients": [
+     {
+      "nom": "Œufs",
+      "qte": 10,
+      "unite": "",
+      "rayon": "Frais"
+     },
+     {
+      "nom": "Pommes de terre",
+      "qte": 600,
+      "unite": "g",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Épinards frais",
+      "qte": 200,
+      "unite": "g",
+      "rayon": "Fruits & légumes",
+      "note": "ou 250 g surgelés"
+     },
+     {
+      "nom": "Oignon",
+      "qte": 1,
+      "unite": "",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Brebis râpé",
+      "qte": 80,
+      "unite": "g",
+      "rayon": "Frais"
+     },
+     {
+      "nom": "Lait végétal",
+      "qte": 10,
+      "unite": "cl",
+      "rayon": "Épicerie"
+     },
+     {
+      "nom": "Huile d’olive",
+      "qte": 2,
+      "unite": "c.s.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Sel",
+      "qte": 1,
+      "unite": "c.c.",
+      "rayon": "Placard",
+      "note": "+ 1 c.s. pour l’eau"
+     },
+     {
+      "nom": "Poivre",
+      "qte": null,
+      "unite": "",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Mâche ou salade",
+      "qte": 1,
+      "unite": "sachet",
+      "rayon": "Fruits & légumes",
+      "note": "pour servir"
+     }
+    ],
+    "methode": [
+     {
+      "texte": "Four à **180 °C**. Lave les pommes de terre, rondelles de 5 mm. **Précuis-les 10 min** dans l’eau bouillante salée (ou 8 min au micro-ondes, couvertes). Égoutte.",
+      "min": 12,
+      "actif": false
+     },
+     {
+      "texte": "Poêle : 1 c.s. d’huile, oignon émincé **4 min**, épinards **2 min** (surgelés : 5 min, puis bien égoutter).",
+      "min": 7,
+      "actif": true
+     },
+     {
+      "texte": "Bats les 10 œufs avec le lait végétal, le brebis, 1 c.c. de sel et du poivre.",
+      "min": 3,
+      "actif": true
+     },
+     {
+      "texte": "Plat d’environ 25 × 30 cm huilé ou avec papier cuisson : pommes de terre, épinards et oignon, puis les œufs.",
+      "min": 2,
+      "actif": true
+     },
+     {
+      "texte": "**30 à 35 min à 180 °C**, jusqu’à ce que le centre soit pris. Coupe en 8 parts une fois tiède. Se mange chaud ou froid, avec la salade.",
+      "min": 35,
+      "actif": false
+     }
+    ]
+   },
+   "statut": "banque",
+   "faitLe": [],
+   "avis": "",
+   "remarque": "",
+   "ordre": 22
+  },
+  {
+   "id": "soupe-lentilles-corail-coco",
+   "nom": "Soupe de lentilles corail, carottes et lait de coco, pain complet",
+   "type": "vege",
+   "categorie": "soupe",
+   "equipement": "casserole",
+   "materiel": [
+    "casserole",
+    "mixeur"
+   ],
+   "cuisson": "plaques",
+   "conservation": "tient",
+   "congelation": "oui",
+   "saisons": [
+    "automne",
+    "hiver"
+   ],
+   "feculent": "pain",
+   "proteinesPortion": 29,
+   "duree": {
+    "active": 15,
+    "totale": 45
+   },
+   "contient": [
+    "gluten"
+   ],
+   "motsCles": [
+    "soupe",
+    "velouté",
+    "lentilles",
+    "lait de coco",
+    "carottes",
+    "épicé doux",
+    "réconfortant",
+    "léger",
+    "végé"
+   ],
+   "ingredients": [
+    "lentilles corail",
+    "carottes",
+    "lait de coco",
+    "tomates",
+    "pain complet"
+   ],
+   "fiche": {
+    "infos": "Végé · une grande casserole (+ mixeur plongeant) · tient en fin de semaine · se congèle très bien · ~45 min (dont 25 min de mijotage) · protéines ~29 g/portion avec le pain",
+    "ingredients": [
+     {
+      "nom": "Lentilles corail",
+      "qte": 300,
+      "unite": "g",
+      "rayon": "Épicerie"
+     },
+     {
+      "nom": "Carottes",
+      "qte": 4,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "~400 g"
+     },
+     {
+      "nom": "Oignons",
+      "qte": 2,
+      "unite": "",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Ail",
+      "qte": 2,
+      "unite": "gousses",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Gingembre frais",
+      "qte": 2,
+      "unite": "cm",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Lait de coco",
+      "qte": 1,
+      "unite": "boîte de 400 ml",
+      "rayon": "Épicerie"
+     },
+     {
+      "nom": "Tomates concassées",
+      "qte": 1,
+      "unite": "boîte de 400 g",
+      "rayon": "Épicerie"
+     },
+     {
+      "nom": "Bouillon de légumes",
+      "qte": 2,
+      "unite": "cubes",
+      "rayon": "Placard",
+      "note": "+ 1,2 L d’eau"
+     },
+     {
+      "nom": "Cumin",
+      "qte": 2,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Curcuma",
+      "qte": 1,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Huile",
+      "qte": 1,
+      "unite": "c.s.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Citron",
+      "qte": 1,
+      "unite": "",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Sel",
+      "qte": null,
+      "unite": "",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Pain complet",
+      "qte": 400,
+      "unite": "g",
+      "rayon": "Épicerie",
+      "note": "pour servir"
+     }
+    ],
+    "methode": [
+     {
+      "texte": "Oignons émincés, carottes en fines rondelles, ail et gingembre hachés.",
+      "min": 8,
+      "actif": true
+     },
+     {
+      "texte": "Grande casserole : 1 c.s. d’huile, oignons **5 min**, ail, gingembre, cumin et curcuma **1 min**.",
+      "min": 6,
+      "actif": true
+     },
+     {
+      "texte": "Ajoute les carottes, les lentilles rincées, les tomates, 1,2 L d’eau et les 2 cubes. **Mijote 25 min**, en remuant de temps en temps.",
+      "min": 25,
+      "actif": false
+     },
+     {
+      "texte": "Ajoute le lait de coco, mixe (sans mixeur : écrase au presse-purée, la soupe sera plus rustique). Jus de citron, sel.",
+      "min": 4,
+      "actif": true
+     },
+     {
+      "texte": "Se congèle très bien en portions. Le pain se garde à part ; la soupe épaissit au frigo, ajoute un peu d’eau au réchauffage.",
+      "actif": true
+     }
+    ]
+   },
+   "statut": "banque",
+   "faitLe": [],
+   "avis": "",
+   "remarque": "",
+   "ordre": 23
+  },
+  {
+   "id": "minestrone-haricots-blancs",
+   "nom": "Minestrone d’hiver aux haricots blancs et petites pâtes",
+   "type": "vege",
+   "categorie": "soupe",
+   "equipement": "casserole",
+   "materiel": [
+    "casserole"
+   ],
+   "cuisson": "plaques",
+   "conservation": "tient",
+   "congelation": "moyen",
+   "congelationNote": "les pâtes ramollissent",
+   "saisons": [
+    "automne",
+    "hiver"
+   ],
+   "feculent": "pates",
+   "proteinesPortion": 24,
+   "duree": {
+    "active": 20,
+    "totale": 50
+   },
+   "contient": [
+    "gluten"
+   ],
+   "motsCles": [
+    "soupe",
+    "minestrone",
+    "haricots blancs",
+    "légumes",
+    "pâtes",
+    "italien",
+    "réconfortant",
+    "végé"
+   ],
+   "ingredients": [
+    "haricots blancs",
+    "petites pâtes",
+    "poireau",
+    "carottes",
+    "chou",
+    "pommes de terre",
+    "pecorino"
+   ],
+   "fiche": {
+    "infos": "Végé · une grande casserole · tient en fin de semaine · congélation moyenne · ~50 min (dont 30 min de mijotage) · protéines ~24 g/portion",
+    "ingredients": [
+     {
+      "nom": "Haricots blancs",
+      "qte": 3,
+      "unite": "boîtes de 400 g",
+      "rayon": "Épicerie",
+      "note": "égouttées et rincées"
+     },
+     {
+      "nom": "Petites pâtes",
+      "qte": 150,
+      "unite": "g",
+      "rayon": "Épicerie",
+      "note": "coquillettes ou ditalini"
+     },
+     {
+      "nom": "Poireau",
+      "qte": 1,
+      "unite": "",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Carottes",
+      "qte": 2,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "~200 g"
+     },
+     {
+      "nom": "Chou vert",
+      "qte": 0.25,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "~250 g"
+     },
+     {
+      "nom": "Pommes de terre",
+      "qte": 2,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "~300 g"
+     },
+     {
+      "nom": "Oignon",
+      "qte": 1,
+      "unite": "",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Ail",
+      "qte": 2,
+      "unite": "gousses",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Tomates concassées",
+      "qte": 1,
+      "unite": "boîte de 400 g",
+      "rayon": "Épicerie"
+     },
+     {
+      "nom": "Bouillon de légumes",
+      "qte": 2,
+      "unite": "cubes",
+      "rayon": "Placard",
+      "note": "+ 1,5 L d’eau"
+     },
+     {
+      "nom": "Pecorino râpé",
+      "qte": 80,
+      "unite": "g",
+      "rayon": "Frais",
+      "note": "pour servir"
+     },
+     {
+      "nom": "Huile d’olive",
+      "qte": 2,
+      "unite": "c.s.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Thym",
+      "qte": 1,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Laurier",
+      "qte": 1,
+      "unite": "feuille",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Poivre",
+      "qte": null,
+      "unite": "",
+      "rayon": "Placard"
+     }
+    ],
+    "methode": [
+     {
+      "texte": "Oignon en dés, poireau en rondelles, carottes et pommes de terre en dés de 1 cm, chou émincé, ail haché.",
+      "min": 12,
+      "actif": true
+     },
+     {
+      "texte": "Grande casserole : 2 c.s. d’huile, oignon et poireau **5 min**, carottes et ail **3 min**.",
+      "min": 8,
+      "actif": true
+     },
+     {
+      "texte": "Ajoute les pommes de terre, le chou, les tomates, 1,5 L d’eau, les cubes, le thym et le laurier. **Mijote 20 min.**",
+      "min": 20,
+      "actif": false
+     },
+     {
+      "texte": "Ajoute les haricots blancs et les pâtes, cuis **le temps du paquet** (~10 min) en remuant. Poivre.",
+      "min": 10,
+      "actif": false
+     },
+     {
+      "texte": "Les pâtes gonflent au frigo : ajoute un peu d’eau au réchauffage. Pecorino au service.",
+      "actif": true
+     }
+    ]
+   },
+   "statut": "banque",
+   "faitLe": [],
+   "avis": "",
+   "remarque": "",
+   "ordre": 24
+  },
+  {
+   "id": "pasta-e-ceci",
+   "nom": "Pâtes aux pois chiches à l’italienne (pasta e ceci)",
+   "type": "vege",
+   "categorie": "pâtes",
+   "equipement": "casserole",
+   "materiel": [
+    "casserole"
+   ],
+   "cuisson": "plaques",
+   "conservation": "tient",
+   "congelation": "moyen",
+   "saisons": [
+    "automne",
+    "hiver",
+    "printemps"
+   ],
+   "feculent": "pates",
+   "proteinesPortion": 24,
+   "duree": {
+    "active": 20,
+    "totale": 35
+   },
+   "contient": [
+    "gluten"
+   ],
+   "motsCles": [
+    "pâtes",
+    "pois chiches",
+    "italien",
+    "tomate",
+    "romarin",
+    "pecorino",
+    "simple",
+    "économique",
+    "végé"
+   ],
+   "ingredients": [
+    "pois chiches",
+    "petites pâtes",
+    "tomates",
+    "pecorino"
+   ],
+   "fiche": {
+    "infos": "Végé · une grande casserole · tient en fin de semaine · congélation moyenne · ~35 min · protéines ~24 g/portion",
+    "ingredients": [
+     {
+      "nom": "Pois chiches",
+      "qte": 2,
+      "unite": "boîtes de 400 g",
+      "rayon": "Épicerie"
+     },
+     {
+      "nom": "Petites pâtes",
+      "qte": 250,
+      "unite": "g",
+      "rayon": "Épicerie"
+     },
+     {
+      "nom": "Tomates concassées",
+      "qte": 1,
+      "unite": "boîte de 400 g",
+      "rayon": "Épicerie"
+     },
+     {
+      "nom": "Concentré de tomate",
+      "qte": 1,
+      "unite": "c.s.",
+      "rayon": "Épicerie"
+     },
+     {
+      "nom": "Oignon",
+      "qte": 1,
+      "unite": "",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Carotte",
+      "qte": 1,
+      "unite": "",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Ail",
+      "qte": 3,
+      "unite": "gousses",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Bouillon de légumes",
+      "qte": 1,
+      "unite": "cube",
+      "rayon": "Placard",
+      "note": "+ 1 L d’eau"
+     },
+     {
+      "nom": "Pecorino râpé",
+      "qte": 80,
+      "unite": "g",
+      "rayon": "Frais"
+     },
+     {
+      "nom": "Huile d’olive",
+      "qte": 3,
+      "unite": "c.s.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Romarin",
+      "qte": 1,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Piment",
+      "qte": null,
+      "unite": "1 pincée",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Sel",
+      "qte": null,
+      "unite": "",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Poivre",
+      "qte": null,
+      "unite": "",
+      "rayon": "Placard"
+     }
+    ],
+    "methode": [
+     {
+      "texte": "Oignon et carotte en petits dés, ail haché. Égoutte et rince les pois chiches.",
+      "min": 6,
+      "actif": true
+     },
+     {
+      "texte": "Grande casserole : 2 c.s. d’huile, oignon et carotte **5 min**, ail, romarin, piment et concentré de tomate **1 min**.",
+      "min": 6,
+      "actif": true
+     },
+     {
+      "texte": "Ajoute les tomates, les pois chiches, 1 L d’eau et le cube, **10 min**. Écrase un tiers des pois chiches au presse-purée, directement dans la casserole : ça épaissit.",
+      "min": 12,
+      "actif": false
+     },
+     {
+      "texte": "Ajoute les pâtes, cuis **le temps du paquet** en remuant souvent (ça attache), avec un peu d’eau si c’est trop épais. Hors du feu : 1 c.s. d’huile et le pecorino.",
+      "min": 11,
+      "actif": true
+     },
+     {
+      "texte": "Ça épaissit beaucoup au frigo : au réchauffage, ajoute 5 c.s. d’eau par portion.",
+      "actif": true
+     }
+    ]
+   },
+   "statut": "banque",
+   "faitLe": [],
+   "avis": "",
+   "remarque": "",
+   "ordre": 25
+  },
+  {
+   "id": "poulet-saute-carottes-pois-chiches",
+   "nom": "Poulet sauté aux carottes, pois chiches et citron, semoule",
+   "type": "viande",
+   "categorie": "sauté",
+   "equipement": "poele",
+   "materiel": [
+    "sauteuse"
+   ],
+   "cuisson": "plaques",
+   "conservation": "tot",
+   "congelation": "oui",
+   "congelationNote": "sans la semoule",
+   "saisons": [
+    "automne",
+    "hiver"
+   ],
+   "feculent": "semoule",
+   "proteinesPortion": 36,
+   "duree": {
+    "active": 25,
+    "totale": 45
+   },
+   "contient": [
+    "volaille",
+    "gluten"
+   ],
+   "motsCles": [
+    "poulet",
+    "tajine",
+    "oriental",
+    "carottes",
+    "pois chiches",
+    "citron",
+    "semoule",
+    "épicé doux",
+    "sauteuse"
+   ],
+   "ingredients": [
+    "poulet",
+    "carottes",
+    "pois chiches",
+    "citron",
+    "semoule"
+   ],
+   "fiche": {
+    "infos": "Viande · une sauteuse (+ eau bouillante pour la semoule) · à manger en début de semaine · se congèle bien sans la semoule · ~45 min · protéines ~36 g/portion",
+    "ingredients": [
+     {
+      "nom": "Hauts de cuisse de poulet désossés",
+      "qte": 400,
+      "unite": "g",
+      "rayon": "Frais",
+      "note": "ou blancs"
+     },
+     {
+      "nom": "Pois chiches",
+      "qte": 1,
+      "unite": "boîte de 400 g",
+      "rayon": "Épicerie"
+     },
+     {
+      "nom": "Carottes",
+      "qte": 4,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "~400 g"
+     },
+     {
+      "nom": "Oignons",
+      "qte": 2,
+      "unite": "",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Ail",
+      "qte": 2,
+      "unite": "gousses",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Citron",
+      "qte": 1,
+      "unite": "",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Raisins secs",
+      "qte": 40,
+      "unite": "g",
+      "rayon": "Épicerie",
+      "note": "facultatif"
+     },
+     {
+      "nom": "Semoule",
+      "qte": 250,
+      "unite": "g",
+      "rayon": "Épicerie",
+      "note": "+ 30 cl d’eau bouillante"
+     },
+     {
+      "nom": "Bouillon de légumes",
+      "qte": 0.5,
+      "unite": "cube",
+      "rayon": "Placard",
+      "note": "+ 30 cl d’eau"
+     },
+     {
+      "nom": "Ras el hanout",
+      "qte": 2,
+      "unite": "c.c.",
+      "rayon": "Placard",
+      "note": "ou 1 c.c. de cumin + 1 c.c. de paprika"
+     },
+     {
+      "nom": "Cumin",
+      "qte": 1,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Cannelle",
+      "qte": 0.5,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Huile d’olive",
+      "qte": 3,
+      "unite": "c.s.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Sel",
+      "qte": 1,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Persil ou coriandre",
+      "qte": 10,
+      "unite": "g",
+      "rayon": "Fruits & légumes",
+      "note": "quelques brins"
+     }
+    ],
+    "methode": [
+     {
+      "texte": "Coupe le poulet en morceaux de 3 cm, mélange-le avec le ras el hanout, le cumin et ½ c.c. de sel. Oignons émincés, carottes en rondelles de 5 mm, ail haché.",
+      "min": 10,
+      "actif": true
+     },
+     {
+      "texte": "Grande sauteuse : 1 c.s. d’huile, poulet **6 min** jusqu’à ce qu’il dore, sors-le.",
+      "min": 6,
+      "actif": true
+     },
+     {
+      "texte": "1 c.s. d’huile, oignons et carottes **6 min**, ail et cannelle **1 min**.",
+      "min": 7,
+      "actif": true
+     },
+     {
+      "texte": "Ajoute 30 cl d’eau avec le ½ cube, les pois chiches égouttés, les raisins et le zeste du citron. **Couvre 15 min** à feu doux, jusqu’à ce que les carottes soient tendres. Remets le poulet **5 min**. Jus du citron, herbes.",
+      "min": 20,
+      "actif": false
+     },
+     {
+      "texte": "Semoule : 30 cl d’eau bouillante salée sur les 250 g de semoule avec 1 c.s. d’huile, couvre **5 min**, égrène.",
+      "min": 6,
+      "actif": true
+     }
+    ]
+   },
+   "statut": "banque",
+   "faitLe": [],
+   "avis": "",
+   "remarque": "",
+   "ordre": 26
   }
  ],
  "semaines": [
@@ -2096,11 +4685,11 @@ window.FIREBASE_CONFIG = {
 
   /* ---------- plats ---------- */
   const GROUPS = [
-    {k:'type', label:'Type', opts:[['tous','Tous'],['vege','Végé'],['viande','Viande']]},
+    {k:'type', label:'Type', opts:[['tous','Tous'],['vege','Végé'],['viande','Viande'],['poisson','Poisson']]},
     {k:'saison', label:'Saison', opts:[['toutes','Toutes'],['automne','Automne'],['hiver','Hiver'],['printemps','Printemps'],['ete','Été']]},
     {k:'cong', label:'Congélation', opts:[['toutes','Toutes'],['oui','Oui'],['moyen','Moyen'],['non','Non']]},
     {k:'avis', label:'Avis', opts:[['tous','Tous'],['aucun','Pas encore noté'],['a-refaire','À refaire'],['bof','Bof'],['plus-jamais','Plus jamais']]},
-    {k:'statut', label:'Statut', opts:[['tout','Tout'],['fait','Déjà faits'],['idee','Idées']]}
+    {k:'statut', label:'Statut', opts:[['tout','Tout'],['fait','Déjà faits'],['idee','À tester']]}
   ];
   const DEFAULT_F = {type:'tous',saison:'toutes',cong:'toutes',avis:'tous',statut:'tout'};
   function buildChips(){
@@ -2129,10 +4718,10 @@ window.FIREBASE_CONFIG = {
       (f.saison === 'toutes' || (p.saisons || []).includes(f.saison)) &&
       (f.cong === 'toutes' || p.congelation === f.cong) &&
       (f.avis === 'tous' || (f.avis === 'aucun' ? !p.avis && (p.statut || 'fait') === 'fait' : p.avis === f.avis)) &&
-      (f.statut === 'tout' || (p.statut || 'fait') === f.statut) &&
+      (f.statut === 'tout' || (f.statut === 'fait' ? (p.statut || 'fait') === 'fait' : (p.statut || 'fait') !== 'fait')) &&
       (!q || norm(p.nom + ' ' + (p.ingredients || []).join(' ') + ' ' + (p.motsCles || []).join(' ')).includes(q))
     ).sort((a,b) => {
-      const sa = (a.statut||'fait') === 'idee' ? 1 : 0, sb = (b.statut||'fait') === 'idee' ? 1 : 0;
+      const sa = (a.statut||'fait') !== 'fait' ? 1 : 0, sb = (b.statut||'fait') !== 'fait' ? 1 : 0;
       if (sa !== sb) return sa - sb;
       const la = (a.faitLe||[]).slice().sort().pop() || '', lb = (b.faitLe||[]).slice().sort().pop() || '';
       return lb.localeCompare(la) || (a.ordre||0) - (b.ordre||0);
@@ -2142,21 +4731,24 @@ window.FIREBASE_CONFIG = {
       + (active ? '<button type="button" class="linkbtn" id="clear-filters">Effacer les filtres</button>' : '') + '</div>';
     if (!list.length) { el.innerHTML = html + empty('Aucun plat ne correspond', 'Retirez un filtre ou cherchez un autre ingrédient.'); return; }
     html += '<div class="plats">' + list.map(p => {
-      const idee = (p.statut||'fait') === 'idee';
-      const tag = idee ? '<span class="tag idee">Idée</span>' : (p.type === 'viande' ? '<span class="tag viande">Viande</span>' : '<span class="tag">Végé</span>');
+      const idee = (p.statut||'fait') !== 'fait';
+      const tag = '<span class="tags">' + (idee ? '<span class="tag idee">À tester</span>' : '')
+        + (p.type === 'viande' ? '<span class="tag viande">Viande</span>' : p.type === 'poisson' ? '<span class="tag poisson">Poisson</span>' : '<span class="tag">Végé</span>') + '</span>';
       const facts = [
         ['Cuisson', p.cuisson],
+        ['Protéines', p.proteinesPortion ? '~' + p.proteinesPortion + ' g par portion' : ''],
         ['Conservation', CONS[p.conservation] || p.conservation],
         ['Congélation', p.congelation ? (CONG[p.congelation] || p.congelation) + (p.congelationNote ? ' ('+p.congelationNote+')' : '') : ''],
         ['Saison', (p.saisons||[]).map(s => SAISON[s] || s).join(', ')]
       ].filter(x => x[1]).map(([k,v]) => '<div><dt>'+k+'</dt><dd>'+esc(v)+'</dd></div>').join('');
       const fait = (p.faitLe||[]).slice().sort().reverse().map(id => 'sem. du '+fShort.format(toDate(id))).join(' · ');
-      const avis = idee ? '' : '<div class="avis" role="group" aria-label="Avis sur ce plat">' + AVIS.map(([v,l]) =>
+      const avis = '<div class="avis" role="group" aria-label="Avis sur ce plat">' + AVIS.map(([v,l]) =>
         '<button type="button" data-avis="'+esc(p.id)+'" data-v="'+v+'" aria-pressed="'+(p.avis===v)+'"'+(S.canWrite?'':' disabled')+'>'+l+'</button>').join('') + '</div>';
       return '<article class="plat'+(idee?' idee':'')+'">'
         + '<div class="plat-top"><h3>'+esc(p.nom)+'</h3>'+tag+'</div>'
         + (facts ? '<dl class="facts">'+facts+'</dl>' : '')
         + ((p.ingredients||[]).length ? '<p class="ingr"><b>Ingrédients clés :</b> '+esc(p.ingredients.join(', '))+'</p>' : '')
+        + ((p.motsCles||[]).length ? '<p class="mots">'+p.motsCles.map(k => '<button type="button" class="mot" data-mot="'+esc(k)+'">'+esc(k)+'</button>').join('')+'</p>' : '')
         + (p.remarque ? '<p class="remarque"><b>Retour :</b> '+esc(p.remarque)+'</p>' : '')
         + (p.fiche ? '<details class="recette" data-recette="'+esc(p.id)+'"'+(S.recOpen && S.recOpen.has(p.id) ? ' open' : '')+'><summary>Voir la recette complète</summary><div class="fiche-body">'+ficheHTML(p.fiche)+'</div></details>' : '')
         + '<div class="plat-foot"><span class="fait">'+(idee ? 'Pas encore cuisiné' : (fait ? 'Fait : '+esc(fait) : ''))+'</span>'+avis+'</div>'
@@ -2263,6 +4855,7 @@ window.FIREBASE_CONFIG = {
       Object.keys(L.coche).forEach(k => { if (L.coche[k]) { patch[k] = false; L.coche[k] = false; } });
       renderCourses(); if (Object.keys(patch).length) writeList(wid, {coche:patch}); toast('Liste décochée.'); return;
     }
+    if (t.dataset.mot) { S.f.q = t.dataset.mot; $('#plat-search').value = t.dataset.mot; renderPlats(); window.scrollTo(0, 0); return; }
     if (t.dataset.fk) { S.f[t.dataset.fk] = t.dataset.fv; renderPlats(); return; }
     if (t.id === 'clear-filters') { Object.assign(S.f, DEFAULT_F, {q:''}); $('#plat-search').value = ''; renderPlats(); return; }
     if (t.dataset.avis) {
