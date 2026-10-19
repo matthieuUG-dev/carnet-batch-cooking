@@ -25,9 +25,9 @@ Modifier uniquement le bloc `<script type="application/json" id="carnet-data">`,
 ## Données partagées (Firebase, projet `carnet-batch-cooking`)
 Règles Firestore : seules les collections `listes`, `plannings`, `avis`, `reglages` sont autorisées.
 - `listes/<lundi>` : `coche.<idArticle>`, `extras`, `deroule.<idÉtape>` (étapes cochées dans l'onglet Cuisine)
-- `plannings/<lundi>` : `repas.<jour>.<midi|soir>` (false = dehors), `note`, `commentaires.<id>` = `{ texte, date, auteur }` (commentaires sur le menu / le batch de la semaine)
+- `plannings/<lundi>` : `repas.<jour>.<midi|soir>` (false = dehors), `note` (= les envies de la semaine, reconnues via les `motsCles`), `propositions[]` = `{ plats: [idPlat], envies[] }` (les 3 menus proposés), `menu` = `{ plats: [idPlat], envies[], choisiLe }` (le menu choisi), `commentaires.<id>` = `{ texte, date, auteur }` (commentaires sur le menu / le batch de la semaine)
 - `avis/<idPlat>` : `avis`, `commentaires.<id>` = `{ texte, date (ISO), auteur, semaine? }` (commentaires sur un plat)
-- `reglages/foyer` : `personnes`, `portionsParPlat` ; `reglages/stock` : `items.<id>`
+- `reglages/foyer` (« Mon foyer ») : `personnes`, `portionsParPlat`, `four`, `feux`, `casseroles`, `poeles`, `microondes`, `mixeur`, `exclusions[]` (valeurs de `contient`), `viandeMax` ; `reglages/stock` : `items.<id>`
 
 ## Serveur (dossier `api/`)
 Cloudflare Worker déployé automatiquement à chaque push (Workers Builds, dossier racine `api`). Il vérifie le jeton Google/Firebase, la liste d'invités (`ALLOWED_EMAILS`, réglée dans Cloudflare) et appelle l'API Claude avec la clé gardée côté serveur (`ANTHROPIC_API_KEY`, secret Cloudflare). Routes : `GET /health`, `POST /claude` (`{ system, messages, max_tokens, stream }`, modèle et plafond de tokens fixés côté serveur). Ne jamais mettre de clé ni d'adresse e-mail dans le dépôt : il est public.
@@ -38,3 +38,6 @@ Cloudflare Worker déployé automatiquement à chaque push (Workers Builds, doss
 
 ## Relire les retours
 Les commentaires (plats et menus) servent à améliorer la banque : pour les relire, ouvrir l'application dans le navigateur de l'ordinateur et lire `avis/*` et `plannings/*` (champ `commentaires`) avec le SDK Firebase de la page ; puis ajuster les fiches dans `carnet-data`.
+
+## Générateur de menus (dans la page, sans Claude)
+Onglet **Menus** : planning des repas → nombre de plats ; « Proposer 3 menus » tire des plats de la banque (saison, exclusions et équipement de Mon foyer, avis « plus jamais » écartés, plats des 3 dernières semaines pénalisés, féculents variés, plafonds four / casserole / poêle et viande), en couvrant les envies (menu 1 : toutes, menus 2 et 3 : une chacune). Le bouton ↻ change un plat. « Choisir ce menu » crée une **semaine générée** côté page : courses additionnées (× portions / 4, stock déduit, placard selon l'onglet Stock) et déroulé assemblé automatiquement à partir des `methode` (`min`, `actif`). Une semaine présente dans `carnet-data` reste prioritaire sur une semaine générée. Pour que le générateur marche bien, toute nouvelle recette doit avoir une fiche structurée et toutes ses étiquettes.

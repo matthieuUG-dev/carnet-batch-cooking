@@ -121,6 +121,34 @@ select{appearance:none;background:var(--surface) url("data:image/svg+xml,%3Csvg 
 .mot{background:none;border:1px solid var(--line);border-radius:99px;padding:2px 9px;font-size:.76rem;color:var(--muted)}
 .mot:hover{color:var(--ink);border-color:var(--muted)}
 
+/* Menus */
+.btn.big{padding:12px 20px;font-size:1rem}
+.mcards{display:grid;gap:12px}
+.mcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;display:grid;gap:10px}
+.mcard.chosen{border-color:var(--leaf);box-shadow:0 0 0 1px var(--leaf)}
+.mhead{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;font-family:var(--f-display);font-size:1.05rem}
+.mhead small{font-family:var(--f-body);font-size:.84rem;color:var(--accent);font-weight:700}
+.mlist{list-style:none;margin:0;padding:0;display:grid}
+.mdish{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
+.mdish:first-child{border-top:0}
+.mday{flex:0 0 3.6rem;font-family:var(--f-mono);font-size:.76rem;color:var(--accent);text-transform:uppercase;line-height:1.25}
+.mname{flex:1;min-width:0;font-size:.95rem;line-height:1.3}
+.mname small{display:block;color:var(--muted);font-size:.78rem;margin-top:2px}
+.mswap{flex:0 0 auto;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:1.05rem;line-height:1}
+.mfoot{margin:0;font-size:.82rem;color:var(--muted)}
+/* Mon foyer */
+.foyer-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:6px}
+.foyer-head h2{font-family:var(--f-display);font-weight:800;font-size:1.4rem;margin:0}
+.foyer{display:grid;gap:18px}
+.fsec{display:grid;gap:8px}
+.fsec h2{font-family:var(--f-display);font-weight:600;font-size:1.08rem;margin:0}
+.fsec .txt{margin:0;color:var(--muted);font-size:.88rem}
+.chips.wrap{flex-wrap:wrap;overflow:visible}
+.switch{min-width:64px;height:40px;border-radius:99px;border:1px solid var(--line);background:var(--bg);font-weight:700;font-size:.9rem;color:var(--muted)}
+.switch[aria-pressed="true"]{background:var(--leaf);border-color:var(--leaf);color:var(--surface)}
+.maj-btn[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.brand{gap:8px}
+
 /* Commentaires */
 .comments{display:grid;gap:8px}
 .clist{list-style:none;margin:0;padding:0;display:grid;gap:8px}
@@ -321,6 +349,9 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
       <h1>Carnet de <span>batch cooking</span></h1>
       <p>Dimanche en cuisine · 2 personnes · 5 plats</p>
     </div>
+    <button type="button" id="foyer-btn" class="maj-btn" aria-label="Mon foyer : personnes, équipement, régime" title="Mon foyer">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 11.5 12 5l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+    </button>
     <button type="button" id="maj-btn" class="maj-btn" aria-label="Mettre à jour l’application" title="Mettre à jour">
       <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M20 4v5h-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
@@ -330,7 +361,7 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
     <button type="button" class="btn primary" id="maj-bar-btn">Mettre à jour</button>
   </div>
   <nav class="tabs" role="tablist" aria-label="Sections">
-    <button type="button" role="tab" id="t-repas" data-tab="repas" aria-controls="v-repas" aria-selected="false">Repas</button>
+    <button type="button" role="tab" id="t-repas" data-tab="repas" aria-controls="v-repas" aria-selected="false">Menus</button>
     <button type="button" role="tab" id="t-courses" data-tab="courses" aria-controls="v-courses" aria-selected="true">Courses</button>
     <button type="button" role="tab" id="t-cuisine" data-tab="cuisine" aria-controls="v-cuisine" aria-selected="false">Cuisine</button>
     <button type="button" role="tab" id="t-stock" data-tab="stock" aria-controls="v-stock" aria-selected="false">Stock</button>
@@ -342,11 +373,15 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
     <section id="v-repas" role="tabpanel" aria-labelledby="t-repas" hidden>
       <div id="repas-main"><p class="state">Chargement du planning…</p></div>
       <div id="repas-note" class="note-box" hidden>
-        <label for="plan-note" class="eyebrow">Remarques pour les menus de cette semaine</label>
-        <textarea id="plan-note" rows="2" placeholder="Ex. envie de soupe, un plat facile à emporter jeudi midi"></textarea>
+        <label for="plan-note" class="eyebrow">Vos envies pour cette semaine</label>
+        <textarea id="plan-note" rows="2" placeholder="Ex. une soupe, du chorizo, quelque chose qui se mange froid"></textarea>
         <span class="note-state" id="note-state" aria-live="polite"></span>
       </div>
-      <div id="reglages"></div>
+      <div id="menus-main"></div>
+    </section>
+    <section id="v-foyer" hidden>
+      <div class="foyer-head"><h2>Mon foyer</h2><button type="button" class="linkbtn" data-tab="repas">← Retour aux menus</button></div>
+      <div id="foyer-main"><p class="state">Chargement…</p></div>
     </section>
     <section id="v-cuisine" role="tabpanel" aria-labelledby="t-cuisine" hidden>
       <div id="cuisine-head"></div>
@@ -431,18 +466,97 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
    "fiche": {
     "infos": "Viande · plaques + four · à manger en début de semaine · congélation moyenne (sans les pommes de terre) · ~45 min",
     "ingredients": [
-     "Poulet (hauts de cuisse ou blancs) : 600 g",
-     "Champignons de Paris : 400 g",
-     "Poireaux : 3 (~450 g)",
-     "Oignon : 1 (~120 g)",
-     "Ail : 1 gousse",
-     "Pommes de terre grenaille : 800 g",
-     "Crème d'avoine : 20 cl",
-     "Lait végétal (avoine ou soja) : 10 cl",
-     "Moutarde : 2 c.s. (~30 g)",
-     "Farine : 1 c.s. (~10 g)",
-     "Huile d'olive : 4 c.s. (2 grenaille, 2 poulet)",
-     "Thym, ½ c.c. de sel, poivre"
+     {
+      "nom": "Poulet",
+      "qte": 600,
+      "unite": "g",
+      "rayon": "Frais",
+      "note": "hauts de cuisse ou blancs"
+     },
+     {
+      "nom": "Champignons de Paris",
+      "qte": 400,
+      "unite": "g",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Poireaux",
+      "qte": 3,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "~450 g"
+     },
+     {
+      "nom": "Oignon",
+      "qte": 1,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "~120 g"
+     },
+     {
+      "nom": "Ail",
+      "qte": 1,
+      "unite": "gousse",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Pommes de terre grenaille",
+      "qte": 800,
+      "unite": "g",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Crème d’avoine",
+      "qte": 20,
+      "unite": "cl",
+      "rayon": "Épicerie"
+     },
+     {
+      "nom": "Lait végétal",
+      "qte": 10,
+      "unite": "cl",
+      "rayon": "Épicerie",
+      "note": "avoine ou soja"
+     },
+     {
+      "nom": "Moutarde",
+      "qte": 2,
+      "unite": "c.s.",
+      "rayon": "Placard",
+      "note": "~30 g"
+     },
+     {
+      "nom": "Farine",
+      "qte": 1,
+      "unite": "c.s.",
+      "rayon": "Placard",
+      "note": "~10 g"
+     },
+     {
+      "nom": "Huile d’olive",
+      "qte": 4,
+      "unite": "c.s.",
+      "rayon": "Placard",
+      "note": "2 grenaille, 2 poulet"
+     },
+     {
+      "nom": "Thym",
+      "qte": null,
+      "unite": "",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Sel",
+      "qte": 0.5,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Poivre",
+      "qte": null,
+      "unite": "",
+      "rayon": "Placard"
+     }
     ],
     "methode": [
      "Four à 200 °C. Lave la grenaille sans l'éplucher, coupe-la en deux (en quatre si grosse). Sur une plaque avec 2 c.s. d'huile, ½ c.c. de sel, poivre et thym. **35 min à 200 °C.**",
@@ -502,14 +616,82 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
    "fiche": {
     "infos": "Végé · plaques · tient en fin de semaine · pas de congélation · ~45 min",
     "ingredients": [
-     "Tofu ferme nature : 400 g",
-     "Poireaux : 2 (~300 g)",
-     "Brocolis : 2 (~700 g)",
-     "Riz : 250 g (+ 400 ml d'eau salée)",
-     "Sauce, version doublée : 8 c.s. de sauce soja, 4 c.s. de miel ou sirop d'érable, 4 gousses d'ail hachées, 4 cm de gingembre râpé, 6 c.s. d'eau",
-     "Sésame : 2 c.s. (~15 g)",
-     "Huile : 3 c.s. (2 tofu, 1 poêlée)",
-     "Sel (+ 1 c.s. pour l'eau des brocolis)"
+     {
+      "nom": "Tofu ferme nature",
+      "qte": 400,
+      "unite": "g",
+      "rayon": "Frais"
+     },
+     {
+      "nom": "Poireaux",
+      "qte": 2,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "~300 g"
+     },
+     {
+      "nom": "Brocolis",
+      "qte": 2,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "~700 g"
+     },
+     {
+      "nom": "Riz",
+      "qte": 250,
+      "unite": "g",
+      "rayon": "Épicerie",
+      "note": "+ 400 ml d’eau salée"
+     },
+     {
+      "nom": "Sauce soja",
+      "qte": 8,
+      "unite": "c.s.",
+      "rayon": "Placard",
+      "note": "sauce laquée"
+     },
+     {
+      "nom": "Miel ou sirop d’érable",
+      "qte": 4,
+      "unite": "c.s.",
+      "rayon": "Placard",
+      "note": "sauce laquée"
+     },
+     {
+      "nom": "Ail",
+      "qte": 4,
+      "unite": "gousses",
+      "rayon": "Fruits & légumes",
+      "note": "sauce laquée"
+     },
+     {
+      "nom": "Gingembre frais",
+      "qte": 4,
+      "unite": "cm",
+      "rayon": "Fruits & légumes",
+      "note": "sauce laquée"
+     },
+     {
+      "nom": "Sésame",
+      "qte": 2,
+      "unite": "c.s.",
+      "rayon": "Placard",
+      "note": "~15 g"
+     },
+     {
+      "nom": "Huile",
+      "qte": 3,
+      "unite": "c.s.",
+      "rayon": "Placard",
+      "note": "2 tofu, 1 poêlée"
+     },
+     {
+      "nom": "Sel",
+      "qte": null,
+      "unite": "",
+      "rayon": "Placard",
+      "note": "+ 1 c.s. pour l’eau des brocolis"
+     }
     ],
     "methode": [
      "Riz : 250 g de riz et 400 ml d'eau salée dans une petite casserole. Porte à ébullition, couvre, **12 min à feu très doux**, puis 10 min de repos hors du feu sans ouvrir.",
@@ -572,17 +754,77 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
    "fiche": {
     "infos": "Végé · four · tient en fin de semaine · se congèle bien · ~1 h (dont 25 min de four)",
     "ingredients": [
-     "Patates douces : 900 g",
-     "Lait végétal : 15 cl",
-     "Champignons de Paris : 400 g",
-     "Tofu fumé : ~350 g (2 blocs)",
-     "Oignons : 2 (~240 g)",
-     "Ail : 2 gousses",
-     "Brebis à râper (ossau-iraty ou pecorino) : 100 g",
-     "Sauce soja : 2 c.s.",
-     "Thym : 1 c.c.",
-     "Huile d'olive : 2 c.s. (1 purée, 1 farce)",
-     "Sel (½ c.c. + 1 c.s. pour l'eau de cuisson)"
+     {
+      "nom": "Patates douces",
+      "qte": 900,
+      "unite": "g",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Lait végétal",
+      "qte": 15,
+      "unite": "cl",
+      "rayon": "Épicerie"
+     },
+     {
+      "nom": "Champignons de Paris",
+      "qte": 400,
+      "unite": "g",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Tofu fumé",
+      "qte": 350,
+      "unite": "g",
+      "rayon": "Frais",
+      "note": "2 blocs"
+     },
+     {
+      "nom": "Oignons",
+      "qte": 2,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "~240 g"
+     },
+     {
+      "nom": "Ail",
+      "qte": 2,
+      "unite": "gousses",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Brebis à râper",
+      "qte": 100,
+      "unite": "g",
+      "rayon": "Frais",
+      "note": "ossau-iraty ou pecorino"
+     },
+     {
+      "nom": "Sauce soja",
+      "qte": 2,
+      "unite": "c.s.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Thym",
+      "qte": 1,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Huile d’olive",
+      "qte": 2,
+      "unite": "c.s.",
+      "rayon": "Placard",
+      "note": "1 purée, 1 farce"
+     },
+     {
+      "nom": "Sel",
+      "qte": 0.5,
+      "unite": "c.c.",
+      "rayon": "Placard",
+      "note": "+ 1 c.s. pour l’eau de cuisson"
+     }
     ],
     "methode": [
      "Épluche les patates douces, coupe-les en morceaux de 3 cm et cuis-les **20 min** dans 2 L d'eau bouillante salée. Égoutte, écrase avec le lait végétal, 1 c.s. d'huile et ½ c.c. de sel.",
@@ -642,19 +884,103 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
    "fiche": {
     "infos": "Végé · plaques · tient en fin de semaine · se congèle bien · ~50 min (dont 30 min de mijotage)",
     "ingredients": [
-     "Haricots rouges : 2 boîtes de 400 g, égouttées et rincées",
-     "Patate douce : 300 g",
-     "Poivron : 1",
-     "Oignon : 1 (~120 g)",
-     "Ail : 2 gousses",
-     "Tomates concassées : 1 boîte de 400 g",
-     "Concentré de tomate : 1 c.s. (~15 g)",
-     "Maïs : 1 petite boîte, égouttée",
-     "Eau : 10 cl + ½ cube de bouillon de légumes",
-     "Cumin : 2 c.c. · paprika fumé : 1 c.c. · piment selon le goût",
-     "Huile : 1 c.s.",
-     "Quinoa : 200 g (+ 400 ml d'eau salée)",
-     "Citron vert : 1, pour servir"
+     {
+      "nom": "Haricots rouges",
+      "qte": 2,
+      "unite": "boîtes de 400 g",
+      "rayon": "Épicerie",
+      "note": "égouttées et rincées"
+     },
+     {
+      "nom": "Patate douce",
+      "qte": 300,
+      "unite": "g",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Poivron",
+      "qte": 1,
+      "unite": "",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Oignon",
+      "qte": 1,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "~120 g"
+     },
+     {
+      "nom": "Ail",
+      "qte": 2,
+      "unite": "gousses",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Tomates concassées",
+      "qte": 1,
+      "unite": "boîte de 400 g",
+      "rayon": "Épicerie"
+     },
+     {
+      "nom": "Concentré de tomate",
+      "qte": 1,
+      "unite": "c.s.",
+      "rayon": "Épicerie",
+      "note": "~15 g"
+     },
+     {
+      "nom": "Maïs",
+      "qte": 1,
+      "unite": "petite boîte",
+      "rayon": "Épicerie",
+      "note": "égouttée"
+     },
+     {
+      "nom": "Bouillon de légumes",
+      "qte": 0.5,
+      "unite": "cube",
+      "rayon": "Placard",
+      "note": "+ 10 cl d’eau"
+     },
+     {
+      "nom": "Cumin",
+      "qte": 2,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Paprika fumé",
+      "qte": 1,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Piment",
+      "qte": null,
+      "unite": "selon le goût",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Huile",
+      "qte": 1,
+      "unite": "c.s.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Quinoa",
+      "qte": 200,
+      "unite": "g",
+      "rayon": "Épicerie",
+      "note": "+ 400 ml d’eau salée"
+     },
+     {
+      "nom": "Citron vert",
+      "qte": 1,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "pour servir"
+     }
     ],
     "methode": [
      "Coupe l'oignon en petits dés, hache l'ail. Poivron en dés de 1,5 cm, patate douce épluchée en cubes de 1,5 cm.",
@@ -869,24 +1195,138 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
    "fiche": {
     "infos": "Viande · four · à manger en début de semaine · pas de congélation · ~1 h (dont 40 min de four) · protéines : poulet, feta, œufs, yaourt de brebis (~50 g/portion)",
     "ingredients": [
-     "Blancs de poulet : 600 g",
-     "Farine : 40 g",
-     "Œufs : 2",
-     "Chapelure (ou panko) : 100 g",
-     "Paprika : 1 c.c. · ail en poudre : ½ c.c.",
-     "Riz long (basmati ou thaï) : 250 g",
-     "Bouillon de légumes : 55 cl d'eau bouillante + 1 cube",
-     "Feta : 200 g",
-     "Olives noires dénoyautées (kalamata) : 100 g",
-     "Grenade : 1 (~150 g de grains)",
-     "Oignon rouge : 1 (~120 g)",
-     "Ail : 3 gousses (2 riz, 1 sauce)",
-     "Citron : 1 (½ riz, ½ sauce)",
-     "Persil ou menthe : 1 petit bouquet (~20 g)",
-     "Origan : 1 c.c.",
-     "Yaourt de brebis : 250 g (2 pots)",
-     "Huile d'olive : 5 c.s. (2 riz, 3 poulet)",
-     "Sel (½ c.c. poulet + 1 pincée sauce), poivre"
+     {
+      "nom": "Blancs de poulet",
+      "qte": 600,
+      "unite": "g",
+      "rayon": "Frais"
+     },
+     {
+      "nom": "Farine",
+      "qte": 40,
+      "unite": "g",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Œufs",
+      "qte": 2,
+      "unite": "",
+      "rayon": "Frais"
+     },
+     {
+      "nom": "Chapelure",
+      "qte": 100,
+      "unite": "g",
+      "rayon": "Épicerie",
+      "note": "ou panko"
+     },
+     {
+      "nom": "Paprika",
+      "qte": 1,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Ail en poudre",
+      "qte": 0.5,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Riz long",
+      "qte": 250,
+      "unite": "g",
+      "rayon": "Épicerie",
+      "note": "basmati ou thaï"
+     },
+     {
+      "nom": "Bouillon de légumes",
+      "qte": 1,
+      "unite": "cube",
+      "rayon": "Placard",
+      "note": "+ 55 cl d’eau bouillante"
+     },
+     {
+      "nom": "Feta",
+      "qte": 200,
+      "unite": "g",
+      "rayon": "Frais"
+     },
+     {
+      "nom": "Olives noires dénoyautées",
+      "qte": 100,
+      "unite": "g",
+      "rayon": "Épicerie",
+      "note": "kalamata"
+     },
+     {
+      "nom": "Grenade",
+      "qte": 1,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "~150 g de grains"
+     },
+     {
+      "nom": "Oignon rouge",
+      "qte": 1,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "~120 g"
+     },
+     {
+      "nom": "Ail",
+      "qte": 3,
+      "unite": "gousses",
+      "rayon": "Fruits & légumes",
+      "note": "2 riz, 1 sauce"
+     },
+     {
+      "nom": "Citron",
+      "qte": 1,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "½ riz, ½ sauce"
+     },
+     {
+      "nom": "Persil ou menthe",
+      "qte": 20,
+      "unite": "g",
+      "rayon": "Fruits & légumes",
+      "note": "1 petit bouquet"
+     },
+     {
+      "nom": "Origan",
+      "qte": 1,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Yaourt de brebis",
+      "qte": 250,
+      "unite": "g",
+      "rayon": "Frais",
+      "note": "2 pots"
+     },
+     {
+      "nom": "Huile d’olive",
+      "qte": 5,
+      "unite": "c.s.",
+      "rayon": "Placard",
+      "note": "2 riz, 3 poulet"
+     },
+     {
+      "nom": "Sel",
+      "qte": 0.5,
+      "unite": "c.c.",
+      "rayon": "Placard",
+      "note": "+ 1 pincée pour la sauce"
+     },
+     {
+      "nom": "Poivre",
+      "qte": null,
+      "unite": "",
+      "rayon": "Placard"
+     }
     ],
     "methode": [
      "Four à 200 °C. Riz au four : rince le riz. Émince l'oignon rouge, hache 2 gousses d'ail, coupe les olives en deux. Dans un plat à four (~25 × 30 cm), mélange le riz, l'oignon, l'ail, les olives, l'origan et 2 c.s. d'huile. Verse le bouillon bouillant, couvre hermétiquement de papier aluminium. **35 min à 200 °C** (grille du haut).",
@@ -948,20 +1388,117 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
    "fiche": {
     "infos": "Végé · plaques · tient en fin de semaine · se congèle bien (sans la semoule) · ~40 min (dont 25 min de mijotage) · protéines : pois chiches, cacahuète (~22 g/portion avec la semoule)",
     "ingredients": [
-     "Pois chiches : 2 boîtes de 400 g, égouttées et rincées (~480 g)",
-     "Potimarron : ~450 g net (un petit potimarron de ~600 g, la peau se mange)",
-     "Oignon : 1 (~120 g)",
-     "Ail : 2 gousses",
-     "Gingembre frais : 2 cm",
-     "Beurre de cacahuète nature (sans sucre) : 75 g",
-     "Concentré de tomate : 1 c.s. (~15 g)",
-     "Tomates concassées : 1 boîte de 400 g",
-     "Bouillon de légumes : 35 cl d'eau + 1 cube",
-     "Paprika : 1 c.c. · cumin : 1 c.c. · piment selon le goût",
-     "Huile : 1 c.s.",
-     "Sel, poivre",
-     "Semoule complète : 200 g (+ 24 cl d'eau bouillante salée + 1 c.s. d'huile)",
-     "Cacahuètes grillées concassées : 30 g, pour servir (facultatif)"
+     {
+      "nom": "Pois chiches",
+      "qte": 2,
+      "unite": "boîtes de 400 g",
+      "rayon": "Épicerie",
+      "note": "égouttées et rincées"
+     },
+     {
+      "nom": "Potimarron",
+      "qte": 1,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "petit, ~600 g ; la peau se mange"
+     },
+     {
+      "nom": "Oignon",
+      "qte": 1,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "~120 g"
+     },
+     {
+      "nom": "Ail",
+      "qte": 2,
+      "unite": "gousses",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Gingembre frais",
+      "qte": 2,
+      "unite": "cm",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Beurre de cacahuète nature",
+      "qte": 75,
+      "unite": "g",
+      "rayon": "Épicerie",
+      "note": "sans sucre"
+     },
+     {
+      "nom": "Concentré de tomate",
+      "qte": 1,
+      "unite": "c.s.",
+      "rayon": "Épicerie",
+      "note": "~15 g"
+     },
+     {
+      "nom": "Tomates concassées",
+      "qte": 1,
+      "unite": "boîte de 400 g",
+      "rayon": "Épicerie"
+     },
+     {
+      "nom": "Bouillon de légumes",
+      "qte": 1,
+      "unite": "cube",
+      "rayon": "Placard",
+      "note": "+ 35 cl d’eau"
+     },
+     {
+      "nom": "Paprika",
+      "qte": 1,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Cumin",
+      "qte": 1,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Piment",
+      "qte": null,
+      "unite": "selon le goût",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Huile",
+      "qte": 2,
+      "unite": "c.s.",
+      "rayon": "Placard",
+      "note": "1 mafé, 1 semoule"
+     },
+     {
+      "nom": "Sel",
+      "qte": null,
+      "unite": "",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Poivre",
+      "qte": null,
+      "unite": "",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Semoule complète",
+      "qte": 200,
+      "unite": "g",
+      "rayon": "Épicerie",
+      "note": "+ 24 cl d’eau bouillante salée"
+     },
+     {
+      "nom": "Cacahuètes grillées",
+      "qte": 30,
+      "unite": "g",
+      "rayon": "Épicerie",
+      "note": "pour servir, facultatif"
+     }
     ],
     "methode": [
      "Coupe l'oignon en petits dés, hache l'ail, râpe le gingembre. Lave le potimarron, retire les graines et coupe-le en cubes de 2 cm sans l'éplucher.",
@@ -1021,18 +1558,97 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
    "fiche": {
     "infos": "Végé · plaques · tient 3 jours au frigo · pas de congélation · ~45 min · protéines : tofu fumé, pecorino (~30 g/portion)",
     "ingredients": [
-     "Riz à risotto (arborio ou carnaroli) : 320 g",
-     "Bouillon de légumes : 1,6 L d'eau + 2 cubes (dont 30 cl gardés pour le réchauffage)",
-     "Champignons de Paris : 500 g",
-     "Châtaignes cuites (sous vide) : 200 g",
-     "Tofu fumé : ~350 g (2 blocs)",
-     "Oignon : 1 (~120 g)",
-     "Ail : 2 gousses",
-     "Vin blanc sec : 10 cl (facultatif, sinon du bouillon)",
-     "Pecorino râpé : 80 g",
-     "Huile d'olive : 3 c.s. (1 risotto, 2 poêlée)",
-     "Thym : 1 c.c. · persil : quelques brins",
-     "Sel, poivre"
+     {
+      "nom": "Riz à risotto",
+      "qte": 320,
+      "unite": "g",
+      "rayon": "Épicerie",
+      "note": "arborio ou carnaroli"
+     },
+     {
+      "nom": "Bouillon de légumes",
+      "qte": 2,
+      "unite": "cubes",
+      "rayon": "Placard",
+      "note": "+ 1,6 L d’eau, dont 30 cl gardés pour le réchauffage"
+     },
+     {
+      "nom": "Champignons de Paris",
+      "qte": 500,
+      "unite": "g",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Châtaignes cuites sous vide",
+      "qte": 200,
+      "unite": "g",
+      "rayon": "Épicerie"
+     },
+     {
+      "nom": "Tofu fumé",
+      "qte": 350,
+      "unite": "g",
+      "rayon": "Frais",
+      "note": "2 blocs"
+     },
+     {
+      "nom": "Oignon",
+      "qte": 1,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "~120 g"
+     },
+     {
+      "nom": "Ail",
+      "qte": 2,
+      "unite": "gousses",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Vin blanc sec",
+      "qte": 10,
+      "unite": "cl",
+      "rayon": "Épicerie",
+      "note": "facultatif, sinon du bouillon"
+     },
+     {
+      "nom": "Pecorino râpé",
+      "qte": 80,
+      "unite": "g",
+      "rayon": "Frais"
+     },
+     {
+      "nom": "Huile d’olive",
+      "qte": 3,
+      "unite": "c.s.",
+      "rayon": "Placard",
+      "note": "1 risotto, 2 poêlée"
+     },
+     {
+      "nom": "Thym",
+      "qte": 1,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Persil",
+      "qte": 10,
+      "unite": "g",
+      "rayon": "Fruits & légumes",
+      "note": "quelques brins"
+     },
+     {
+      "nom": "Sel",
+      "qte": null,
+      "unite": "",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Poivre",
+      "qte": null,
+      "unite": "",
+      "rayon": "Placard"
+     }
     ],
     "methode": [
      "Garde le bouillon chaud à feu doux dans la petite casserole.",
@@ -1097,20 +1713,140 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
    "fiche": {
     "infos": "Végé · plaques · tient en fin de semaine · se congèle bien · ~1 h 15 (dont 45 min de mijotage) · protéines : tempeh (~25 g/portion)",
     "ingredients": [
-     "Tempeh nature : 400 g (2 blocs)",
-     "Champignons de Paris : 400 g",
-     "Carottes : 4 (~400 g)",
-     "Oignons : 2 (~240 g)",
-     "Ail : 3 gousses",
-     "Vin rouge (type bourgogne ou côtes-du-rhône) : 50 cl",
-     "Bouillon de légumes : 30 cl d'eau + ½ cube",
-     "Concentré de tomate : 2 c.s. (~30 g)",
-     "Farine : 2 c.s. (~20 g)",
-     "Sauce soja : 3 c.s. (1 marinade, 2 sauce)",
-     "Thym : 1 c.c. · laurier : 2 feuilles",
-     "Huile : 3 c.s. (2 tempeh, 1 légumes)",
-     "Poivre (pas de sel avant d'avoir goûté, la sauce soja sale)",
-     "Purée : pommes de terre 800 g, céleri-rave 500 g, lait végétal 25 cl, huile d'olive 3 c.s., ¾ c.c. de sel + 1 c.s. pour l'eau, muscade"
+     {
+      "nom": "Tempeh nature",
+      "qte": 400,
+      "unite": "g",
+      "rayon": "Frais",
+      "note": "2 blocs"
+     },
+     {
+      "nom": "Champignons de Paris",
+      "qte": 400,
+      "unite": "g",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Carottes",
+      "qte": 4,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "~400 g"
+     },
+     {
+      "nom": "Oignons",
+      "qte": 2,
+      "unite": "",
+      "rayon": "Fruits & légumes",
+      "note": "~240 g"
+     },
+     {
+      "nom": "Ail",
+      "qte": 3,
+      "unite": "gousses",
+      "rayon": "Fruits & légumes"
+     },
+     {
+      "nom": "Vin rouge",
+      "qte": 50,
+      "unite": "cl",
+      "rayon": "Épicerie",
+      "note": "type bourgogne ou côtes-du-rhône"
+     },
+     {
+      "nom": "Bouillon de légumes",
+      "qte": 0.5,
+      "unite": "cube",
+      "rayon": "Placard",
+      "note": "+ 30 cl d’eau"
+     },
+     {
+      "nom": "Concentré de tomate",
+      "qte": 2,
+      "unite": "c.s.",
+      "rayon": "Épicerie",
+      "note": "~30 g"
+     },
+     {
+      "nom": "Farine",
+      "qte": 2,
+      "unite": "c.s.",
+      "rayon": "Placard",
+      "note": "~20 g"
+     },
+     {
+      "nom": "Sauce soja",
+      "qte": 3,
+      "unite": "c.s.",
+      "rayon": "Placard",
+      "note": "1 marinade, 2 sauce"
+     },
+     {
+      "nom": "Thym",
+      "qte": 1,
+      "unite": "c.c.",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Laurier",
+      "qte": 2,
+      "unite": "feuilles",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Huile",
+      "qte": 3,
+      "unite": "c.s.",
+      "rayon": "Placard",
+      "note": "2 tempeh, 1 légumes"
+     },
+     {
+      "nom": "Poivre",
+      "qte": null,
+      "unite": "",
+      "rayon": "Placard"
+     },
+     {
+      "nom": "Pommes de terre",
+      "qte": 800,
+      "unite": "g",
+      "rayon": "Fruits & légumes",
+      "note": "purée"
+     },
+     {
+      "nom": "Céleri-rave",
+      "qte": 500,
+      "unite": "g",
+      "rayon": "Fruits & légumes",
+      "note": "purée"
+     },
+     {
+      "nom": "Lait végétal",
+      "qte": 25,
+      "unite": "cl",
+      "rayon": "Épicerie",
+      "note": "purée"
+     },
+     {
+      "nom": "Huile d’olive",
+      "qte": 3,
+      "unite": "c.s.",
+      "rayon": "Placard",
+      "note": "purée"
+     },
+     {
+      "nom": "Sel",
+      "qte": 0.75,
+      "unite": "c.c.",
+      "rayon": "Placard",
+      "note": "purée, + 1 c.s. pour l’eau"
+     },
+     {
+      "nom": "Muscade",
+      "qte": null,
+      "unite": "1 pincée",
+      "rayon": "Placard"
+     }
     ],
     "methode": [
      "Coupe le tempeh en cubes de 2 cm et mélange-les avec 1 c.s. de sauce soja. Coupe les oignons en dés, hache l'ail, coupe les carottes en rondelles de 1 cm et les champignons en quartiers.",
@@ -4128,7 +4864,7 @@ window.FIREBASE_CONFIG = {
   const fShort = new Intl.DateTimeFormat('fr-FR',{day:'numeric',month:'short',year:'numeric'});
   const fDay = new Intl.DateTimeFormat('fr-FR',{weekday:'long',day:'numeric',month:'long'});
   const toDate = iso => { const [y,m,d] = String(iso).split('-').map(Number); return new Date(y,(m||1)-1,d||1); };
-  const TABS = ['repas','courses','cuisine','stock','plats','semaines'];
+  const TABS = ['repas','courses','cuisine','stock','plats','semaines','foyer'];
   const JOURS = [['lundi','Lun'],['mardi','Mar'],['mercredi','Mer'],['jeudi','Jeu'],['vendredi','Ven']];
   const MOMENTS = [['midi','Midi'],['soir','Soir']];
   const isoOf = x => x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0');
@@ -4152,10 +4888,11 @@ window.FIREBASE_CONFIG = {
   function setTab(t){
     S.tab = t;
     TABS.forEach(k => {
-      $('#t-'+k).setAttribute('aria-selected', String(k===t));
+      const b = $('#t-'+k); if (b) b.setAttribute('aria-selected', String(k===t));
       $('#v-'+k).hidden = k !== t;
     });
-    try { $('#t-'+t).scrollIntoView({block:'nearest', inline:'nearest'}); } catch(e){}
+    const fb = $('#foyer-btn'); if (fb) fb.setAttribute('aria-pressed', String(t === 'foyer'));
+    try { const b = $('#t-'+t); if (b) b.scrollIntoView({block:'nearest', inline:'nearest'}); } catch(e){}
     try { localStorage.setItem('bc-tab', t); } catch(e){}
     try { history.replaceState(null,'','#'+t); } catch(e){}
   }
@@ -4208,12 +4945,13 @@ window.FIREBASE_CONFIG = {
   }
   function mergeAvis(){
     S.plats = S.platsBase.map(p => Object.assign({}, p, {avis: S.avis[p.id] != null ? S.avis[p.id] : (p.avis || '')}));
+    if (S.loaded.plats) rebuildWeeks();
   }
   const empty = (t, p) => '<div class="empty"><h2>'+esc(t)+'</h2><p>'+esc(p)+'</p></div>';
   const weekLabel = w => 'Semaine du ' + fLong.format(toDate(w.debut || w.id));
 
   /* ---------- repas de la semaine ---------- */
-  const reg = () => ({personnes: S.reglages.personnes || 2, portionsParPlat: S.reglages.portionsParPlat || 4});
+  const reg = () => foyer();
   function planRepas(pid){
     const stored = (S.plannings[pid] || {}).repas || {};
     const r = {};
@@ -4234,7 +4972,7 @@ window.FIREBASE_CONFIG = {
   }
   function renderRepas(){
     const main = $('#repas-main'), noteBox = $('#repas-note');
-    if (gate(main, 'du planning', ['plannings','reglages'])) { noteBox.hidden = true; $('#reglages').innerHTML = ''; return; }
+    if (gate(main, 'du planning', ['plannings','reglages'])) { noteBox.hidden = true; return; }
     const ids = nextMondays(3);
     if (!ids.includes(S.planId)) S.planId = ids[0];
     const repas = planRepas(S.planId), b = bilan(repas), lundi = toDate(S.planId);
@@ -4255,7 +4993,7 @@ window.FIREBASE_CONFIG = {
     const allHome = b.n === JOURS.length * MOMENTS.length;
     main.innerHTML = '<div class="plan-head"><div class="week-pick"><label for="plan-select" class="eyebrow">Semaine à préparer</label><select id="plan-select">'
       + ids.map(id => '<option value="'+id+'"'+(id===S.planId?' selected':'')+'>Semaine du '+esc(fLong.format(toDate(id)))+'</option>').join('')
-      + '</select></div><p class="hint-txt">Touchez un repas pris à l’extérieur pour le passer en « Dehors ». Claude lit ce planning avant de proposer les menus.</p></div>'
+      + '</select></div><p class="hint-txt">Touchez un repas pris à l’extérieur pour le passer en « Dehors ». Le nombre de plats proposés en dépend.</p></div>'
       + grid
       + '<div class="bilan"><div class="big"><span>'+b.n+'</span> repas à la maison</div>'+detail
       + (!allHome && S.canWrite ? '<div><button type="button" class="linkbtn" id="all-home">Tout remettre à la maison</button></div>' : '')
@@ -4264,12 +5002,6 @@ window.FIREBASE_CONFIG = {
     const ta = $('#plan-note');
     if (document.activeElement !== ta) ta.value = (S.plannings[S.planId] || {}).note || '';
     ta.disabled = !S.canWrite;
-    const r = reg();
-    $('#reglages').innerHTML = '<div class="reglages"><h2>Réglages du foyer</h2>'
-      + '<p class="txt">Valables toutes les semaines. Ils fixent le nombre de plats et les quantités des listes de courses.</p>'
-      + stepper('personnes', 'Personnes à nourrir', 'À chaque repas', r.personnes, 1, 8)
-      + stepper('portionsParPlat', 'Portions par plat', '4 = un midi et un soir pour 2', r.portionsParPlat, 2, 12)
-      + '</div>';
   }
   let noteTimer;
   function saveNote(){
@@ -4350,6 +5082,405 @@ window.FIREBASE_CONFIG = {
     renderAll();
     enqueue(comPath(kind, id), () => store.dropKey(comPath(kind, id), 'commentaires', cid)).then(ok => { if (ok !== false) toast('Commentaire supprimé.'); });
   }
+  /* ===================== MON FOYER ===================== */
+  const FOYER_DEF = {personnes:2, portionsParPlat:4, four:true, feux:3, microondes:true, mixeur:false, casseroles:2, poeles:2, exclusions:[], viandeMax:2};
+  const EXCL = [['porc','Porc'],['boeuf','Bœuf'],['volaille','Volaille'],['poisson','Poisson'],['oeuf','Œufs'],['gluten','Gluten'],
+    ['lactose-vache','Lactose de vache'],['soja','Soja'],['arachide','Arachide'],['fruits-a-coque','Fruits à coque'],['alcool','Alcool']];
+  function foyer(){ const r = Object.assign({}, FOYER_DEF, S.reglages); if (!Array.isArray(r.exclusions)) r.exclusions = []; return r; }
+  function saveFoyer(patch){
+    if (!canEdit()) return;
+    S.reglages = Object.assign({}, S.reglages, patch);
+    mergeAvis(); renderAll();
+    writeDoc('reglages/foyer', patch).then(ok => { if (ok !== false) toast('✓ Mon foyer enregistré'); });
+  }
+  function toggleBtn(k, label, sub){
+    const on = !!foyer()[k];
+    return '<div class="stepper"><span class="lbl">'+esc(label)+(sub ? '<small>'+esc(sub)+'</small>' : '')+'</span>'
+      + '<button type="button" class="switch" data-ftog="'+k+'" aria-pressed="'+on+'"'+(S.canWrite?'':' disabled')+'>'+(on ? 'Oui' : 'Non')+'</button></div>';
+  }
+  function renderFoyer(){
+    const el = $('#foyer-main'); if (!el) return;
+    if (gate(el, 'de votre foyer', ['reglages'])) return;
+    const f = foyer();
+    el.innerHTML = '<div class="foyer">'
+      + '<p class="hint-txt">Ces réglages servent à composer les menus, à ajuster les quantités et à organiser le déroulé du dimanche. Ils sont partagés par tout le foyer.</p>'
+      + '<section class="fsec"><h2>Qui mange</h2>'
+      + stepper('personnes', 'Personnes à nourrir', 'À chaque repas', f.personnes, 1, 8)
+      + stepper('portionsParPlat', 'Portions par plat', '4 = un midi et un soir pour 2', f.portionsParPlat, 2, 12) + '</section>'
+      + '<section class="fsec"><h2>Équipement</h2>'
+      + toggleBtn('four', 'Four', 'Sinon, aucun plat au four n’est proposé')
+      + stepper('feux', 'Feux de cuisson', 'Plaques ou brûleurs', f.feux, 1, 6)
+      + stepper('casseroles', 'Grandes casseroles ou faitouts', 'Pour les mijotés, soupes et pâtes', f.casseroles, 0, 5)
+      + stepper('poeles', 'Poêles ou sauteuses', 'Pour les poêlées et sautés', f.poeles, 0, 5)
+      + toggleBtn('microondes', 'Micro-ondes', 'Pour réchauffer et certaines précuissons')
+      + toggleBtn('mixeur', 'Mixeur plongeant', 'Pour les soupes veloutées') + '</section>'
+      + '<section class="fsec"><h2>Régime</h2>'
+      + '<p class="txt">Ne jamais proposer de plats avec :</p><div class="chips wrap">'
+      + EXCL.map(([k, l]) => '<button type="button" class="chip" data-fexcl="'+k+'" aria-pressed="'+f.exclusions.includes(k)+'"'+(S.canWrite?'':' disabled')+'>'+esc(l)+'</button>').join('') + '</div>'
+      + stepper('viandeMax', 'Plats avec viande par semaine', 'Au maximum', f.viandeMax, 0, 7) + '</section>'
+      + '</div>';
+  }
+
+  /* ===================== OUTILS ===================== */
+  const sing = w => w.length > 3 ? w.replace(/(s|x)$/, '') : w;
+  const keyName = s => norm(s).replace(/\(.*?\)/g, ' ').replace(/[^a-z0-9 ]/g, ' ').split(/\s+/).filter(Boolean).map(sing).join(' ');
+  const slug = s => norm(s).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60);
+  const FRAC = {'½':0.5, '¼':0.25, '¾':0.75};
+  function saisonDe(iso){ const m = toDate(iso).getMonth() + 1; return m >= 3 && m <= 5 ? 'printemps' : m >= 6 && m <= 8 ? 'ete' : m >= 9 && m <= 11 ? 'automne' : 'hiver'; }
+  const shortNom = n => { const s = String(n).split(/[,(]/)[0].trim(); return s.length > 34 ? s.slice(0, 32) + '…' : s; };
+  const tinyNom = n => { const w = String(n).split(/[,(]/)[0].trim().split(/\s+/); const stop = /^(de|du|des|aux?|à|la|le|les|et|d’|en)$/i; const out = [w[0]]; for (let i = 1; i < w.length && out.length < 2; i++) if (!stop.test(w[i])) out.push(w[i]); return out.join(' ').toLowerCase(); };
+  function addDays(iso, n){ const d = toDate(iso); d.setDate(d.getDate() + n); return isoOf(d); }
+
+  /* ===================== GÉNÉRATEUR DE MENUS ===================== */
+  function homeMeals(pid){
+    const r = planRepas(pid), out = [];
+    JOURS.forEach(([j, jl]) => MOMENTS.forEach(([m, ml]) => { if (r[j][m]) out.push({j, jl, m, ml}); }));
+    return out;
+  }
+  /* Découpe les repas à la maison en plats : chaque plat couvre portionsParPlat / personnes repas. */
+  function slotsFor(pid){
+    const f = foyer(), meals = homeMeals(pid), per = Math.max(1, Math.round(f.portionsParPlat / f.personnes));
+    const slots = [];
+    for (let i = 0; i < meals.length; i += per) {
+      const ms = meals.slice(i, i + per);
+      const label = ms.length === 2 && ms[0].j === ms[1].j ? ms[0].jl : ms.map(x => x.jl + ' ' + x.ml.toLowerCase()).join(' · ');
+      slots.push({label, jour: ms[0].jl, portions: ms.length * f.personnes});
+    }
+    return slots;
+  }
+  function envies(pid){
+    const txt = ' ' + norm((S.plannings[pid] || {}).note || '') + ' ';
+    if (!txt.trim()) return [];
+    const all = new Set();
+    S.plats.forEach(p => (p.motsCles || []).forEach(k => all.add(norm(k))));
+    const found = [...all].filter(k => k.length > 2 && new RegExp('(^|[^a-z])' + k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + 's?([^a-z]|$)').test(txt));
+    return found.filter(k => !found.some(o => o !== k && o.includes(k))).slice(0, 4);
+  }
+  const matches = (p, e) => (p.motsCles || []).some(k => norm(k) === e) || norm(p.nom).includes(e);
+  function recentIds(pid){
+    const ids = new Set();
+    S.semaines.forEach(w => { const d = (toDate(pid) - toDate(w.debut || w.id)) / 864e5; if (d > 0 && d <= 21) (w.menu || []).forEach(m => ids.add(m.platId)); });
+    return ids;
+  }
+  function pool(pid){
+    const f = foyer(), saison = saisonDe(pid);
+    return S.plats.filter(p => p.fiche
+      && (!(p.saisons || []).length || p.saisons.includes(saison))
+      && !(p.contient || []).some(c => f.exclusions.includes(c))
+      && p.avis !== 'plus-jamais'
+      && !(!f.four && (p.equipement === 'four' || (p.materiel || []).includes('four')))
+      && !(f.casseroles === 0 && p.equipement === 'casserole')
+      && !(f.poeles === 0 && p.equipement === 'poele'));
+  }
+  function caps(n){
+    const f = foyer();
+    return {
+      four: f.four ? Math.min(3, Math.max(1, Math.ceil(n * 0.6))) : 0,
+      casserole: Math.max(1, Math.min(f.casseroles, f.feux - 1, Math.ceil(n / 2))),
+      poele: Math.max(1, Math.min(Math.max(f.poeles, 1), Math.ceil(n / 2))),
+      viande: f.viandeMax
+    };
+  }
+  function fits(menu, p, cap){
+    const eq = p.equipement || 'casserole';
+    if (menu.filter(x => (x.equipement || 'casserole') === eq).length + 1 > (cap[eq] ?? 99)) return false;
+    if (p.type === 'viande' && menu.filter(x => x.type === 'viande').length + 1 > cap.viande) return false;
+    return true;
+  }
+  function score(menu, recent, others){
+    let s = 0; const fec = {};
+    menu.forEach(p => {
+      if (p.avis === 'a-refaire') s += 3; else if (p.avis === 'bof') s -= 3;
+      if (p.statut !== 'fait') s += 1;
+      if (recent.has(p.id)) s -= 6;
+      if ((p.proteinesPortion || 0) >= 22) s += 0.5;
+      fec[p.feculent || p.id] = (fec[p.feculent || p.id] || 0) + 1;
+    });
+    Object.values(fec).forEach(c => { if (c > 1) s -= 3 * (c - 1); });
+    others.forEach(o => menu.forEach(p => { if (o.includes(p.id)) s -= 4; }));
+    return s + Math.random() * 1.5;
+  }
+  function build(n, base, need, recent, others, cap){
+    let best = null;
+    for (let t = 0; t < 250; t++) {
+      const menu = [];
+      for (const e of need) {
+        if (menu.some(p => matches(p, e))) continue;
+        const c = base.filter(p => matches(p, e) && !menu.includes(p) && fits(menu, p, cap));
+        if (c.length) menu.push(c[Math.floor(Math.random() * c.length)]);
+      }
+      const rest = base.filter(p => !menu.includes(p)).sort(() => Math.random() - 0.5);
+      for (const p of rest) { if (menu.length >= n) break; if (fits(menu, p, cap)) menu.push(p); }
+      if (menu.length < n) continue;
+      const sc = score(menu, recent, others) + need.filter(e => menu.some(p => matches(p, e))).length * 10;
+      if (!best || sc > best.sc) best = {menu, sc};
+    }
+    return best && best.menu;
+  }
+  const ordre = p => (p.type === 'viande' ? 0 : 2) + (p.conservation === 'tot' ? 0 : 1);
+  function generate(pid){
+    const n = slotsFor(pid).length; if (!n) return [];
+    const base = pool(pid), recent = recentIds(pid), env = envies(pid);
+    let cap = caps(n);
+    const needs = env.length === 0 ? [[], [], []] : env.length === 1 ? [env, env, []] : [env, [env[0]], [env[1]].concat(env.slice(2))];
+    const out = [];
+    for (const need of needs) {
+      let m = build(n, base, need, recent, out.map(o => o.plats), cap);
+      if (!m) { cap = {four: cap.four + 1, casserole: cap.casserole + 1, poele: cap.poele + 1, viande: cap.viande}; m = build(n, base, need, recent, out.map(o => o.plats), cap); }
+      if (m) out.push({plats: m.slice().sort((a, b) => ordre(a) - ordre(b)).map(p => p.id), envies: need.filter(e => m.some(p => matches(p, e)))});
+    }
+    return out;
+  }
+  function swapDish(pid, k, platId){
+    const P = S.plannings[pid] || {}, props = JSON.parse(JSON.stringify(P.propositions || []));
+    const prop = props[k]; if (!prop) return;
+    const get = id => S.plats.find(p => p.id === id);
+    const others = prop.plats.filter(id => id !== platId).map(get).filter(Boolean);
+    const cap = caps(prop.plats.length), recent = recentIds(pid), old = get(platId);
+    const lost = (prop.envies || []).filter(e => old && matches(old, e) && !others.some(p => matches(p, e)));
+    const cands = pool(pid).filter(p => !prop.plats.includes(p.id) && fits(others, p, cap) && lost.every(e => matches(p, e)));
+    if (!cands.length) { toast('Aucun autre plat ne convient avec ce menu et vos réglages.'); return; }
+    const ranked = cands.map(p => ({p, s: score(others.concat([p]), recent, [])})).sort((a, b) => b.s - a.s).slice(0, 3);
+    const pick = ranked[Math.floor(Math.random() * ranked.length)].p;
+    prop.plats = prop.plats.map(id => id === platId ? pick.id : id).map(get).filter(Boolean).sort((a, b) => ordre(a) - ordre(b)).map(p => p.id);
+    savePlanning(pid, {propositions: props}, 'Plat remplacé.');
+  }
+  function savePlanning(pid, patch, msg){
+    if (!canEdit()) return;
+    const P = S.plannings[pid] = S.plannings[pid] || {};
+    const w = {}, drop = [];
+    Object.keys(patch).forEach(k => { if (patch[k] === null) { delete P[k]; drop.push(k); } else { P[k] = JSON.parse(JSON.stringify(patch[k])); w[k] = patch[k]; } });
+    mergeAvis(); renderAll();
+    const path = 'plannings/' + pid;
+    let pr = Object.keys(w).length ? writeDoc(path, w) : Promise.resolve();
+    drop.forEach(k => { pr = pr.then(() => enqueue(path, () => store.dropKey(path, k))); });
+    pr.then(ok => { if (ok !== false && msg) toast(msg); });
+  }
+
+  /* ===================== COURSES ===================== */
+  const RAYON_KW = [
+    ['Surgelés', /surgel/],
+    ['Placard', /\b(huile|sel|poivre|cumin|paprika|curcuma|curry|thym|origan|romarin|laurier|sauge|cannelle|muscade|piment|ras el hanout|sauce soja|moutarde|miel|sirop|farine|sesame|bouillon|vinaigre|sucre|ail en poudre)(s|x)?\b/],
+    ['Frais', /\b(poulet|boeuf|saucisse|chorizo|tofu|tempeh|oeuf|feta|chevre|brebis|pecorino|yaourt|parmesan|lardon|jambon|gnocchi|pate brisee|creme fraiche|beurre)(s|x)?\b/],
+    ['Fruits & légumes', /\b(oignon|ail|carotte|poireau|champignon|courge|butternut|potimarron|patate|pomme|grenaille|brocoli|chou|epinard|celeri|citron|persil|coriandre|menthe|gingembre|grenade|poivron|salade|mache|panais|navet|betterave|courgette|aubergine)(s|x)?\b/]
+  ];
+  function rayonOf(nom){ const n = norm(nom); for (const [r, re] of RAYON_KW) if (re.test(n)) return r; return 'Épicerie'; }
+  function parseLine(line){
+    if (typeof line !== 'string') return Object.assign({}, line, {rayon: line.rayon || rayonOf(line.nom)});
+    const i = line.indexOf(' : ');
+    if (i < 0) return {nom: line, qte: null, unite: '', rayon: rayonOf(line)};
+    const nom = line.slice(0, i).trim(); let rest = line.slice(i + 3).trim(), note = '';
+    const m = rest.match(/^~?\s*(\d+(?:[.,]\d+)?|½|¼|¾)\s*(.*)$/);
+    if (!m || /,/.test(nom)) return {nom, qte: null, unite: '', note: rest, rayon: rayonOf(nom)};
+    const q = FRAC[m[1]] ?? parseFloat(m[1].replace(',', '.'));
+    let unite = m[2];
+    const cut = unite.search(/[,(]/);
+    if (cut >= 0) { note = unite.slice(cut).replace(/^[,\s]+/, '').replace(/^\((.*)\)$/, '$1'); unite = unite.slice(0, cut); }
+    unite = unite.trim();
+    if (unite.length > 22) { note = (unite + ' ' + note).trim(); unite = ''; }
+    return {nom, qte: q, unite, note, rayon: rayonOf(nom)};
+  }
+  function fmtQte(q, unite){
+    if (q == null) return '';
+    let v = q;
+    if (/^(g)$/.test(unite)) v = q >= 100 ? Math.round(q / 10) * 10 : Math.round(q / 5) * 5 || q;
+    else if (/^(cl|ml)$/.test(unite)) v = Math.round(q);
+    else if (/(boîte|bloc|cube|rouleau|sachet|paquet|pot|barquette)/.test(unite)) v = Math.ceil(q - 0.01);
+    else v = Math.round(q * 4) / 4;
+    const ent = Math.floor(v), fr = Math.round((v - ent) * 4) / 4;
+    const frs = fr === 0.5 ? '½' : fr === 0.25 ? '¼' : fr === 0.75 ? '¾' : '';
+    const num = ent === 0 && frs ? frs : (frs ? ent + ' ' + frs : String(Math.round(v * 100) / 100).replace('.', ','));
+    let u = unite || '';
+    if (v > 1) u = u.replace(/^(boîte|bloc|cube|rouleau|sachet|gousse|feuille|pot|paquet|barquette|petite boîte)(?!s)/, '$1s').replace(/^petite boîtes/, 'petites boîtes');
+    else u = u.replace(/^(boîte|bloc|cube|rouleau|sachet|gousse|feuille|pot|paquet|barquette)s\b/, '$1');
+    return (num + (u ? ' ' + u : '')).trim();
+  }
+  function stockMatch(nom){
+    const k = keyName(nom);
+    return Object.entries(S.stock || {}).map(([id, v]) => Object.assign({id}, v))
+      .find(v => v && v.nom && !v.supprime && (keyName(v.nom) === k || keyName(v.nom).includes(k) || k.includes(keyName(v.nom))));
+  }
+  function buildCourses(dishes){
+    const acc = new Map();
+    dishes.forEach(({p, portions}) => {
+      const fac = portions / 4;
+      (p.fiche.ingredients || []).forEach(raw => {
+        const it = parseLine(raw);
+        if (/^eau\b/.test(norm(it.nom))) return;
+        const key = keyName(it.nom) + '|' + (it.qte == null ? '' : keyName(it.unite || ''));
+        const cur = acc.get(key) || {nom: it.nom, unite: it.unite || '', qte: it.qte == null ? null : 0, rayon: it.rayon, par: []};
+        if (it.qte != null) { cur.qte = (cur.qte || 0) + it.qte * fac; cur.par.push(fmtQte(it.qte * fac, it.unite) + ' ' + tinyNom(p.nom)); }
+        else if (!cur.par.length) cur.par.push(tinyNom(p.nom));
+        if (it.nom.length < cur.nom.length || /s$/.test(it.nom)) cur.nom = /s$/.test(it.nom) ? it.nom : cur.nom;
+        acc.set(key, cur);
+      });
+    });
+    const R = {'Fruits & légumes': [], 'Frais': [], 'Surgelés': [], 'Épicerie': [], 'Placard': [], 'Placard à vérifier': []};
+    const withQ = new Set([...acc.entries()].filter(([, c]) => c.qte != null).map(([k]) => k.split('|')[0]));
+    [...acc.entries()].filter(([k, c]) => !(c.qte == null && withQ.has(k.split('|')[0]))).map(([, c]) => c).forEach(c => {
+      const st = stockMatch(c.nom), item = {id: 'g-' + slug(c.nom + '-' + c.unite), nom: c.nom, qte: fmtQte(c.qte, c.unite), note: dishes.length > 1 && c.par.length > 1 ? c.par.join(', ') : ''};
+      if (c.rayon === 'Placard') {
+        if (st && st.etat === 'ok') return;
+        if (st && (st.etat === 'bas' || st.etat === 'vide')) { item.note = (st.etat === 'vide' ? 'plus rien en stock' : 'bientôt fini'); R['Placard'].push(item); }
+        else R['Placard à vérifier'].push(item);
+        return;
+      }
+      if (st && (st.qte || st.zone === 'frigo' || st.zone === 'congel')) item.note = ('en stock : ' + (st.qte || 'oui') + ' ? ' + (item.note || '')).trim();
+      (R[c.rayon] || R['Épicerie']).push(item);
+    });
+    return Object.entries(R).filter(([, it]) => it.length).map(([rayon, items]) => {
+      items.sort((a, b) => a.nom.localeCompare(b.nom, 'fr'));
+      const r = {rayon: rayon === 'Placard' ? 'Placard (à racheter)' : rayon, items};
+      if (rayon === 'Placard à vérifier') { r.placard = true; r.hint = 'Cocher ce qu’on a déjà. Notez l’état du placard dans l’onglet Stock pour que ce rayon disparaisse.'; }
+      return r;
+    });
+  }
+
+  /* ===================== DÉROULÉ AUTOMATIQUE ===================== */
+  function stepsOf(p){
+    return (p.fiche.methode || []).map(x => {
+      const o = typeof x === 'string' ? {texte: x} : Object.assign({}, x);
+      const t = norm(o.texte || '');
+      if (o.min == null) {
+        const nums = [...String(o.texte).matchAll(/\*\*[^*]*?(\d+)\s*(?:à\s*(\d+)\s*)?min[^*]*\*\*/g)].map(m => +(m[2] || m[1]));
+        o.min = nums.length ? Math.max(...nums) : 5;
+      }
+      if (o.actif == null) o.actif = !(/(mijot|au four|°c|repos|cuis|laisse)/.test(t) && o.min >= 10);
+      o.four = /(four|°c)/.test(t) && !/sors|eteins/.test(t);
+      o.feu = !o.four && /(mijot|casserole|poele|sauteuse|ebullition|bouillante|feu|dore)/.test(t);
+      return o;
+    }).filter(o => o.texte);
+  }
+  const hm = m => Math.floor(m / 60) + ':' + String(Math.round(m % 60)).padStart(2, '0');
+  function buildDeroule(dishes){
+    const f = foyer(), ovenSlots = 2, feux = f.feux;
+    const D = dishes.map(({p, portions}) => { const st = stepsOf(p); return {p, portions, st, i: 0, ready: 0, rest: st.reduce((a, s) => a + s.min, 0)}; });
+    const busy = []; const out = [];
+    const free = (kind, t, dur) => busy.filter(b => b.kind === kind && b.start < t + dur && b.end > t).length < (kind === 'four' ? ovenSlots : feux);
+    let t = 0, guard = 0;
+    const temp = (() => { for (const d of D) for (const s of d.st) { const m = String(s.texte).match(/(\d{3})\s*°C/); if (m) return m[1]; } return null; })();
+    if (temp) out.push({start: 0, dur: 2, p: null, texte: ['Allume le four à **' + temp + ' °C**. Sors le matériel, les planches et les boîtes.']});
+    else out.push({start: 0, dur: 2, p: null, texte: ['Sors le matériel, les planches et les boîtes.']});
+    t = 2;
+    while (D.some(d => d.i < d.st.length) && guard++ < 500) {
+      const ready = D.filter(d => d.i < d.st.length && d.ready <= t).sort((a, b) => b.rest - a.rest);
+      let done = false;
+      for (const d of ready) {
+        const s = d.st[d.i];
+        const kind = s.four ? 'four' : s.feu ? 'feu' : null;
+        if (kind && !free(kind, t, s.actif ? s.min : s.min)) continue;
+        if (kind) busy.push({kind, start: t, end: t + s.min});
+        const last = out[out.length - 1];
+        if (last && last.p === d.p && last.actif && s.actif && last.start + last.dur === t) { last.texte.push(s.texte); last.dur += s.min; }
+        else out.push({start: t, dur: s.min, p: d.p, actif: s.actif, texte: [s.texte], passif: !s.actif});
+        d.i++; d.rest -= s.min;
+        if (s.actif) { t += s.min; d.ready = t; } else { d.ready = t + s.min; t += 1; }
+        done = true; break;
+      }
+      if (!done) {
+        const next = Math.min(...D.filter(d => d.i < d.st.length).map(d => d.ready).filter(x => x > t), ...busy.map(b => b.end).filter(x => x > t));
+        t = isFinite(next) ? next : t + 1;
+      }
+    }
+    const fin = Math.max(t, ...D.map(d => d.ready));
+    const scaled = dishes.filter(d => d.portions !== 4).map(d => shortNom(d.p.nom) + ' : ' + d.portions + ' portions (×' + fmtNum(d.portions / 4) + ')');
+    return {
+      auto: true,
+      intro: 'Déroulé assemblé automatiquement à partir des fiches : environ **' + hm(fin).replace(':', ' h ') + '**. Les repères comptent depuis le début ; quand une étape cuit sans surveillance, passe à la suivante.'
+        + (scaled.length ? ' Quantités des fiches pour 4 portions, à ajuster : ' + scaled.join(' ; ') + '.' : ''),
+      etapes: out.map((e, k) => ({id: 'a' + String(k + 1).padStart(2, '0'), titre: e.p ? shortNom(e.p.nom) + (e.passif ? ' · cuisson' : '') : 'Démarrer',
+        temps: hm(e.start) + (e.passif ? ' · ' + e.dur + ' min sans surveillance' : ' · ' + e.dur + ' min'), details: e.texte, plats: e.p ? [e.p.id] : []}))
+    };
+  }
+
+  /* ===================== SEMAINES GÉNÉRÉES ===================== */
+  function rebuildWeeks(){
+    const base = S.semainesBase || [], ids = new Set(base.map(w => w.id)), gen = [];
+    Object.entries(S.plannings || {}).forEach(([pid, P]) => {
+      if (!P || !P.menu || !(P.menu.plats || []).length || ids.has(pid)) return;
+      const slots = slotsFor(pid);
+      const dishes = P.menu.plats.map((id, i) => ({p: S.plats.find(x => x.id === id), portions: (slots[i] || {}).portions || foyer().portionsParPlat, slot: slots[i]})).filter(d => d.p && d.p.fiche);
+      if (!dishes.length) return;
+      gen.push({id: pid, debut: pid, batch: addDays(pid, -1), genere: true,
+        choix: 'Menu choisi dans l’application' + (P.menu.choisiLe ? ' le ' + fShort.format(new Date(P.menu.choisiLe)) : '') + ((P.menu.envies || []).length ? ', envies : ' + P.menu.envies.join(', ') : '') + '.',
+        menu: dishes.map(d => ({jour: d.slot ? d.slot.label : '', plat: d.p.nom, platId: d.p.id})),
+        nbRepas: homeMeals(pid).length, courses: buildCourses(dishes), deroule: buildDeroule(dishes), retours: [],
+        etapes: {menu: true, courses: true, deroule: true}});
+    });
+    S.semaines = base.concat(gen);
+    const today = isoOf(new Date());
+    S.plats.forEach(p => {
+      const weeks = gen.filter(w => w.debut <= addDays(today, 1) && w.menu.some(m => m.platId === p.id)).map(w => w.id);
+      if (weeks.length) { p.faitLe = [...new Set((p.faitLe || []).concat(weeks))]; if (p.statut !== 'fait') p.statut = 'fait'; }
+    });
+  }
+
+  /* ===================== ONGLET MENUS ===================== */
+  const EQ = {four: 'Four', poele: 'Poêle', casserole: 'Casserole'};
+  function dishLine(p, label, k){
+    return '<li class="mdish"><span class="mday">'+esc(label || '')+'</span><span class="mname">'+esc(p.nom)
+      + '<small>'+esc([p.type === 'viande' ? 'Viande' : p.type === 'poisson' ? 'Poisson' : 'Végé', EQ[p.equipement] || '', p.statut !== 'fait' ? 'À tester' : (p.avis === 'a-refaire' ? 'À refaire' : '')].filter(Boolean).join(' · '))+'</small></span>'
+      + (k != null && S.canWrite ? '<button type="button" class="mswap" data-swap="'+k+':'+esc(p.id)+'" aria-label="Changer '+esc(p.nom)+'" title="Changer ce plat">↻</button>' : '') + '</li>';
+  }
+  function renderMenus(){
+    const el = $('#menus-main'); if (!el) return;
+    if (!S.loaded.plannings || !S.loaded.plats || !S.loaded.reglages) { el.innerHTML = ''; return; }
+    const pid = S.planId, P = S.plannings[pid] || {}, slots = slotsFor(pid);
+    const get = id => S.plats.find(p => p.id === id);
+    const env = envies(pid);
+    let html = '<h2 class="cuis-h2">Menu de la semaine</h2>';
+    const staticW = (S.semainesBase || []).find(w => w.id === pid);
+    if (staticW) { el.innerHTML = html + '<div class="cuis-empty">Le menu de cette semaine a été préparé avec Claude. Il est dans les onglets Courses et Cuisine.</div>'; return; }
+    if (!slots.length) { el.innerHTML = html + '<div class="cuis-empty">Aucun repas à la maison cette semaine.</div>'; return; }
+    if (P.menu && (P.menu.plats || []).length) {
+      const plats = P.menu.plats.map(get).filter(Boolean);
+      html += '<div class="mcard chosen"><div class="mhead"><b>Menu choisi</b>'+(P.menu.choisiLe ? '<small>le '+esc(fShort.format(new Date(P.menu.choisiLe)))+'</small>' : '')+'</div>'
+        + '<ul class="mlist">' + plats.map((p, i) => dishLine(p, (slots[i] || {}).label)).join('') + '</ul>'
+        + '<div class="actions"><button type="button" class="btn primary" data-goto="courses">Voir les courses</button><button type="button" class="btn" data-goto="cuisine">Voir le déroulé</button>'
+        + (S.canWrite ? '<button type="button" class="btn danger" id="menu-unchoose">Changer de menu</button>' : '') + '</div></div>';
+      el.innerHTML = html; return;
+    }
+    html += '<p class="hint-txt">'+slots.length+' plat'+(slots.length > 1 ? 's' : '')+' à prévoir d’après le planning. Les menus suivent Mon foyer, la saison, vos avis, et évitent les plats des 3 dernières semaines.'
+      + (env.length ? ' <b>Envies reconnues : '+esc(env.join(', '))+'.</b>' : '') + '</p>';
+    const props = P.propositions || [];
+    if (!props.length) {
+      html += '<button type="button" class="btn primary big" id="menus-gen"'+(S.canWrite ? '' : ' disabled')+'>Proposer 3 menus</button>';
+      el.innerHTML = html; return;
+    }
+    html += '<div class="mcards">' + props.map((pr, k) => {
+      const plats = pr.plats.map(get).filter(Boolean);
+      const eqc = {}; plats.forEach(p => { eqc[p.equipement] = (eqc[p.equipement] || 0) + 1; });
+      const prot = Math.round(plats.reduce((a, p) => a + (p.proteinesPortion || 0), 0) / Math.max(1, plats.length));
+      return '<article class="mcard"><div class="mhead"><b>Menu '+(k + 1)+'</b>'+((pr.envies || []).length ? '<small>avec '+esc(pr.envies.join(' et '))+'</small>' : '')+'</div>'
+        + '<ul class="mlist">' + plats.map((p, i) => dishLine(p, (slots[i] || {}).label, k)).join('') + '</ul>'
+        + '<p class="mfoot">'+esc(Object.entries(eqc).map(([e, c]) => c + ' ' + (EQ[e] || e).toLowerCase()).join(' · '))+(prot ? ' · ~'+prot+' g de protéines par portion' : '')+'</p>'
+        + (S.canWrite ? '<button type="button" class="btn primary" data-choose="'+k+'">Choisir ce menu</button>' : '') + '</article>';
+    }).join('') + '</div>'
+      + (S.canWrite ? '<div class="actions" style="margin-top:12px"><button type="button" class="btn" id="menus-gen">Proposer d’autres menus</button></div>' : '');
+    el.innerHTML = html;
+  }
+  function onMenuClick(t){
+    if (t.id === 'menus-gen') {
+      const props = generate(S.planId);
+      if (!props.length) { toast('Pas assez de recettes compatibles avec vos réglages pour composer un menu.'); return true; }
+      savePlanning(S.planId, {propositions: props}, props.length < 3 ? 'Seulement ' + props.length + ' menu(s) possible(s) avec vos réglages.' : '');
+      return true;
+    }
+    if (t.dataset.swap) { const [k, id] = t.dataset.swap.split(':'); swapDish(S.planId, +k, id); return true; }
+    if (t.dataset.choose) {
+      const pr = (S.plannings[S.planId].propositions || [])[+t.dataset.choose]; if (!pr) return true;
+      S.weekId = S.planId; S.cuisineId = S.planId; S.confirmReset = false;
+      savePlanning(S.planId, {menu: {plats: pr.plats, envies: pr.envies || [], choisiLe: new Date().toISOString()}}, '✓ Menu choisi : courses et déroulé sont prêts');
+      return true;
+    }
+    if (t.id === 'menu-unchoose') { savePlanning(S.planId, {menu: null}, 'Vous pouvez choisir un autre menu.'); return true; }
+    if (t.dataset.goto) { S.weekId = S.planId; S.cuisineId = S.planId; setTab(t.dataset.goto); renderAll(); window.scrollTo(0, 0); return true; }
+    if (t.dataset.ftog) { const k = t.dataset.ftog; saveFoyer({[k]: !foyer()[k]}); return true; }
+    if (t.dataset.fexcl) { const k = t.dataset.fexcl, ex = foyer().exclusions.slice(); const i = ex.indexOf(k); if (i < 0) ex.push(k); else ex.splice(i, 1); saveFoyer({exclusions: ex}); return true; }
+    if (t.id === 'foyer-btn') { setTab(S.tab === 'foyer' ? 'repas' : 'foyer'); renderFoyer(); window.scrollTo(0, 0); return true; }
+    return false;
+  }
+
   /* Ne pas redessiner une liste pendant qu'on y écrit : on redessine à la sortie du champ. */
   function holdIfTyping(el){
     const a = document.activeElement;
@@ -4694,13 +5825,16 @@ window.FIREBASE_CONFIG = {
   function renderAll(){
     $('#ro').hidden = S.canWrite || S.status !== 'ready';
     /* status 'ready' = la base répond ; chaque onglet attend ses propres données (S.loaded) */
-    renderRepas(); renderCourses(); renderCuisine(); renderStock(); renderPlats(); renderSemaines();
+    renderRepas(); renderMenus(); renderFoyer(); renderCourses(); renderCuisine(); renderStock(); renderPlats(); renderSemaines();
+    const f = foyer(), sub = document.querySelector('.brand-txt p');
+    if (sub) sub.textContent = 'Dimanche en cuisine · ' + f.personnes + ' personne' + (f.personnes > 1 ? 's' : '');
   }
 
   /* ---------- events ---------- */
   document.addEventListener('click', e => {
     const t = e.target.closest('button'); if (!t) return;
     if (t.dataset.tab) { setTab(t.dataset.tab); return; }
+    if (onMenuClick(t)) return;
     if (t.dataset.csend) { sendComment(t.dataset.csend, t); return; }
     if (t.dataset.cdel) { deleteComment(t.dataset.cdel); return; }
     if (t.dataset.dstep) {
@@ -4750,8 +5884,7 @@ window.FIREBASE_CONFIG = {
       const k = t.dataset.step, r = reg();
       const v = Math.min(+t.dataset.max, Math.max(+t.dataset.min, r[k] + Number(t.dataset.d)));
       if (v === r[k]) return;
-      S.reglages = Object.assign({}, S.reglages, {[k]: v});
-      renderRepas(); writeDoc('reglages/foyer', {[k]: v}, {personnes:2, portionsParPlat:4}); return;
+      saveFoyer({[k]: v}); return;
     }
     if (t.id === 'toggle-done') { S.hideDone = !S.hideDone; try { localStorage.setItem('bc-hide', S.hideDone?'1':'0'); } catch(e){} renderCourses(); return; }
     if (t.id === 'reset-ask') { S.confirmReset = true; renderCourses(); return; }
@@ -4843,7 +5976,7 @@ window.FIREBASE_CONFIG = {
   function loadStatic(){
     try {
       const d = JSON.parse(document.getElementById('carnet-data').textContent);
-      S.platsBase = d.plats || []; S.semaines = d.semaines || []; mergeAvis();
+      S.platsBase = d.plats || []; S.semainesBase = d.semaines || []; S.semaines = S.semainesBase.slice(); mergeAvis();
     } catch(e){ toast('Impossible de lire les menus et les plats de l’application.'); }
     ready('plats'); ready('semaines'); renderAll();
   }
@@ -4879,13 +6012,13 @@ window.FIREBASE_CONFIG = {
       if (late.length) { late.forEach(ready); renderAll(); toast('Le carnet met du temps à répondre. Rechargez la page si rien n’apparaît.'); }
     }, 12000);
     const asMap = docs => { const o = {}; docs.forEach(d => { o[d.id] = JSON.parse(JSON.stringify(d.data)); }); return o; };
-    store.watchCol('plannings', docs => { S.plannings = asMap(docs); ready('plannings'); renderAll(); }, onErrFor('plannings'));
+    store.watchCol('plannings', docs => { S.plannings = asMap(docs); ready('plannings'); mergeAvis(); renderAll(); }, onErrFor('plannings'));
     store.watchCol('listes', docs => { S.listes = asMap(docs); ready('listes'); renderAll(); }, onErrFor('listes'));
-    store.watchDoc('reglages/foyer', d => { S.reglages = d ? Object.assign({}, d) : {}; ready('reglages'); renderAll(); }, onErrFor('reglages'));
+    store.watchDoc('reglages/foyer', d => { S.reglages = d ? Object.assign({}, d) : {}; ready('reglages'); mergeAvis(); renderAll(); }, onErrFor('reglages'));
     store.watchDoc('reglages/stock', d => {
       if ((!d || !d.initialise) && !S.stockSeeded) seedStock();
       S.stock = d && d.items ? JSON.parse(JSON.stringify(d.items)) : {};
-      ready('stock'); renderStock();
+      ready('stock'); mergeAvis(); renderStock(); renderCourses(); renderCuisine();
     }, onErrFor('stock'));
     store.watchCol('avis', docs => { S.avis = {}; S.comments = {}; docs.forEach(d => { S.avis[d.id] = d.data.avis || ''; S.comments[d.id] = JSON.parse(JSON.stringify(d.data.commentaires || {})); }); mergeAvis(); ready('avis'); renderAll(); }, onErrFor('avis'));
   })();
