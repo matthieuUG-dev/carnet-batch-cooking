@@ -29,6 +29,9 @@ Règles Firestore : seules les collections `listes`, `plannings`, `avis`, `regla
 - `avis/<idPlat>` : `avis`, `commentaires.<id>` = `{ texte, date (ISO), auteur, semaine? }` (commentaires sur un plat)
 - `reglages/foyer` (« Mon foyer ») : `personnes`, `portionsParPlat`, `four`, `feux`, `casseroles` (grandes), `petitesCasseroles`, `poeles`, `microondes`, `mixeur`, `exclusions[]` (valeurs de `contient`), `viandeMax` ; `reglages/stock` : `items.<id>`
 
+## Foyers séparés
+Lien `?foyer=<nom>` (minuscules, chiffres, tirets) : un foyer à part, mémorisé sur l'appareil et gardé dans l'adresse ; `?foyer=principal` revient au foyer principal. Dans un autre foyer, chaque document Firestore porte le préfixe `<nom>~` (`reglages/essai~foyer`, `listes/essai~2026-10-26`, `avis/essai~<idPlat>`…) ; le foyer principal garde les identifiants sans préfixe et ignore ceux qui contiennent `~`. Les semaines et avis de `carnet-data` n'appartiennent qu'au foyer principal ; la banque de plats est commune. C'est un cloisonnement d'usage, pas une sécurité : les règles Firestore restent les mêmes. Le tout est fait dans `connect()` (fonction `P` et filtre `mine`) : toute nouvelle lecture ou écriture doit passer par `store`.
+
 ## Serveur (dossier `api/`)
 Cloudflare Worker déployé automatiquement à chaque push (Workers Builds, dossier racine `api`). Il vérifie le jeton Google/Firebase, la liste d'invités (`ALLOWED_EMAILS`, réglée dans Cloudflare) et appelle l'API Claude avec la clé gardée côté serveur (`ANTHROPIC_API_KEY`, secret Cloudflare). Routes : `GET /health`, `POST /claude` (`{ system, messages, max_tokens, stream }`, modèle et plafond de tokens fixés côté serveur). Ne jamais mettre de clé ni d'adresse e-mail dans le dépôt : il est public.
 
