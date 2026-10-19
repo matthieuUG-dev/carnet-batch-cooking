@@ -5188,8 +5188,9 @@ window.FIREBASE_CONFIG = {
     return true;
   }
   function score(menu, recent, others){
-    let s = 0; const fec = {};
+    let s = 0; const fec = {}, cat = {};
     menu.forEach(p => {
+      if (p.categorie) cat[p.categorie] = (cat[p.categorie] || 0) + 1;
       if (p.avis === 'a-refaire') s += 3; else if (p.avis === 'bof') s -= 3;
       if (p.statut !== 'fait') s += 1;
       if (recent.has(p.id)) s -= 6;
@@ -5197,6 +5198,7 @@ window.FIREBASE_CONFIG = {
       fec[p.feculent || p.id] = (fec[p.feculent || p.id] || 0) + 1;
     });
     Object.values(fec).forEach(c => { if (c > 1) s -= 3 * (c - 1); });
+    Object.values(cat).forEach(c => { if (c > 1) s -= 4 * (c - 1); });
     others.forEach(o => menu.forEach(p => { if (o.includes(p.id)) s -= 4; }));
     return s + Math.random() * 1.5;
   }
