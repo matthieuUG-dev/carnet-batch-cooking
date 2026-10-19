@@ -114,6 +114,14 @@ select{appearance:none;background:var(--surface) url("data:image/svg+xml,%3Csvg 
 .extra input#extra-qte{flex:1 1 100px}
 .extra button{flex:0 0 auto;border-radius:var(--r);padding:10px 16px}
 
+/* Recette dans Plats */
+.recette{border-top:1px solid var(--line);margin-inline:-16px;padding-inline:16px}
+.recette summary{list-style:none;cursor:pointer;padding:12px 0 2px;font-weight:700;color:var(--accent);display:flex;justify-content:space-between;gap:8px}
+.recette summary::-webkit-details-marker{display:none}
+.recette summary::after{content:"+";font-family:var(--f-mono)}
+.recette[open] summary::after{content:"–"}
+.recette .fiche-body{padding:10px 0 4px}
+
 /* Cuisine */
 .cuis-head{display:grid;gap:10px;margin-bottom:16px}
 .cuis-tools{display:flex;flex-wrap:wrap;gap:8px}
@@ -1847,6 +1855,20 @@ window.FIREBASE_CONFIG = {
   const md = t => esc(t).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
   const etapesOf = w => Array.isArray(w.deroule) ? w.deroule : ((w.deroule && w.deroule.etapes) || []);
   function splitIngr(line){ const i = line.indexOf(' : '); return i < 0 ? [line, ''] : [line.slice(0, i), line.slice(i + 3)]; }
+  const fmtNum = n => String(Math.round(n * 100) / 100).replace('.', ',');
+  function ingrCells(it){
+    if (typeof it === 'string') return splitIngr(it);
+    const q = it.qte != null ? fmtNum(it.qte) + (it.unite ? ' ' + it.unite : '') : (it.unite || '');
+    return [it.nom + (it.note ? ' (' + it.note + ')' : ''), q];
+  }
+  function ficheHTML(f){
+    const steps = (f.methode || []).map(x => typeof x === 'string' ? x : x.texte);
+    return '<p class="fiche-infos">'+esc(f.infos||'')+'</p>'
+      + '<div><h4 class="eyebrow" style="margin:0 0 4px">Ingrédients · 4 portions</h4><table class="ingr-tab"><tbody>'
+      + (f.ingredients||[]).map(it => { const [a,b] = ingrCells(it); return '<tr><td>'+esc(a)+'</td><td>'+esc(b)+'</td></tr>'; }).join('') + '</tbody></table></div>'
+      + '<div><h4 class="eyebrow" style="margin:0 0 6px">Méthode</h4><ol class="methode">'+steps.map(x => '<li>'+md(x)+'</li>').join('')+'</ol></div>'
+      + (f.retours ? '<p class="remarque"><b>Retour :</b> '+esc(f.retours)+'</p>' : '');
+  }
   function renderCuisine(){
     const head = $('#cuisine-head'), el = $('#cuisine-main');
     if (gate(el, 'du déroulé', ['semaines','plats','listes'])) { head.innerHTML = ''; return; }
@@ -1895,11 +1917,7 @@ window.FIREBASE_CONFIG = {
       const open = S.ficheOpen && S.ficheOpen.has(w.id+'/'+m.platId);
       let body;
       if (!f) body = '<p class="fiche-infos">Fiche pas encore publiée dans l’application.</p>';
-      else body = '<p class="fiche-infos">'+esc(f.infos||'')+'</p>'
-        + '<div><h4 class="eyebrow" style="margin:0 0 4px">Ingrédients</h4><table class="ingr-tab"><tbody>'
-        + (f.ingredients||[]).map(l => { const [a,b] = splitIngr(l); return '<tr><td>'+esc(a)+'</td><td>'+esc(b)+'</td></tr>'; }).join('') + '</tbody></table></div>'
-        + '<div><h4 class="eyebrow" style="margin:0 0 6px">Méthode</h4><ol class="methode">'+(f.methode||[]).map(x => '<li>'+md(x)+'</li>').join('')+'</ol></div>'
-        + (f.retours ? '<p class="remarque"><b>Retour :</b> '+esc(f.retours)+'</p>' : '');
+      else body = ficheHTML(f);
       return '<details class="fiche" data-fiche="'+esc(w.id+'/'+m.platId)+'"'+(open?' open':'')+'><summary><span class="fj">'+esc(String(m.jour||'').slice(0,3))+'</span><span class="fn">'+esc(p.nom || m.plat)+'</span></summary><div class="fiche-body">'+body+'</div></details>';
     }).join('') + '</div>';
     el.innerHTML = html;
@@ -1912,6 +1930,9 @@ window.FIREBASE_CONFIG = {
     } catch(e){ S.wake = null; toast('Ce téléphone ne permet pas de garder l’écran allumé depuis l’application.'); }
     renderCuisine();
   }
+  document.addEventListener('toggle', e => {
+    const r = e.target; if (r.matches && r.matches('details[data-recette]')) { S.recOpen = S.recOpen || new Set(); if (r.open) S.recOpen.add(r.dataset.recette); else S.recOpen.delete(r.dataset.recette); return; }
+  }, true);
   document.addEventListener('toggle', e => {
     const d = e.target; if (!d.matches || !d.matches('details[data-fiche]')) return;
     S.ficheOpen = S.ficheOpen || new Set();
@@ -2109,7 +2130,7 @@ window.FIREBASE_CONFIG = {
       (f.cong === 'toutes' || p.congelation === f.cong) &&
       (f.avis === 'tous' || (f.avis === 'aucun' ? !p.avis && (p.statut || 'fait') === 'fait' : p.avis === f.avis)) &&
       (f.statut === 'tout' || (p.statut || 'fait') === f.statut) &&
-      (!q || norm(p.nom + ' ' + (p.ingredients || []).join(' ')).includes(q))
+      (!q || norm(p.nom + ' ' + (p.ingredients || []).join(' ') + ' ' + (p.motsCles || []).join(' ')).includes(q))
     ).sort((a,b) => {
       const sa = (a.statut||'fait') === 'idee' ? 1 : 0, sb = (b.statut||'fait') === 'idee' ? 1 : 0;
       if (sa !== sb) return sa - sb;
@@ -2137,6 +2158,7 @@ window.FIREBASE_CONFIG = {
         + (facts ? '<dl class="facts">'+facts+'</dl>' : '')
         + ((p.ingredients||[]).length ? '<p class="ingr"><b>Ingrédients clés :</b> '+esc(p.ingredients.join(', '))+'</p>' : '')
         + (p.remarque ? '<p class="remarque"><b>Retour :</b> '+esc(p.remarque)+'</p>' : '')
+        + (p.fiche ? '<details class="recette" data-recette="'+esc(p.id)+'"'+(S.recOpen && S.recOpen.has(p.id) ? ' open' : '')+'><summary>Voir la recette complète</summary><div class="fiche-body">'+ficheHTML(p.fiche)+'</div></details>' : '')
         + '<div class="plat-foot"><span class="fait">'+(idee ? 'Pas encore cuisiné' : (fait ? 'Fait : '+esc(fait) : ''))+'</span>'+avis+'</div>'
         + '</article>';
     }).join('') + '</div>';
