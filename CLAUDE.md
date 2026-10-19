@@ -27,7 +27,7 @@ Règles Firestore : seules les collections `listes`, `plannings`, `avis`, `regla
 - `listes/<lundi>` : `coche.<idArticle>`, `extras`, `deroule.<idÉtape>` (étapes cochées dans l'onglet Cuisine)
 - `plannings/<lundi>` : `repas.<jour>.<midi|soir>` (false = dehors), `note` (= les envies de la semaine, reconnues via les `motsCles`), `propositions[]` = `{ plats: [idPlat], envies[] }` (les 3 menus proposés), `menu` = `{ plats: [idPlat], envies[], choisiLe }` (le menu choisi), `commentaires.<id>` = `{ texte, date, auteur }` (commentaires sur le menu / le batch de la semaine)
 - `avis/<idPlat>` : `avis`, `commentaires.<id>` = `{ texte, date (ISO), auteur, semaine? }` (commentaires sur un plat)
-- `reglages/foyer` (« Mon foyer ») : `personnes`, `portionsParPlat`, `four`, `feux`, `casseroles`, `poeles`, `microondes`, `mixeur`, `exclusions[]` (valeurs de `contient`), `viandeMax` ; `reglages/stock` : `items.<id>`
+- `reglages/foyer` (« Mon foyer ») : `personnes`, `portionsParPlat`, `four`, `feux`, `casseroles` (grandes), `petitesCasseroles`, `poeles`, `microondes`, `mixeur`, `exclusions[]` (valeurs de `contient`), `viandeMax` ; `reglages/stock` : `items.<id>`
 
 ## Serveur (dossier `api/`)
 Cloudflare Worker déployé automatiquement à chaque push (Workers Builds, dossier racine `api`). Il vérifie le jeton Google/Firebase, la liste d'invités (`ALLOWED_EMAILS`, réglée dans Cloudflare) et appelle l'API Claude avec la clé gardée côté serveur (`ANTHROPIC_API_KEY`, secret Cloudflare). Routes : `GET /health`, `POST /claude` (`{ system, messages, max_tokens, stream }`, modèle et plafond de tokens fixés côté serveur). Ne jamais mettre de clé ni d'adresse e-mail dans le dépôt : il est public.

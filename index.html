@@ -121,6 +121,15 @@ select{appearance:none;background:var(--surface) url("data:image/svg+xml,%3Csvg 
 .mot{background:none;border:1px solid var(--line);border-radius:99px;padding:2px 9px;font-size:.76rem;color:var(--muted)}
 .mot:hover{color:var(--ink);border-color:var(--muted)}
 
+/* Explications d'onglet */
+.tab-intro{margin:0 0 16px;padding:10px 14px;border-left:3px solid var(--accent);background:var(--surface);border-radius:0 var(--r) var(--r) 0;font-size:.9rem;line-height:1.5;color:var(--ink);max-width:68ch}
+.step-h{display:flex;align-items:center;gap:10px;font-family:var(--f-display);font-weight:600;font-size:1.12rem;margin:18px 0 6px}
+.step-h span{flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:var(--accent);color:var(--surface);display:grid;place-items:center;font-size:.85rem;font-weight:800}
+.step-h small{font-family:var(--f-body);font-weight:400;font-size:.8rem;color:var(--muted)}
+.recap{background:var(--sunk);border-radius:var(--r);padding:10px 14px;margin-bottom:12px;display:grid;gap:4px;font-size:.88rem}
+.recap p{margin:0}
+.recap .actions{gap:14px}
+.tag.exclu{background:var(--sunk);color:var(--warn)}
 /* Menus */
 .btn.big{padding:12px 20px;font-size:1rem}
 .mcards{display:grid;gap:12px}
@@ -371,9 +380,11 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
   <div id="ro" class="ro" hidden>Lecture seule : vous pouvez consulter le carnet, pas le modifier.</div>
   <main>
     <section id="v-repas" role="tabpanel" aria-labelledby="t-repas" hidden>
+      <p class="tab-intro">Préparez la semaine en trois étapes : <b>1.</b> indiquez les repas pris à la maison, <b>2.</b> notez vos envies si vous en avez, <b>3.</b> choisissez un menu parmi trois propositions. La liste de courses et le déroulé du dimanche se préparent ensuite tout seuls, dans les onglets Courses et Cuisine.</p>
       <div id="repas-main"><p class="state">Chargement du planning…</p></div>
       <div id="repas-note" class="note-box" hidden>
-        <label for="plan-note" class="eyebrow">Vos envies pour cette semaine</label>
+        <label for="plan-note" class="step-h"><span>2</span>Vos envies <small>facultatif</small></label>
+        <p class="hint-txt">Un plat, un ingrédient, un style : « soupe », « chorizo », « se mange froid »… Les menus proposés en tiendront compte.</p>
         <textarea id="plan-note" rows="2" placeholder="Ex. une soupe, du chorizo, quelque chose qui se mange froid"></textarea>
         <span class="note-state" id="note-state" aria-live="polite"></span>
       </div>
@@ -384,10 +395,12 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
       <div id="foyer-main"><p class="state">Chargement…</p></div>
     </section>
     <section id="v-cuisine" role="tabpanel" aria-labelledby="t-cuisine" hidden>
+      <p class="tab-intro">Pour le jour du batch : le déroulé du dimanche étape par étape, à cocher à deux, puis la recette de chaque plat. Pensez à « Garder l’écran allumé ». Après avoir cuisiné, laissez un commentaire : il servira à améliorer les recettes.</p>
       <div id="cuisine-head"></div>
       <div id="cuisine-main"><p class="state">Chargement…</p></div>
     </section>
     <section id="v-courses" role="tabpanel" aria-labelledby="t-courses">
+      <p class="tab-intro">La liste du menu choisi, rangée par rayon, avec les quantités de toute la semaine. Cochez au magasin : les cases sont partagées entre vos téléphones. « Placard à vérifier » regroupe ce que vous avez sûrement déjà : cochez ce qui est là.</p>
       <div id="courses-head"></div>
       <div id="courses-list"><p class="state">Chargement de la liste de courses…</p></div>
       <form id="extra-form" class="extra" hidden>
@@ -400,6 +413,7 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
       </form>
     </section>
     <section id="v-stock" role="tabpanel" aria-labelledby="t-stock" hidden>
+      <p class="tab-intro"><b>Facultatif.</b> L’application fonctionne sans stock. Mais le tenir à jour affine la liste de courses : ce qui est noté « OK » au placard n’y apparaît plus, et ce que vous avez déjà en épicerie, au frigo ou au congélateur y est signalé. Vous n’achetez que le nécessaire.</p>
       <div id="stock-head"></div>
       <div id="stock-list"><p class="state">Chargement du stock…</p></div>
       <form id="stock-form" class="extra" hidden>
@@ -418,6 +432,7 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
       </form>
     </section>
     <section id="v-plats" role="tabpanel" aria-labelledby="t-plats" hidden>
+      <p class="tab-intro">Toutes les recettes : celles déjà cuisinées et celles à tester. Après les avoir goûtées, notez-les (À refaire, Bof, Plus jamais) et laissez un commentaire : les menus proposés en tiennent compte, et une recette « Plus jamais » n’est plus proposée.</p>
       <div class="filters">
         <label for="plat-search" class="sr">Chercher un plat ou un ingrédient</label>
         <input id="plat-search" type="search" placeholder="Chercher un plat ou un ingrédient" autocomplete="off">
@@ -426,6 +441,7 @@ input[type="search"]{width:100%;background:var(--surface);border:1px solid var(-
       <div id="plats-list"><p class="state">Chargement des plats…</p></div>
     </section>
     <section id="v-semaines" role="tabpanel" aria-labelledby="t-semaines" hidden>
+      <p class="tab-intro">L’historique de vos semaines : le menu, la liste de courses et vos commentaires sur chaque batch.</p>
       <div id="semaines-list"><p class="state">Chargement des semaines…</p></div>
     </section>
   </main>
@@ -4877,7 +4893,7 @@ window.FIREBASE_CONFIG = {
   const S = {
     cuisineId:null, comments:{}, drafts:{}, held:{}, confirmDeroule:false, wake:null, status:'loading', dbErr:null, loaded:{plats:false, semaines:false, listes:false, plannings:false, reglages:false, avis:false, stock:false}, stock:{}, stockPending:false, stockSeeded:false, sst:{}, sqTimers:{}, platsBase:[], avis:{}, plats:[], semaines:[], listes:{}, plannings:{}, reglages:{}, planId:nextMondays(1)[0], tab:'courses', weekId:null,
     hideDone:false, confirmReset:false, canWrite:true, open:new Set(), openInit:false,
-    f:{type:'tous',saison:'toutes',cong:'toutes',avis:'tous',statut:'tout',q:''}
+    f:{type:'tous',saison:'toutes',cong:'toutes',avis:'tous',statut:'tout',foyer:'tous',q:''}
   };
   try { const t = localStorage.getItem('bc-tab'); if (TABS.includes(t)) S.tab = t; S.hideDone = localStorage.getItem('bc-hide') === '1'; } catch(e){}
   const h = location.hash.slice(1); if (TABS.includes(h)) S.tab = h;
@@ -4993,7 +5009,7 @@ window.FIREBASE_CONFIG = {
     const allHome = b.n === JOURS.length * MOMENTS.length;
     main.innerHTML = '<div class="plan-head"><div class="week-pick"><label for="plan-select" class="eyebrow">Semaine à préparer</label><select id="plan-select">'
       + ids.map(id => '<option value="'+id+'"'+(id===S.planId?' selected':'')+'>Semaine du '+esc(fLong.format(toDate(id)))+'</option>').join('')
-      + '</select></div><p class="hint-txt">Touchez un repas pris à l’extérieur pour le passer en « Dehors ». Le nombre de plats proposés en dépend.</p></div>'
+      + '</select></div></div><h2 class="step-h"><span>1</span>Qui mange à la maison ?</h2><p class="hint-txt">Touchez un repas pris à l’extérieur pour le passer en « Dehors ». Le nombre de plats proposés en dépend.</p>'
       + grid
       + '<div class="bilan"><div class="big"><span>'+b.n+'</span> repas à la maison</div>'+detail
       + (!allHome && S.canWrite ? '<div><button type="button" class="linkbtn" id="all-home">Tout remettre à la maison</button></div>' : '')
@@ -5083,7 +5099,7 @@ window.FIREBASE_CONFIG = {
     enqueue(comPath(kind, id), () => store.dropKey(comPath(kind, id), 'commentaires', cid)).then(ok => { if (ok !== false) toast('Commentaire supprimé.'); });
   }
   /* ===================== MON FOYER ===================== */
-  const FOYER_DEF = {personnes:2, portionsParPlat:4, four:true, feux:3, microondes:true, mixeur:false, casseroles:2, poeles:2, exclusions:[], viandeMax:2};
+  const FOYER_DEF = {personnes:2, portionsParPlat:4, four:true, feux:3, microondes:true, mixeur:false, casseroles:2, petitesCasseroles:1, poeles:2, exclusions:[], viandeMax:2};
   const EXCL = [['porc','Porc'],['boeuf','Bœuf'],['volaille','Volaille'],['poisson','Poisson'],['oeuf','Œufs'],['gluten','Gluten'],
     ['lactose-vache','Lactose de vache'],['soja','Soja'],['arachide','Arachide'],['fruits-a-coque','Fruits à coque'],['alcool','Alcool']];
   function foyer(){ const r = Object.assign({}, FOYER_DEF, S.reglages); if (!Array.isArray(r.exclusions)) r.exclusions = []; return r; }
@@ -5111,6 +5127,7 @@ window.FIREBASE_CONFIG = {
       + toggleBtn('four', 'Four', 'Sinon, aucun plat au four n’est proposé')
       + stepper('feux', 'Feux de cuisson', 'Plaques ou brûleurs', f.feux, 1, 6)
       + stepper('casseroles', 'Grandes casseroles ou faitouts', 'Pour les mijotés, soupes et pâtes', f.casseroles, 0, 5)
+      + stepper('petitesCasseroles', 'Petites casseroles', 'Pour le riz, la semoule, un bouillon', f.petitesCasseroles, 0, 5)
       + stepper('poeles', 'Poêles ou sauteuses', 'Pour les poêlées et sautés', f.poeles, 0, 5)
       + toggleBtn('microondes', 'Micro-ondes', 'Pour réchauffer et certaines précuissons')
       + toggleBtn('mixeur', 'Mixeur plongeant', 'Pour les soupes veloutées') + '</section>'
@@ -5181,9 +5198,11 @@ window.FIREBASE_CONFIG = {
       viande: f.viandeMax
     };
   }
+  function usesPot(x){ return (x.equipement || 'casserole') === 'casserole' || (foyer().petitesCasseroles === 0 && (x.materiel || []).includes('petite-casserole')); }
   function fits(menu, p, cap){
     const eq = p.equipement || 'casserole';
-    if (menu.filter(x => (x.equipement || 'casserole') === eq).length + 1 > (cap[eq] ?? 99)) return false;
+    if (eq !== 'casserole' && menu.filter(x => (x.equipement || 'casserole') === eq).length + 1 > (cap[eq] ?? 99)) return false;
+    if (usesPot(p) && menu.filter(usesPot).length + 1 > cap.casserole) return false;
     if (p.type === 'viande' && menu.filter(x => x.type === 'viande').length + 1 > cap.viande) return false;
     return true;
   }
@@ -5430,7 +5449,7 @@ window.FIREBASE_CONFIG = {
     const pid = S.planId, P = S.plannings[pid] || {}, slots = slotsFor(pid);
     const get = id => S.plats.find(p => p.id === id);
     const env = envies(pid);
-    let html = '<h2 class="cuis-h2">Menu de la semaine</h2>';
+    let html = '<h2 class="step-h"><span>3</span>Le menu de la semaine</h2>';
     const staticW = (S.semainesBase || []).find(w => w.id === pid);
     if (staticW) { el.innerHTML = html + '<div class="cuis-empty">Le menu de cette semaine a été préparé avec Claude. Il est dans les onglets Courses et Cuisine.</div>'; return; }
     if (!slots.length) { el.innerHTML = html + '<div class="cuis-empty">Aucun repas à la maison cette semaine.</div>'; return; }
@@ -5442,8 +5461,8 @@ window.FIREBASE_CONFIG = {
         + (S.canWrite ? '<button type="button" class="btn danger" id="menu-unchoose">Changer de menu</button>' : '') + '</div></div>';
       el.innerHTML = html; return;
     }
-    html += '<p class="hint-txt">'+slots.length+' plat'+(slots.length > 1 ? 's' : '')+' à prévoir d’après le planning. Les menus suivent Mon foyer, la saison, vos avis, et évitent les plats des 3 dernières semaines.'
-      + (env.length ? ' <b>Envies reconnues : '+esc(env.join(', '))+'.</b>' : '') + '</p>';
+    html += recapFoyer(pid, slots.length)
+      + (env.length ? '<p class="hint-txt"><b>Envies reconnues : '+esc(env.join(', '))+'.</b></p>' : '');
     const props = P.propositions || [];
     if (!props.length) {
       html += '<button type="button" class="btn primary big" id="menus-gen"'+(S.canWrite ? '' : ' disabled')+'>Proposer 3 menus</button>';
@@ -5461,7 +5480,24 @@ window.FIREBASE_CONFIG = {
       + (S.canWrite ? '<div class="actions" style="margin-top:12px"><button type="button" class="btn" id="menus-gen">Proposer d’autres menus</button></div>' : '');
     el.innerHTML = html;
   }
+  function foyerOK(p){
+    const f = foyer();
+    return !(p.contient || []).some(c => f.exclusions.includes(c)) && p.avis !== 'plus-jamais'
+      && !(!f.four && (p.equipement === 'four' || (p.materiel || []).includes('four')))
+      && !(f.casseroles === 0 && p.equipement === 'casserole') && !(f.poeles === 0 && p.equipement === 'poele');
+  }
+  function recapFoyer(pid, n){
+    const f = foyer(), ok = pool(pid).length, tot = S.plats.filter(p => p.fiche).length;
+    const sans = EXCL.filter(([k]) => f.exclusions.includes(k)).map(([, l]) => l.toLowerCase());
+    const eq = [f.four ? 'four' : 'pas de four', f.feux + ' feu' + (f.feux > 1 ? 'x' : ''), f.casseroles + ' grande' + (f.casseroles > 1 ? 's' : '') + ' casserole' + (f.casseroles > 1 ? 's' : ''), f.petitesCasseroles + ' petite' + (f.petitesCasseroles > 1 ? 's' : ''), f.poeles + ' poêle' + (f.poeles > 1 ? 's' : '')];
+    return '<div class="recap"><p><b>'+n+' plat'+(n > 1 ? 's' : '')+' à prévoir</b> pour '+f.personnes+' personne'+(f.personnes > 1 ? 's' : '')+', '+f.portionsParPlat+' portions par plat.</p>'
+      + '<p>Votre foyer : '+esc(eq.join(', '))+' · '+(sans.length ? 'sans '+esc(sans.join(', ')) : 'aucun aliment exclu')+' · '+f.viandeMax+' plat'+(f.viandeMax > 1 ? 's' : '')+' avec viande au maximum.</p>'
+      + '<p><b>'+ok+' recette'+(ok > 1 ? 's' : '')+' de saison compatible'+(ok > 1 ? 's' : '')+'</b> sur '+tot+'. Les menus évitent aussi les plats des 3 dernières semaines et tiennent compte de vos avis.</p>'
+      + '<div class="actions"><button type="button" class="linkbtn" data-recap="foyer">Modifier Mon foyer</button><button type="button" class="linkbtn" data-recap="plats">Voir ces recettes</button></div></div>';
+  }
   function onMenuClick(t){
+    if (t.dataset.recap === 'foyer') { setTab('foyer'); renderFoyer(); window.scrollTo(0, 0); return true; }
+    if (t.dataset.recap === 'plats') { Object.assign(S.f, {foyer: 'ok', saison: saisonDe(S.planId), statut: 'tout', type: 'tous', cong: 'toutes', avis: 'tous', q: ''}); $('#plat-search').value = ''; setTab('plats'); renderPlats(); window.scrollTo(0, 0); return true; }
     if (t.id === 'menus-gen') {
       const props = generate(S.planId);
       if (!props.length) { toast('Pas assez de recettes compatibles avec vos réglages pour composer un menu.'); return true; }
@@ -5627,7 +5663,7 @@ window.FIREBASE_CONFIG = {
     head.innerHTML = '<div class="stock-sum">'
       + '<div><b>'+racheter.length+'</b><span>à racheter</span></div>'
       + '<div><b>'+verifier.length+'</b><span>à vérifier</span></div>'
-      + '<p class="hint-txt">Ce qui est noté ici n’est pas racheté : Claude s’en sert pour préparer la liste de courses.</p></div>';
+      + '</div>';
     list.innerHTML = ZONES.map(([z, titre, aide]) => {
       const zi = items.filter(i => i.zone === z).sort((x,y) => (x.ordre??999) - (y.ordre??999) || String(x.nom).localeCompare(String(y.nom),'fr'));
       return '<section class="rayon"><h2><span class="eyebrow">'+titre+'</span><span class="cnt">'+zi.length+'</span></h2><p class="hint">'+aide+'</p>'
@@ -5723,9 +5759,10 @@ window.FIREBASE_CONFIG = {
     {k:'saison', label:'Saison', opts:[['toutes','Toutes'],['automne','Automne'],['hiver','Hiver'],['printemps','Printemps'],['ete','Été']]},
     {k:'cong', label:'Congélation', opts:[['toutes','Toutes'],['oui','Oui'],['moyen','Moyen'],['non','Non']]},
     {k:'avis', label:'Avis', opts:[['tous','Tous'],['aucun','Pas encore noté'],['a-refaire','À refaire'],['bof','Bof'],['plus-jamais','Plus jamais']]},
-    {k:'statut', label:'Statut', opts:[['tout','Tout'],['fait','Déjà faits'],['idee','À tester']]}
+    {k:'statut', label:'Statut', opts:[['tout','Tout'],['fait','Déjà faits'],['idee','À tester']]},
+    {k:'foyer', label:'Mon foyer', opts:[['tous','Toutes'],['ok','Compatibles']]}
   ];
-  const DEFAULT_F = {type:'tous',saison:'toutes',cong:'toutes',avis:'tous',statut:'tout'};
+  const DEFAULT_F = {type:'tous',saison:'toutes',cong:'toutes',avis:'tous',statut:'tout',foyer:'tous'};
   function buildChips(){
     $('#chip-groups').innerHTML = GROUPS.map(g =>
       '<div class="group" role="group" aria-label="'+esc(g.label)+'"><span class="eyebrow">'+esc(g.label)+'</span><div class="chips">'
@@ -5734,7 +5771,7 @@ window.FIREBASE_CONFIG = {
     $('#chip-groups').style.display = 'grid'; $('#chip-groups').style.gap = '8px';
   }
   function syncChips(){
-    document.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', String(S.f[c.dataset.fk] === c.dataset.fv)));
+    document.querySelectorAll('.chip[data-fk]').forEach(c => c.setAttribute('aria-pressed', String(S.f[c.dataset.fk] === c.dataset.fv)));
   }
   const SAISON = {automne:'automne', hiver:'hiver', printemps:'printemps', ete:'été'};
   const CONG = {oui:'Se congèle', moyen:'Moyennement', non:'Ne se congèle pas'};
@@ -5754,6 +5791,7 @@ window.FIREBASE_CONFIG = {
       (f.cong === 'toutes' || p.congelation === f.cong) &&
       (f.avis === 'tous' || (f.avis === 'aucun' ? !p.avis && (p.statut || 'fait') === 'fait' : p.avis === f.avis)) &&
       (f.statut === 'tout' || (f.statut === 'fait' ? (p.statut || 'fait') === 'fait' : (p.statut || 'fait') !== 'fait')) &&
+      (f.foyer === 'tous' || foyerOK(p)) &&
       (!q || norm(p.nom + ' ' + (p.ingredients || []).join(' ') + ' ' + (p.motsCles || []).join(' ')).includes(q))
     ).sort((a,b) => {
       const sa = (a.statut||'fait') !== 'fait' ? 1 : 0, sb = (b.statut||'fait') !== 'fait' ? 1 : 0;
@@ -5767,7 +5805,7 @@ window.FIREBASE_CONFIG = {
     if (!list.length) { el.innerHTML = html + empty('Aucun plat ne correspond', 'Retirez un filtre ou cherchez un autre ingrédient.'); return; }
     html += '<div class="plats">' + list.map(p => {
       const idee = (p.statut||'fait') !== 'fait';
-      const tag = '<span class="tags">' + (idee ? '<span class="tag idee">À tester</span>' : '')
+      const tag = '<span class="tags">' + (!foyerOK(p) ? '<span class="tag exclu">Hors Mon foyer</span>' : '') + (idee ? '<span class="tag idee">À tester</span>' : '')
         + (p.type === 'viande' ? '<span class="tag viande">Viande</span>' : p.type === 'poisson' ? '<span class="tag poisson">Poisson</span>' : '<span class="tag">Végé</span>') + '</span>';
       const facts = [
         ['Cuisson', p.cuisson],
